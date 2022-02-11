@@ -1,8 +1,7 @@
-import { createTheme, ThemeProvider, styled } from "@mui/material/styles";
-import { purple } from "@mui/material/colors";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { TextField, Icon, InputAdornment } from "@mui/material";
 
-const color = purple[500];
+const color = "#5D2DFD";
 
 const theme = createTheme({
     palette: {
@@ -15,6 +14,7 @@ const theme = createTheme({
             styleOverrides: {
                 input: {
                     color: color,
+                    fontWeight: 600,
                 },
             },
         },
