@@ -9,6 +9,7 @@ import {
     Tabs,
     IconButton,
     Box,
+    Slide,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
@@ -16,30 +17,42 @@ import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import icon from "../assets/icon.png";
 
 const NavBar = () => {
+    const navigate = useNavigate();
     const location = useLocation();
-    let navigate = useNavigate();
 
     const [selectedTab, setSelectedTab] = useState(location.pathname);
+    const [toggle, setToggle] = useState(false);
+    const [collapse, setCollapse] = useState(false);
 
     useEffect(() => {
-        const setTab = () => {
-            setSelectedTab(location.pathname);
-        };
-        setTab();
-    }, []);
+        setSelectedTab(location.pathname);
+    }, [location.pathname]);
 
-    const handleMenuOpen = () => {};
+    const handleMenuOpen = () => {
+        if (collapse === true) {
+            setTimeout(() => {
+                setCollapse(false);
+            }, 300);
+        } else {
+            setCollapse(true);
+        }
 
-    const handelTabChange = (event, newValue) => {
+        setToggle((toggle) => !toggle);
+    };
+
+    const handleTabChange = (event, newValue) => {
         navigate(newValue);
-        setSelectedTab(newValue);
+        handleMenuOpen();
     };
 
     return (
-        <AppBar position="static" color="transparent" sx={{ boxShadow: 1 }}>
+        <AppBar
+            position="static"
+            color="transparent"
+            sx={{ boxShadow: 1, minWidth: "320px" }}
+        >
             <Toolbar>
                 <Box
-                    component="div"
                     sx={{
                         display: "flex",
                         alignItems: "center",
@@ -47,7 +60,7 @@ const NavBar = () => {
                         width: "100%",
                     }}
                 >
-                    <Box component="div" sx={{ display: "flex" }}>
+                    <Box sx={{ display: "flex" }}>
                         <Avatar
                             src={icon}
                             sx={{
@@ -58,9 +71,6 @@ const NavBar = () => {
                         />
                         <IconButton
                             size="large"
-                            aria-label="account of current user"
-                            aria-controls="menu-appbar"
-                            aria-haspopup="true"
                             onClick={handleMenuOpen}
                             color="inherit"
                             sx={{
@@ -71,13 +81,12 @@ const NavBar = () => {
                         </IconButton>
                     </Box>
                     <Box
-                        component="div"
                         mt={2}
                         sx={{
                             display: { md: "flex", xs: "none" },
                         }}
                     >
-                        <Tabs value={selectedTab} onChange={handelTabChange}>
+                        <Tabs value={selectedTab} onChange={handleTabChange}>
                             <Tab value="/" label="Home" />
                             <Tab value="/wallets" label="Wallets" />
                             <Tab value="/transactions" label="Transactions" />
@@ -90,8 +99,33 @@ const NavBar = () => {
                     </IconButton>
                 </Box>
             </Toolbar>
+            {collapse && (
+                <Box
+                    mt={-6}
+                    sx={{
+                        display: { xs: "flex", md: "none" },
+                        justifyContent: "center",
+                    }}
+                >
+                    <Slide
+                        in={toggle}
+                        style={{ transformOrigin: "0 0 0" }}
+                        {...(toggle ? { timeout: 500 } : {})}
+                    >
+                        <Tabs
+                            value={selectedTab}
+                            onChange={handleTabChange}
+                            orientation="vertical"
+                        >
+                            <Tab value="/" label="Home" />
+                            <Tab value="/wallets" label="Wallets" />
+                            <Tab value="/transactions" label="Transactions" />
+                            <Tab value="/categories" label="Categories" />
+                        </Tabs>
+                    </Slide>
+                </Box>
+            )}
         </AppBar>
     );
 };
-
 export default NavBar;
