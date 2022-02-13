@@ -1,11 +1,11 @@
-import { Container, Typography } from "@mui/material";
 import React from "react";
+import Router from "./router";
 
 const App = () => {
     return (
-        <Container maxWidth="xl">
-            <Typography variant="h4"> Home page</Typography>
-        </Container>
+        <React.StrictMode>
+            <Router />
+        </React.StrictMode>
     );
 };
 
