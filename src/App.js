@@ -1,11 +1,13 @@
-import React from "react";
 import Router from "./router";
+
+import NavBar from "./components/NavBar";
 
 const App = () => {
     return (
-        <React.StrictMode>
+        <>
+            <NavBar />
             <Router />
-        </React.StrictMode>
+        </>
     );
 };
 

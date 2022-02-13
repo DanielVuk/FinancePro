@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
-
 import { useNavigate, useLocation } from "react-router-dom";
+
 import {
     AppBar,
     Toolbar,
@@ -15,13 +15,9 @@ import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 
 import icon from "../assets/icon.png";
 
-const horizontal = "horizontal";
-const vertical = "vertical";
-
 const NavBar = () => {
     const location = useLocation();
     let navigate = useNavigate();
-    const [tabsOrientation, setTabsOrientation] = useState(horizontal);
 
     const [selectedTab, setSelectedTab] = useState(location.pathname);
 
@@ -30,13 +26,9 @@ const NavBar = () => {
             setSelectedTab(location.pathname);
         };
         setTab();
-    });
+    }, []);
 
-    const handleMenuOpen = () => {
-        setTabsOrientation(
-            tabsOrientation === horizontal ? vertical : horizontal
-        );
-    };
+    const handleMenuOpen = () => {};
 
     const handelTabChange = (event, newValue) => {
         navigate(newValue);
@@ -85,11 +77,7 @@ const NavBar = () => {
                             display: { md: "flex", xs: "none" },
                         }}
                     >
-                        <Tabs
-                            value={selectedTab}
-                            onChange={handelTabChange}
-                            orientation={horizontal}
-                        >
+                        <Tabs value={selectedTab} onChange={handelTabChange}>
                             <Tab value="/" label="Home" />
                             <Tab value="/wallets" label="Wallets" />
                             <Tab value="/transactions" label="Transactions" />
