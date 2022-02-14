@@ -1,5 +1,6 @@
+import { Icon, InputAdornment, TextField } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { TextField, Icon, InputAdornment } from "@mui/material";
+import EmailIcon from "@mui/icons-material/Email";
 
 const color = "#5D2DFD";
 
@@ -21,22 +22,24 @@ const theme = createTheme({
     },
 });
 
-const AppInput = ({ text, placeholder, icon = null, type = text }) => {
+const AppInput = ({
+    value,
+    setValue,
+    placeholder,
+    type = "text",
+    ...otherProps
+}) => {
     return (
         <ThemeProvider theme={theme}>
             <TextField
-                sx={{ marginBottom: "15px" }}
-                fullWidth
-                color="primary"
+                value={value}
+                onChange={(event) => {
+                    setValue(event.target.value);
+                }}
+                // color="primary"
                 placeholder={placeholder}
                 type={type}
-                InputProps={{
-                    startAdornment: (
-                        <InputAdornment position="start">
-                            <Icon color="primary">{icon}</Icon>
-                        </InputAdornment>
-                    ),
-                }}
+                {...otherProps}
             />
         </ThemeProvider>
     );

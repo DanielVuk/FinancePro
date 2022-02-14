@@ -1,19 +1,17 @@
-import { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-
+import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
+import MenuIcon from "@mui/icons-material/Menu";
 import {
     AppBar,
-    Toolbar,
     Avatar,
+    Box,
+    IconButton,
+    Slide,
     Tab,
     Tabs,
-    IconButton,
-    Box,
-    Slide,
+    Toolbar,
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
-
+import { useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import icon from "../assets/icon.png";
 
 const NavBar = () => {
