@@ -7,13 +7,13 @@ import App from "./App";
 import { AppTheme } from "./AppTheme";
 
 ReactDOM.render(
-    <React.StrictMode>
-        <ThemeProvider theme={AppTheme}>
-            <CssBaseline />
-            <BrowserRouter>
-                <App />
-            </BrowserRouter>
-        </ThemeProvider>
-    </React.StrictMode>,
+    //<React.StrictMode>
+    <ThemeProvider theme={AppTheme}>
+        <CssBaseline />
+        <BrowserRouter>
+            <App />
+        </BrowserRouter>
+    </ThemeProvider>,
+    //</React.StrictMode>,
     document.getElementById("root")
 );

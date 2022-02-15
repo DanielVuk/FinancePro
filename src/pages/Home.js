@@ -1,6 +1,10 @@
 import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
+
+import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
+import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
+
 import {
     Box,
     Button,
@@ -8,12 +12,11 @@ import {
     Stack,
     Typography,
     IconButton,
-    FormControl,
 } from "@mui/material";
-import { ColorPicker } from "material-ui-color";
 import React, { useEffect, useState } from "react";
 import AppModal from "../components/modals/AppModal";
 import AppInput from "../components/AppInput";
+import { ColorPicker } from "material-ui-color";
 
 const _wallets = [
     {
@@ -45,38 +48,28 @@ const Home = () => {
 
     const [selectedWallet, setSelectedWallet] = useState();
 
-    const handleAddWallet = () => {
-        var newWallet = { ...selectedWallet, id: wallets.length + 1 };
+    const addWallet = (wallet) => {
+        var newWallet = { id: wallets.length + 1, ...wallet };
         let newWallets = [...wallets, newWallet];
         setWallets(newWallets);
-        setSelectedWallet();
+
         setAddWalletModal(false);
     };
 
     const deleteWallet = () => {
         let newWallets = [...wallets].filter((w) => w.id !== selectedWallet.id);
         setWallets(newWallets);
+
         setDeleteWalletModal(false);
     };
 
-    const handleDeleteWallet = (wallet) => {
-        setSelectedWallet(wallet);
-        setDeleteWalletModal(true);
-    };
-
-    const editWallet = () => {
-        var index = wallets.findIndex((item) => item.id == selectedWallet.id);
+    const editWallet = (wallet) => {
+        var index = wallets.findIndex((item) => item.id === selectedWallet.id);
         let tempWallets = [...wallets];
-        tempWallets[index] = selectedWallet;
-
+        tempWallets[index] = { id: selectedWallet.id, ...wallet };
         setWallets(tempWallets);
-        setSelectedWallet();
-        setEditWalletModal(false);
-    };
 
-    const handleEditWallet = (wallet) => {
-        setSelectedWallet(wallet);
-        setEditWalletModal(true);
+        setEditWalletModal(false);
     };
 
     return (
@@ -102,7 +95,10 @@ const Home = () => {
                         Your total balance:
                     </Typography>
                     <Typography variant="h4" sx={{ color: "white" }}>
-                        6000
+                        {wallets.reduce(
+                            (prev, curr) => prev + +curr.balance,
+                            0
+                        )}
                     </Typography>
                 </Stack>
             </Grid>
@@ -122,7 +118,9 @@ const Home = () => {
                     <Grid container spacing={3}>
                         <Grid item xs="auto" mx={1.5}>
                             <Button
-                                onClick={() => setAddWalletModal(true)}
+                                onClick={() => {
+                                    setAddWalletModal(true);
+                                }}
                                 sx={{
                                     backgroundColor: "#F7F6FA",
                                     boxShadow: 3,
@@ -145,9 +143,13 @@ const Home = () => {
                                     name={wallet.name}
                                     balance={wallet.balance}
                                     onDelete={() => {
-                                        handleDeleteWallet(wallet);
+                                        setSelectedWallet(wallet);
+                                        setDeleteWalletModal(true);
                                     }}
-                                    onEdit={() => handleEditWallet(wallet)}
+                                    onEdit={() => {
+                                        setSelectedWallet(wallet);
+                                        setEditWalletModal(true);
+                                    }}
                                 />
                             </Grid>
                         ))}
@@ -159,14 +161,14 @@ const Home = () => {
                 open={addWalletModal}
                 onClose={() => {
                     setAddWalletModal(false);
-                    setSelectedWallet();
                 }}
-                onConfirm={handleAddWallet}
             >
                 <WalletForm
                     title="Create New Wallet"
+                    onConfirm={addWallet}
+                    onClose={() => setAddWalletModal(false)}
+                    open={addWalletModal}
                     wallet={selectedWallet}
-                    setWallet={setSelectedWallet}
                 />
             </AppModal>
 
@@ -174,25 +176,25 @@ const Home = () => {
                 open={editWalletModal}
                 onClose={() => {
                     setEditWalletModal(false);
-                    setSelectedWallet();
                 }}
-                onConfirm={editWallet}
             >
                 <WalletForm
                     title="Edit Wallet"
-                    wallet={selectedWallet}
-                    setWallet={setSelectedWallet}
                     action="edit"
+                    onConfirm={editWallet}
+                    onClose={() => setEditWalletModal(false)}
+                    open={editWalletModal}
+                    wallet={selectedWallet}
                 />
             </AppModal>
 
             <AppModal
                 open={deleteWalletModal}
                 onClose={() => setDeleteWalletModal(false)}
-                onConfirm={deleteWallet}
             >
                 <Typography sm={12} variant="h4">
-                    Delete wallet {selectedWallet && selectedWallet.name}
+                    Are you sure you want to delete wallet{" "}
+                    {selectedWallet && selectedWallet.name}?
                 </Typography>
             </AppModal>
         </Grid>
@@ -251,71 +253,127 @@ const Wallet = ({ color, name, balance, onDelete, onEdit }) => {
     );
 };
 
-const WalletForm = ({ title, wallet, setWallet, action = "add" }) => {
+const WalletForm = ({
+    title,
+    action = "add",
+    onConfirm,
+    onClose,
+    open,
+    wallet = null,
+}) => {
     const [walletName, setWalletName] = useState("");
     const [walletBalance, setWalletBalance] = useState(0);
-    const [walletColor, setWalletColor] = useState("");
+    const [walletColor, setWalletColor] = useState("black");
 
     useEffect(() => {
-        if (wallet) {
-            setWalletName(wallet.name);
-            setWalletBalance(wallet.balance);
-            setWalletColor(wallet.color);
-        } else {
+        if (action == "add") {
             setWalletName("");
             setWalletBalance(0);
-            setWalletColor("");
+            setWalletColor("black");
+        } else if (action == "edit") {
+            if (wallet) {
+                setWalletName(wallet.name);
+                setWalletBalance(wallet.balance);
+                setWalletColor(wallet.color);
+            }
         }
-    }, [wallet]);
-
-    useEffect(() => {
-        let tempWallet = {
-            id: null,
-            name: walletName,
-            balance: walletBalance,
-            color: walletColor,
-        };
-        if (wallet && wallet.id) {
-            tempWallet.id = wallet.id;
-        }
-
-        setWallet(tempWallet);
-    }, [walletName, walletBalance, walletColor]);
+    }, [open]);
 
     return (
-        <Grid container alignItems="center" direction="column">
-            <Typography sm={12} variant="h4">
-                {title}
-            </Typography>
-            <Stack
-                my={5}
-                sx={{
-                    width: "500px",
-                }}
-            >
-                <AppInput
-                    placeholder="Wallet name"
-                    value={walletName}
-                    setValue={setWalletName}
-                    sx={{ marginBottom: 5 }}
-                />
-
-                <AppInput
-                    value={walletBalance}
-                    setValue={setWalletBalance}
-                    type="number"
-                    sx={{ marginBottom: 5 }}
-                    disabled={action === "edit"}
-                    placeholder="Current balance"
-                />
-
-                <ColorPicker
-                    value={walletColor}
-                    onChange={(event) => {
-                        setWalletColor(event.css.backgroundColor);
+        <form
+            onSubmit={(event) => {
+                event.preventDefault();
+                onConfirm({
+                    name: walletName,
+                    balance: walletBalance,
+                    color: walletColor,
+                });
+            }}
+        >
+            <Grid container alignItems="center" direction="column">
+                <Typography sm={12} variant="h4">
+                    {title}
+                </Typography>
+                <Stack
+                    my={5}
+                    sx={{
+                        width: "500px",
                     }}
-                />
-            </Stack>
-        </Grid>
+                >
+                    <AppInput
+                        placeholder="Wallet name"
+                        value={walletName}
+                        required
+                        setValue={setWalletName}
+                        sx={{ marginBottom: 5 }}
+                    />
+
+                    <AppInput
+                        value={walletBalance}
+                        setValue={setWalletBalance}
+                        type="number"
+                        required
+                        sx={{ marginBottom: 5 }}
+                        disabled={action === "edit"}
+                        placeholder="Current balance"
+                    />
+
+                    <Box
+                        sx={{
+                            border: "1px solid lightgrey",
+                            borderRadius: "4px",
+                            display: "flex",
+                            alignItems: "center",
+                            height: "56px",
+                            justifyContent: "space-between",
+                        }}
+                        fullWidth
+                    >
+                        <Typography
+                            ml={1.5}
+                            sx={{ color: "#5D2DFD", fontWeight: 600 }}
+                        >
+                            Wallet color: {walletColor}
+                        </Typography>
+
+                        <ColorPicker
+                            value={walletColor}
+                            hideTextfield
+                            defaultValue="black"
+                            onChange={(event) => {
+                                setWalletColor(event.css.backgroundColor);
+                            }}
+                        />
+                    </Box>
+
+                    <Box
+                        sx={{
+                            display: "flex",
+                            justifyContent: "space-around",
+                            width: "100%",
+                        }}
+                    >
+                        <IconButton
+                            onClick={onClose}
+                            sx={{ backgroundColor: "#F1ECFD" }}
+                        >
+                            <CancelOutlinedIcon
+                                fontSize="inherit"
+                                color="primary"
+                            />
+                        </IconButton>
+                        <IconButton
+                            type="submit"
+                            sx={{ backgroundColor: "#F1ECFD" }}
+                        >
+                            <CheckRoundedIcon
+                                fontSize="inherit"
+                                color="primary"
+                            />
+                        </IconButton>
+                    </Box>
+                </Stack>
+            </Grid>
+        </form>
     );
 };
