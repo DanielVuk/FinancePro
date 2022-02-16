@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 
 const initialState = {
-    user: [],
     wallets: [
         {
             id: 1,
@@ -24,7 +23,7 @@ const initialState = {
     ],
 };
 
-export const Context = React.createContext();
+const Context = React.createContext();
 
 const Store = ({ children }) => {
     const [state, setState] = useState(initialState);
@@ -36,4 +35,4 @@ const Store = ({ children }) => {
     );
 };
 
-export default Store;
+export { Store, Context };

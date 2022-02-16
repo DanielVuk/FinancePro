@@ -6,6 +6,8 @@ import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import {
     Box,
     Button,
+    Card,
+    Container,
     Grid,
     IconButton,
     Stack,
@@ -13,9 +15,17 @@ import {
 } from "@mui/material";
 import { ColorPicker } from "material-ui-color";
 import React, { useContext, useEffect, useState } from "react";
+import Carousel from "react-elastic-carousel";
 import AppInput from "../components/AppInput";
 import AppModal from "../components/modals/AppModal";
 import { Context } from "../Store";
+
+const breakPoints = [
+    { width: 1, itemsToShow: 1 },
+    { width: 550, itemsToShow: 2 },
+    { width: 768, itemsToShow: 3 },
+    { width: 1200, itemsToShow: 4 },
+];
 
 const Home = () => {
     const [state, setState] = useContext(Context);
@@ -84,60 +94,59 @@ const Home = () => {
                     </Typography>
                 </Stack>
             </Grid>
-            <Grid mt={-14} px={4}>
-                <Grid item>
-                    <Typography variant="h4" sx={{ color: "white" }}>
-                        Wallets:
-                    </Typography>
-                </Grid>
-                <Box
-                    mt={2}
-                    ml={5}
-                    sx={{
-                        display: "flex",
-                    }}
+            <Container maxWidth="xl">
+                <Typography
+                    variant="h4"
+                    sx={{ color: "white" }}
+                    mt={-13}
+                    mb={2}
                 >
-                    <Grid container spacing={3}>
-                        <Grid item xs="auto" mx={1.5}>
-                            <Button
-                                onClick={() => {
-                                    setAddWalletModal(true);
+                    Wallets:
+                </Typography>
+                <Carousel breakPoints={breakPoints}>
+                    <Button
+                        onClick={() => {
+                            setAddWalletModal(true);
+                        }}
+                        sx={{
+                            backgroundColor: "#F7F6FA",
+                            boxShadow: 3,
+                            "&:hover": {
+                                backgroundColor: "#F7F6FA",
+                                boxShadow: 4,
+                            },
+                            borderRadius: 5,
+                            minWidth: "250px",
+                            minHeight: "153px",
+                            marginBottom: "5px",
+                        }}
+                    >
+                        <AddCircleOutlineRoundedIcon fontSize="large" />
+                    </Button>
+                    {state.wallets.map((wallet) => (
+                        <Card
+                            sx={{
+                                backgroundColor: "transparent",
+                                boxShadow: 0,
+                            }}
+                        >
+                            <Wallet
+                                color={wallet.color}
+                                name={wallet.name}
+                                balance={wallet.balance}
+                                onDelete={() => {
+                                    setSelectedWallet(wallet);
+                                    setDeleteWalletModal(true);
                                 }}
-                                sx={{
-                                    backgroundColor: "#F7F6FA",
-                                    boxShadow: 3,
-                                    "&:hover": {
-                                        backgroundColor: "#F7F6FA",
-                                        boxShadow: 4,
-                                    },
-                                    borderRadius: 5,
-                                    minWidth: "250px",
-                                    minHeight: "153px",
+                                onEdit={() => {
+                                    setSelectedWallet(wallet);
+                                    setEditWalletModal(true);
                                 }}
-                            >
-                                <AddCircleOutlineRoundedIcon fontSize="large" />
-                            </Button>
-                        </Grid>
-                        {state.wallets.map((wallet) => (
-                            <Grid item xs="auto" key={wallet.id}>
-                                <Wallet
-                                    color={wallet.color}
-                                    name={wallet.name}
-                                    balance={wallet.balance}
-                                    onDelete={() => {
-                                        setSelectedWallet(wallet);
-                                        setDeleteWalletModal(true);
-                                    }}
-                                    onEdit={() => {
-                                        setSelectedWallet(wallet);
-                                        setEditWalletModal(true);
-                                    }}
-                                />
-                            </Grid>
-                        ))}
-                    </Grid>
-                </Box>
-            </Grid>
+                            />
+                        </Card>
+                    ))}
+                </Carousel>
+            </Container>
             <AppModal
                 open={addWalletModal}
                 onClose={() => {
@@ -214,9 +223,10 @@ const Wallet = ({ color, name, balance, onDelete, onEdit }) => {
     const walletStyle = {
         backgroundColor: "#F7F6FA",
         borderRadius: 5,
-        minWidth: "250px",
         padding: 1.5,
         boxShadow: 3,
+        minWidth: "250px",
+        marginBottom: "5px",
     };
 
     return (
@@ -308,6 +318,7 @@ const WalletForm = ({
                     }}
                 >
                     <AppInput
+                        label="Name"
                         placeholder="Wallet name"
                         value={walletName}
                         required
@@ -315,6 +326,7 @@ const WalletForm = ({
                         sx={{ marginBottom: 5 }}
                     />
                     <AppInput
+                        label="Balance"
                         value={walletBalance}
                         setValue={setWalletBalance}
                         type="number"
@@ -331,6 +343,7 @@ const WalletForm = ({
                             alignItems: "center",
                             height: "56px",
                             justifyContent: "space-between",
+                            paddingRight: "10px",
                         }}
                         fullWidth
                     >
@@ -338,7 +351,7 @@ const WalletForm = ({
                             ml={1.5}
                             sx={{ color: "#5D2DFD", fontWeight: 600 }}
                         >
-                            Wallet color: {walletColor}
+                            Wallet color
                         </Typography>
 
                         <ColorPicker

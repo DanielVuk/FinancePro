@@ -1,5 +1,5 @@
 import Router from "./router";
-import Store from "./Store";
+import { Store } from "./Store";
 
 import NavBar from "./components/NavBar";
 
