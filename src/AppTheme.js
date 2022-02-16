@@ -8,5 +8,9 @@ export let AppTheme = createTheme({
         background: {
             default: "#F1ECFD",
         },
+        text: {
+            primary: "#000",
+            secondary: "#5D2DFD",
+        },
     },
 });

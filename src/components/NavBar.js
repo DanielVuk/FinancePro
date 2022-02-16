@@ -43,6 +43,10 @@ const NavBar = () => {
         handleMenuOpen();
     };
 
+    const handleLogOut = () => {
+        navigate("/auth");
+    };
+
     return (
         <AppBar
             position="static"
@@ -67,6 +71,7 @@ const NavBar = () => {
                                 WebkitFilter: "brightness(0)",
                             }}
                         />
+
                         <IconButton
                             size="large"
                             onClick={handleMenuOpen}
@@ -92,7 +97,7 @@ const NavBar = () => {
                         </Tabs>
                     </Box>
 
-                    <IconButton size="large">
+                    <IconButton size="large" onClick={handleLogOut}>
                         <LogoutRoundedIcon fontSize="inherit" />
                     </IconButton>
                 </Box>

@@ -20,11 +20,18 @@ import AppInput from "../components/AppInput";
 import AppModal from "../components/modals/AppModal";
 import { Context } from "../Store";
 
-const breakPoints = [
+const breakPointsForWallets = [
     { width: 1, itemsToShow: 1 },
     { width: 550, itemsToShow: 2 },
     { width: 768, itemsToShow: 3 },
     { width: 1200, itemsToShow: 4 },
+];
+
+const breakPointsForCategories = [
+    { width: 1, itemsToShow: 1 },
+    { width: 550, itemsToShow: 2 },
+    { width: 768, itemsToShow: 3 },
+    { width: 1200, itemsToShow: 8 },
 ];
 
 const Home = () => {
@@ -94,7 +101,7 @@ const Home = () => {
                     </Typography>
                 </Stack>
             </Grid>
-            <Container maxWidth="xl">
+            <Container maxWidth="xl" sx={{ minWidth: "320px" }}>
                 <Typography
                     variant="h4"
                     sx={{ color: "white" }}
@@ -103,37 +110,30 @@ const Home = () => {
                 >
                     Wallets:
                 </Typography>
-                <Carousel breakPoints={breakPoints}>
-                    <Button
+                <Carousel breakPoints={breakPointsForWallets}>
+                    <AddButton
                         onClick={() => {
                             setAddWalletModal(true);
                         }}
-                        sx={{
-                            backgroundColor: "#F7F6FA",
-                            boxShadow: 3,
-                            "&:hover": {
-                                backgroundColor: "#F7F6FA",
-                                boxShadow: 4,
-                            },
-                            borderRadius: 5,
-                            minWidth: "250px",
-                            minHeight: "153px",
-                            marginBottom: "5px",
-                        }}
-                    >
-                        <AddCircleOutlineRoundedIcon fontSize="large" />
-                    </Button>
+                        height="153px"
+                        width="250px"
+                        transform="scale(1.03)"
+                    />
                     {state.wallets.map((wallet) => (
                         <Card
+                            key={wallet.id}
+                            onClick={() => {
+                                console.log(wallet.name);
+                            }}
                             sx={{
                                 backgroundColor: "transparent",
                                 boxShadow: 0,
                             }}
                         >
                             <Wallet
+                                balance={wallet.balance}
                                 color={wallet.color}
                                 name={wallet.name}
-                                balance={wallet.balance}
                                 onDelete={() => {
                                     setSelectedWallet(wallet);
                                     setDeleteWalletModal(true);
@@ -146,6 +146,31 @@ const Home = () => {
                         </Card>
                     ))}
                 </Carousel>
+                <Typography
+                    my={4}
+                    variant="h4"
+                    color="text.secondary"
+                    sx={{ fontWeight: "bold" }}
+                >
+                    Categories:
+                </Typography>
+                <Carousel breakPoints={breakPointsForCategories}>
+                    <AddButton
+                        onClick={() => {
+                            setAddWalletModal(true);
+                        }}
+                        height="150px"
+                        width="120px"
+                    />
+                    {state.categories.map((category) => (
+                        <Category
+                            key={category.id}
+                            color={category.color}
+                            iconName={category.icon}
+                            name={category.name}
+                        />
+                    ))}
+                </Carousel>
             </Container>
             <AppModal
                 open={addWalletModal}
@@ -155,8 +180,8 @@ const Home = () => {
             >
                 <WalletForm
                     title="Create New Wallet"
-                    onConfirm={addWallet}
                     onClose={() => setAddWalletModal(false)}
+                    onConfirm={addWallet}
                     open={addWalletModal}
                     wallet={selectedWallet}
                 />
@@ -168,10 +193,10 @@ const Home = () => {
                 }}
             >
                 <WalletForm
-                    title="Edit Wallet"
                     action="edit"
-                    onConfirm={editWallet}
+                    title="Edit Wallet"
                     onClose={() => setEditWalletModal(false)}
+                    onConfirm={editWallet}
                     open={editWalletModal}
                     wallet={selectedWallet}
                 />
@@ -219,14 +244,25 @@ const Home = () => {
 
 export default Home;
 
-const Wallet = ({ color, name, balance, onDelete, onEdit }) => {
+const GetIconComponent = ({ iconName }) => {
+    if (iconName === "delete") {
+        return <DeleteIcon fontSize="large" />;
+    }
+};
+
+const Wallet = ({ balance, color, name, onDelete, onEdit }) => {
     const walletStyle = {
         backgroundColor: "#F7F6FA",
         borderRadius: 5,
         padding: 1.5,
         boxShadow: 3,
         minWidth: "250px",
-        marginBottom: "5px",
+        margin: "10px ",
+        "&:hover": {
+            cursor: "pointer",
+            transform: "scale(1.03)",
+            backgroundColor: "#F1ECFD",
+        },
     };
 
     return (
@@ -250,19 +286,19 @@ const Wallet = ({ color, name, balance, onDelete, onEdit }) => {
                 <Typography variant="h6">HRK</Typography>
                 <Box>
                     <IconButton
-                        onClick={onEdit}
-                        sx={{ backgroundColor: "#F1ECFD" }}
-                    >
-                        <EditRoundedIcon fontSize="inherit" color="primary" />
-                    </IconButton>
-                    <IconButton
                         onClick={onDelete}
-                        sx={{ backgroundColor: "#F1ECFD", marginLeft: "15px" }}
+                        sx={{ backgroundColor: "#F1ECFD" }}
                     >
                         <DeleteIcon
                             fontSize="inherit"
                             sx={{ color: "#FF6D6D" }}
                         />
+                    </IconButton>
+                    <IconButton
+                        onClick={onEdit}
+                        sx={{ backgroundColor: "#F1ECFD", marginLeft: "15px" }}
+                    >
+                        <EditRoundedIcon fontSize="inherit" color="primary" />
                     </IconButton>
                 </Box>
             </Box>
@@ -271,11 +307,11 @@ const Wallet = ({ color, name, balance, onDelete, onEdit }) => {
 };
 
 const WalletForm = ({
-    title,
     action = "add",
-    onConfirm,
     onClose,
+    onConfirm,
     open,
+    title,
     wallet = null,
 }) => {
     const [walletName, setWalletName] = useState("");
@@ -308,7 +344,7 @@ const WalletForm = ({
             }}
         >
             <Grid container alignItems="center" direction="column">
-                <Typography sm={12} variant="h4">
+                <Typography sm={12} variant="h4" sx={{ fontWeight: "bold" }}>
                     {title}
                 </Typography>
                 <Stack
@@ -380,5 +416,74 @@ const WalletForm = ({
                 </Stack>
             </Grid>
         </form>
+    );
+};
+
+const Category = ({ color, iconName, name }) => {
+    return (
+        <Box
+            sx={{
+                display: "flex",
+                flexDirection: "column",
+                height: "150px",
+                width: "120px",
+                borderRadius: 4,
+                justifyContent: "center",
+                alignItems: "center",
+                margin: "10px ",
+                boxShadow: 3,
+                backgroundColor: color,
+                "&:hover": {
+                    cursor: "pointer",
+                    transform: "scale(1.1)",
+                },
+            }}
+        >
+            <Box
+                sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    backgroundColor: "white",
+                    height: "66px",
+                    width: "66px",
+                    borderRadius: "30px",
+                }}
+            >
+                <GetIconComponent iconName={iconName} />
+            </Box>
+
+            <Typography
+                variant="button"
+                mt={3}
+                sx={{ WebkitFilter: "invert(100%)", color: color }}
+            >
+                {name}
+            </Typography>
+        </Box>
+    );
+};
+
+const AddButton = ({ onClick, height, width, transform }) => {
+    return (
+        <Button
+            onClick={onClick}
+            sx={{
+                backgroundColor: "#F7F6FA",
+                boxShadow: 3,
+                "&:hover": {
+                    backgroundColor: "#F7F6FA",
+                    boxShadow: 4,
+                    transform: transform,
+                    backgroundColor: "#F1ECFD",
+                },
+                margin: "10px ",
+                borderRadius: 5,
+                height: height,
+                width: width,
+            }}
+        >
+            <AddCircleOutlineRoundedIcon fontSize="large" />
+        </Button>
     );
 };
