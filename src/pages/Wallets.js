@@ -1,11 +1,13 @@
 import { Container, Typography } from "@mui/material";
-import React from "react";
+import React, { useContext } from "react";
+import { Context } from "../Store";
 
 const Wallets = () => {
+    const [state] = useContext(Context);
     return (
         <Container maxWidth="xl" sx={{ backgroundColor: "white" }}>
             <Typography m={10} variant="h3">
-                Wallets:
+                Wallets: {state.wallets.length}
             </Typography>
         </Container>
     );

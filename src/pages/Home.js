@@ -1,46 +1,24 @@
 import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
+import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
-
-import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
-import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
-
 import {
     Box,
     Button,
     Grid,
+    IconButton,
     Stack,
     Typography,
-    IconButton,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import AppModal from "../components/modals/AppModal";
-import AppInput from "../components/AppInput";
 import { ColorPicker } from "material-ui-color";
-
-const _wallets = [
-    {
-        id: 1,
-        name: "Gotovina",
-        balance: 4000,
-        color: "green",
-    },
-    {
-        id: 2,
-        name: "Ziro",
-        balance: 40000,
-        color: "red",
-    },
-    {
-        id: 3,
-        name: "Tekuci",
-        balance: 2000,
-        color: "yellow",
-    },
-];
+import React, { useContext, useEffect, useState } from "react";
+import AppInput from "../components/AppInput";
+import AppModal from "../components/modals/AppModal";
+import { Context } from "../Store";
 
 const Home = () => {
-    const [wallets, setWallets] = useState(_wallets);
+    const [state, setState] = useContext(Context);
 
     const [addWalletModal, setAddWalletModal] = useState(false);
     const [deleteWalletModal, setDeleteWalletModal] = useState(false);
@@ -49,25 +27,29 @@ const Home = () => {
     const [selectedWallet, setSelectedWallet] = useState();
 
     const addWallet = (wallet) => {
-        var newWallet = { id: wallets.length + 1, ...wallet };
-        let newWallets = [...wallets, newWallet];
-        setWallets(newWallets);
+        let newWallet = { id: state.wallets.length + 1, ...wallet };
+        let newWallets = [...state.wallets, newWallet];
+        setState({ ...state, wallets: newWallets });
 
         setAddWalletModal(false);
     };
 
     const deleteWallet = () => {
-        let newWallets = [...wallets].filter((w) => w.id !== selectedWallet.id);
-        setWallets(newWallets);
+        let newWallets = [...state.wallets].filter(
+            (w) => w.id !== selectedWallet.id
+        );
+        setState({ ...state, wallets: newWallets });
 
         setDeleteWalletModal(false);
     };
 
     const editWallet = (wallet) => {
-        var index = wallets.findIndex((item) => item.id === selectedWallet.id);
-        let tempWallets = [...wallets];
+        var index = state.wallets.findIndex(
+            (item) => item.id === selectedWallet.id
+        );
+        let tempWallets = [...state.wallets];
         tempWallets[index] = { id: selectedWallet.id, ...wallet };
-        setWallets(tempWallets);
+        setState({ ...state, wallets: tempWallets });
 
         setEditWalletModal(false);
     };
@@ -95,7 +77,7 @@ const Home = () => {
                         Your total balance:
                     </Typography>
                     <Typography variant="h4" sx={{ color: "white" }}>
-                        {wallets.reduce(
+                        {state.wallets.reduce(
                             (prev, curr) => prev + +curr.balance,
                             0
                         )}
@@ -136,7 +118,7 @@ const Home = () => {
                                 <AddCircleOutlineRoundedIcon fontSize="large" />
                             </Button>
                         </Grid>
-                        {wallets.map((wallet) => (
+                        {state.wallets.map((wallet) => (
                             <Grid item xs="auto" key={wallet.id}>
                                 <Wallet
                                     color={wallet.color}
@@ -156,7 +138,6 @@ const Home = () => {
                     </Grid>
                 </Box>
             </Grid>
-
             <AppModal
                 open={addWalletModal}
                 onClose={() => {
@@ -171,7 +152,6 @@ const Home = () => {
                     wallet={selectedWallet}
                 />
             </AppModal>
-
             <AppModal
                 open={editWalletModal}
                 onClose={() => {
@@ -187,15 +167,42 @@ const Home = () => {
                     wallet={selectedWallet}
                 />
             </AppModal>
-
             <AppModal
                 open={deleteWalletModal}
                 onClose={() => setDeleteWalletModal(false)}
             >
-                <Typography sm={12} variant="h4">
-                    Are you sure you want to delete wallet{" "}
-                    {selectedWallet && selectedWallet.name}?
-                </Typography>
+                <Stack spacing={5} sx={{ alignItems: "center" }}>
+                    <Typography
+                        sm={12}
+                        variant="h4"
+                        sx={{ fontWeight: "bold" }}
+                    >
+                        Delete wallet {selectedWallet && selectedWallet.name}?
+                    </Typography>
+                    <Typography variant="h6">
+                        Once deleted cannot be recovered.
+                    </Typography>
+                    <Stack direction="row" spacing={15}>
+                        <IconButton
+                            onClick={() => setDeleteWalletModal(false)}
+                            sx={{ backgroundColor: "#F1ECFD" }}
+                        >
+                            <CloseRoundedIcon
+                                fontSize="inherit"
+                                color="primary"
+                            />
+                        </IconButton>
+                        <IconButton
+                            onClick={deleteWallet}
+                            sx={{ backgroundColor: "#F1ECFD" }}
+                        >
+                            <CheckRoundedIcon
+                                fontSize="inherit"
+                                color="primary"
+                            />
+                        </IconButton>
+                    </Stack>
+                </Stack>
             </AppModal>
         </Grid>
     );
@@ -266,11 +273,11 @@ const WalletForm = ({
     const [walletColor, setWalletColor] = useState("black");
 
     useEffect(() => {
-        if (action == "add") {
+        if (action === "add") {
             setWalletName("");
             setWalletBalance(0);
             setWalletColor("black");
-        } else if (action == "edit") {
+        } else if (action === "edit") {
             if (wallet) {
                 setWalletName(wallet.name);
                 setWalletBalance(wallet.balance);
@@ -307,7 +314,6 @@ const WalletForm = ({
                         setValue={setWalletName}
                         sx={{ marginBottom: 5 }}
                     />
-
                     <AppInput
                         value={walletBalance}
                         setValue={setWalletBalance}
@@ -317,7 +323,6 @@ const WalletForm = ({
                         disabled={action === "edit"}
                         placeholder="Current balance"
                     />
-
                     <Box
                         sx={{
                             border: "1px solid lightgrey",
@@ -345,33 +350,20 @@ const WalletForm = ({
                             }}
                         />
                     </Box>
-
-                    <Box
-                        sx={{
-                            display: "flex",
-                            justifyContent: "space-around",
-                            width: "100%",
-                        }}
+                </Stack>
+                <Stack direction="row" spacing={8}>
+                    <IconButton
+                        onClick={onClose}
+                        sx={{ backgroundColor: "#F1ECFD" }}
                     >
-                        <IconButton
-                            onClick={onClose}
-                            sx={{ backgroundColor: "#F1ECFD" }}
-                        >
-                            <CancelOutlinedIcon
-                                fontSize="inherit"
-                                color="primary"
-                            />
-                        </IconButton>
-                        <IconButton
-                            type="submit"
-                            sx={{ backgroundColor: "#F1ECFD" }}
-                        >
-                            <CheckRoundedIcon
-                                fontSize="inherit"
-                                color="primary"
-                            />
-                        </IconButton>
-                    </Box>
+                        <CloseRoundedIcon fontSize="inherit" color="primary" />
+                    </IconButton>
+                    <IconButton
+                        type="submit"
+                        sx={{ backgroundColor: "#F1ECFD" }}
+                    >
+                        <CheckRoundedIcon fontSize="inherit" color="primary" />
+                    </IconButton>
                 </Stack>
             </Grid>
         </form>
