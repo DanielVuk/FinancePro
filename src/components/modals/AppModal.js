@@ -1,19 +1,25 @@
 import { Box, Modal, Slide } from "@mui/material";
 
 const style = {
-    position: "absolute",
-    top: "30%",
-    left: "35%",
-    width: 700,
     bgcolor: "background.paper",
     borderRadius: 5,
     boxShadow: 20,
+    minWidth: "320px",
     p: 4,
 };
 
 const AppModal = ({ open, onClose, children }) => {
     return (
-        <Modal keepMounted open={open} onClose={onClose}>
+        <Modal
+            keepMounted
+            open={open}
+            onClose={onClose}
+            sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+            }}
+        >
             <Slide in={open}>
                 <Box sx={style}>{children}</Box>
             </Slide>
