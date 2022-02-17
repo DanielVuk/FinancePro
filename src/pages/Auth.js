@@ -13,8 +13,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import AppInput from "../components/AppInput.js";
-import AppButton from "../components/common/AppButton";
-import AppModal from "../components/modals/AppModal";
+import AppModal from "../components/AppModal";
+import AppButton from "../components/Buttons/AppButton";
 
 const alignCenter = {
     justifyContent: "center",

@@ -1,38 +1,11 @@
-import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
-import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
-import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditRoundedIcon from "@mui/icons-material/EditRounded";
-import {
-    Box,
-    Button,
-    Card,
-    Container,
-    Grid,
-    IconButton,
-    Stack,
-    Typography,
-} from "@mui/material";
-import { ColorPicker } from "material-ui-color";
-import React, { useContext, useEffect, useState } from "react";
-import Carousel from "react-elastic-carousel";
-import AppInput from "../components/AppInput";
-import AppModal from "../components/modals/AppModal";
+import { Container, Grid, Stack, Typography } from "@mui/material";
+import React, { useContext, useState } from "react";
+import AppModal from "../components/AppModal";
+import CategoriesCarousel from "../components/Carousels/CategoriesCarousel";
+import WalletsCarousel from "../components/Carousels/WalletsCarousel";
+import DeleteForm from "../components/Forms/DeleteForm";
+import WalletForm from "../components/Forms/WalletForm";
 import { Context } from "../Store";
-
-const breakPointsForWallets = [
-    { width: 1, itemsToShow: 1 },
-    { width: 550, itemsToShow: 2 },
-    { width: 768, itemsToShow: 3 },
-    { width: 1200, itemsToShow: 4 },
-];
-
-const breakPointsForCategories = [
-    { width: 1, itemsToShow: 1 },
-    { width: 550, itemsToShow: 2 },
-    { width: 768, itemsToShow: 3 },
-    { width: 1200, itemsToShow: 8 },
-];
 
 const Home = () => {
     const [state, setState] = useContext(Context);
@@ -42,12 +15,16 @@ const Home = () => {
     const [editWalletModal, setEditWalletModal] = useState(false);
 
     const [selectedWallet, setSelectedWallet] = useState();
+    const [selectedCategory, setSelectedCategory] = useState();
 
     const addWallet = (wallet) => {
-        let newWallet = { id: state.wallets.length + 1, ...wallet };
+        let newWallet = {
+            id: state.wallets[state.wallets.length - 1].id + 1,
+            ...wallet,
+        };
         let newWallets = [...state.wallets, newWallet];
         setState({ ...state, wallets: newWallets });
-
+        console.log(state);
         setAddWalletModal(false);
     };
 
@@ -76,7 +53,7 @@ const Home = () => {
             container
             maxWidth="fluid"
             justifyContent="center"
-            sx={{ minWidth: "320px" }}
+            sx={{ minWidth: "428px" }}
         >
             <Grid
                 container
@@ -102,76 +79,41 @@ const Home = () => {
                 </Stack>
             </Grid>
             <Container maxWidth="xl" sx={{ minWidth: "320px" }}>
-                <Typography
-                    variant="h4"
-                    sx={{ color: "white" }}
-                    mt={-13}
-                    mb={2}
-                >
-                    Wallets:
-                </Typography>
-                <Carousel breakPoints={breakPointsForWallets}>
-                    <AddButton
-                        onClick={() => {
-                            setAddWalletModal(true);
-                        }}
-                        height="153px"
-                        width="250px"
-                        transform="scale(1.03)"
-                    />
-                    {state.wallets.map((wallet) => (
-                        <Card
-                            key={wallet.id}
-                            onClick={() => {
-                                console.log(wallet.name);
-                            }}
-                            sx={{
-                                backgroundColor: "transparent",
-                                boxShadow: 0,
-                            }}
-                        >
-                            <Wallet
-                                balance={wallet.balance}
-                                color={wallet.color}
-                                name={wallet.name}
-                                onDelete={() => {
-                                    setSelectedWallet(wallet);
-                                    setDeleteWalletModal(true);
-                                }}
-                                onEdit={() => {
-                                    setSelectedWallet(wallet);
-                                    setEditWalletModal(true);
-                                }}
-                            />
-                        </Card>
-                    ))}
-                </Carousel>
-                <Typography
-                    my={4}
-                    variant="h4"
-                    color="text.secondary"
-                    sx={{ fontWeight: "bold" }}
-                >
-                    Categories:
-                </Typography>
-                <Carousel breakPoints={breakPointsForCategories}>
-                    <AddButton
-                        onClick={() => {
-                            setAddWalletModal(true);
-                        }}
-                        height="150px"
-                        width="120px"
-                    />
-                    {state.categories.map((category) => (
-                        <Category
-                            key={category.id}
-                            color={category.color}
-                            iconName={category.icon}
-                            name={category.name}
-                        />
-                    ))}
-                </Carousel>
+                <WalletsCarousel
+                    onAdd={() => {
+                        setAddWalletModal(true);
+                    }}
+                    onDelete={() => {
+                        setDeleteWalletModal(true);
+                    }}
+                    onEdit={() => {
+                        setEditWalletModal(true);
+                    }}
+                    onSelect={(wallet) => {
+                        setSelectedWallet(wallet);
+                        console.log(wallet.name);
+                    }}
+                />
+                <CategoriesCarousel
+                    onAdd={() => {
+                        //TODO: add modal
+                        //  setAddWalletModal(true);
+                    }}
+                    onDelete={() => {
+                        //TODO: ADD MODAL
+                        setDeleteWalletModal(true);
+                    }}
+                    onEdit={() => {
+                        //TODO: ADD MODAL
+                        setEditWalletModal(true);
+                    }}
+                    onSelect={(category) => {
+                        setSelectedCategory(category);
+                        console.log(category.name);
+                    }}
+                />
             </Container>
+
             <AppModal
                 open={addWalletModal}
                 onClose={() => {
@@ -205,285 +147,19 @@ const Home = () => {
                 open={deleteWalletModal}
                 onClose={() => setDeleteWalletModal(false)}
             >
-                <Stack spacing={5} sx={{ alignItems: "center" }}>
-                    <Typography
-                        sm={12}
-                        variant="h4"
-                        sx={{ fontWeight: "bold" }}
-                    >
-                        Delete wallet {selectedWallet && selectedWallet.name}?
-                    </Typography>
-                    <Typography variant="h6">
-                        Once deleted cannot be recovered.
-                    </Typography>
-                    <Stack direction="row" spacing={15}>
-                        <IconButton
-                            onClick={() => setDeleteWalletModal(false)}
-                            sx={{ backgroundColor: "#F1ECFD" }}
-                        >
-                            <CloseRoundedIcon
-                                fontSize="inherit"
-                                color="primary"
-                            />
-                        </IconButton>
-                        <IconButton
-                            onClick={deleteWallet}
-                            sx={{ backgroundColor: "#F1ECFD" }}
-                        >
-                            <CheckRoundedIcon
-                                fontSize="inherit"
-                                color="primary"
-                            />
-                        </IconButton>
-                    </Stack>
-                </Stack>
+                <DeleteForm
+                    onClose={() => setDeleteWalletModal(false)}
+                    onDelete={deleteWallet}
+                    Title={
+                        <>
+                            Delete wallet{" "}
+                            {selectedWallet && selectedWallet.name}?
+                        </>
+                    }
+                />
             </AppModal>
         </Grid>
     );
 };
 
 export default Home;
-
-const GetIconComponent = ({ iconName }) => {
-    if (iconName === "delete") {
-        return <DeleteIcon fontSize="large" />;
-    }
-};
-
-const Wallet = ({ balance, color, name, onDelete, onEdit }) => {
-    const walletStyle = {
-        backgroundColor: "#F7F6FA",
-        borderRadius: 5,
-        padding: 1.5,
-        boxShadow: 3,
-        minWidth: "250px",
-        margin: "10px ",
-        "&:hover": {
-            cursor: "pointer",
-            transform: "scale(1.03)",
-            backgroundColor: "#F1ECFD",
-        },
-    };
-
-    return (
-        <Box mx={1.5} sx={walletStyle}>
-            <Box
-                sx={{
-                    backgroundColor: color,
-                    border: "2px solid black",
-                    height: "25px",
-                    width: "35px",
-                    borderRadius: 4,
-                }}
-            ></Box>
-            <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                {name}
-            </Typography>
-            <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-                {balance}
-            </Typography>
-            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                <Typography variant="h6">HRK</Typography>
-                <Box>
-                    <IconButton
-                        onClick={onDelete}
-                        sx={{ backgroundColor: "#F1ECFD" }}
-                    >
-                        <DeleteIcon
-                            fontSize="inherit"
-                            sx={{ color: "#FF6D6D" }}
-                        />
-                    </IconButton>
-                    <IconButton
-                        onClick={onEdit}
-                        sx={{ backgroundColor: "#F1ECFD", marginLeft: "15px" }}
-                    >
-                        <EditRoundedIcon fontSize="inherit" color="primary" />
-                    </IconButton>
-                </Box>
-            </Box>
-        </Box>
-    );
-};
-
-const WalletForm = ({
-    action = "add",
-    onClose,
-    onConfirm,
-    open,
-    title,
-    wallet = null,
-}) => {
-    const [walletName, setWalletName] = useState("");
-    const [walletBalance, setWalletBalance] = useState(0);
-    const [walletColor, setWalletColor] = useState("black");
-
-    useEffect(() => {
-        if (action === "add") {
-            setWalletName("");
-            setWalletBalance(0);
-            setWalletColor("black");
-        } else if (action === "edit") {
-            if (wallet) {
-                setWalletName(wallet.name);
-                setWalletBalance(wallet.balance);
-                setWalletColor(wallet.color);
-            }
-        }
-    }, [open]);
-
-    return (
-        <form
-            onSubmit={(event) => {
-                event.preventDefault();
-                onConfirm({
-                    name: walletName,
-                    balance: walletBalance,
-                    color: walletColor,
-                });
-            }}
-        >
-            <Grid container alignItems="center" direction="column">
-                <Typography sm={12} variant="h4" sx={{ fontWeight: "bold" }}>
-                    {title}
-                </Typography>
-                <Stack
-                    my={5}
-                    sx={{
-                        width: "500px",
-                    }}
-                >
-                    <AppInput
-                        label="Name"
-                        placeholder="Wallet name"
-                        value={walletName}
-                        required
-                        setValue={setWalletName}
-                        sx={{ marginBottom: 5 }}
-                    />
-                    <AppInput
-                        label="Balance"
-                        value={walletBalance}
-                        setValue={setWalletBalance}
-                        type="number"
-                        required
-                        sx={{ marginBottom: 5 }}
-                        disabled={action === "edit"}
-                        placeholder="Current balance"
-                    />
-                    <Box
-                        sx={{
-                            border: "1px solid lightgrey",
-                            borderRadius: "4px",
-                            display: "flex",
-                            alignItems: "center",
-                            height: "56px",
-                            justifyContent: "space-between",
-                            paddingRight: "10px",
-                        }}
-                        fullWidth
-                    >
-                        <Typography
-                            ml={1.5}
-                            sx={{ color: "#5D2DFD", fontWeight: 600 }}
-                        >
-                            Wallet color
-                        </Typography>
-
-                        <ColorPicker
-                            value={walletColor}
-                            hideTextfield
-                            defaultValue="black"
-                            onChange={(event) => {
-                                setWalletColor(event.css.backgroundColor);
-                            }}
-                        />
-                    </Box>
-                </Stack>
-                <Stack direction="row" spacing={8}>
-                    <IconButton
-                        onClick={onClose}
-                        sx={{ backgroundColor: "#F1ECFD" }}
-                    >
-                        <CloseRoundedIcon fontSize="inherit" color="primary" />
-                    </IconButton>
-                    <IconButton
-                        type="submit"
-                        sx={{ backgroundColor: "#F1ECFD" }}
-                    >
-                        <CheckRoundedIcon fontSize="inherit" color="primary" />
-                    </IconButton>
-                </Stack>
-            </Grid>
-        </form>
-    );
-};
-
-const Category = ({ color, iconName, name }) => {
-    return (
-        <Box
-            sx={{
-                display: "flex",
-                flexDirection: "column",
-                height: "150px",
-                width: "120px",
-                borderRadius: 4,
-                justifyContent: "center",
-                alignItems: "center",
-                margin: "10px ",
-                boxShadow: 3,
-                backgroundColor: color,
-                "&:hover": {
-                    cursor: "pointer",
-                    transform: "scale(1.1)",
-                },
-            }}
-        >
-            <Box
-                sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    backgroundColor: "white",
-                    height: "66px",
-                    width: "66px",
-                    borderRadius: "30px",
-                }}
-            >
-                <GetIconComponent iconName={iconName} />
-            </Box>
-
-            <Typography
-                variant="button"
-                mt={3}
-                sx={{ WebkitFilter: "invert(100%)", color: color }}
-            >
-                {name}
-            </Typography>
-        </Box>
-    );
-};
-
-const AddButton = ({ onClick, height, width, transform }) => {
-    return (
-        <Button
-            onClick={onClick}
-            sx={{
-                backgroundColor: "#F7F6FA",
-                boxShadow: 3,
-                "&:hover": {
-                    backgroundColor: "#F7F6FA",
-                    boxShadow: 4,
-                    transform: transform,
-                    backgroundColor: "#F1ECFD",
-                },
-                margin: "10px ",
-                borderRadius: 5,
-                height: height,
-                width: width,
-            }}
-        >
-            <AddCircleOutlineRoundedIcon fontSize="large" />
-        </Button>
-    );
-};

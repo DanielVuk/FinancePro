@@ -22,16 +22,9 @@ const initialState = {
         },
     ],
     categories: [
+        { id: 1, name: "Car", type: "Expense", color: "green", icon: "delete" },
         {
-            id: 1,
-            name: "House",
-            type: "Expense",
-            color: "red",
-            icon: "delete",
-        },
-        { id: 2, name: "Car", type: "Expense", color: "green", icon: "delete" },
-        {
-            id: 3,
+            id: 2,
             name: "Food",
             type: "Expense",
             color: "black",

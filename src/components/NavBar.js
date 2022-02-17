@@ -91,9 +91,7 @@ const NavBar = () => {
                     >
                         <Tabs value={selectedTab} onChange={handleTabChange}>
                             <Tab value="/" label="Home" />
-                            <Tab value="/wallets" label="Wallets" />
                             <Tab value="/transactions" label="Transactions" />
-                            <Tab value="/categories" label="Categories" />
                         </Tabs>
                     </Box>
 

@@ -1,6 +1,5 @@
-import { Icon, InputAdornment, TextField } from "@mui/material";
+import { TextField } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import EmailIcon from "@mui/icons-material/Email";
 
 const color = "#5D2DFD";
 
