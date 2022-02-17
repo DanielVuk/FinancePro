@@ -14,6 +14,10 @@ const Home = () => {
     const [deleteWalletModal, setDeleteWalletModal] = useState(false);
     const [editWalletModal, setEditWalletModal] = useState(false);
 
+    const [addCategoryModal, setAddCategoryModal] = useState(false);
+    const [deleteCategoryModal, setDeleteCategoryModal] = useState(false);
+    const [editCategoryModal, setEditCategoryModal] = useState(false);
+
     const [selectedWallet, setSelectedWallet] = useState();
     const [selectedCategory, setSelectedCategory] = useState();
 
@@ -46,6 +50,15 @@ const Home = () => {
         setState({ ...state, wallets: tempWallets });
 
         setEditWalletModal(false);
+    };
+
+    const deleteCategory = () => {
+        let newCategories = [...state.categories].filter(
+            (w) => w.id !== selectedCategory.id
+        );
+        setState({ ...state, categories: newCategories });
+
+        setDeleteCategoryModal(false);
     };
 
     return (
@@ -96,16 +109,13 @@ const Home = () => {
                 />
                 <CategoriesCarousel
                     onAdd={() => {
-                        //TODO: add modal
-                        //  setAddWalletModal(true);
+                        setAddCategoryModal(true);
                     }}
                     onDelete={() => {
-                        //TODO: ADD MODAL
-                        setDeleteWalletModal(true);
+                        setDeleteCategoryModal(true);
                     }}
                     onEdit={() => {
-                        //TODO: ADD MODAL
-                        setEditWalletModal(true);
+                        setEditCategoryModal(true);
                     }}
                     onSelect={(category) => {
                         setSelectedCategory(category);
@@ -154,6 +164,32 @@ const Home = () => {
                         <>
                             Delete wallet{" "}
                             {selectedWallet && selectedWallet.name}?
+                        </>
+                    }
+                />
+            </AppModal>
+
+            <AppModal
+                open={addCategoryModal}
+                onClose={() => setDeleteCategoryModal(false)}
+            >
+                {" "}
+            </AppModal>
+            <AppModal
+                open={editCategoryModal}
+                onClose={() => setDeleteCategoryModal(false)}
+            ></AppModal>
+            <AppModal
+                open={deleteCategoryModal}
+                onClose={() => setDeleteCategoryModal(false)}
+            >
+                <DeleteForm
+                    onClose={() => setDeleteCategoryModal(false)}
+                    onDelete={deleteCategory}
+                    Title={
+                        <>
+                            Delete category{" "}
+                            {selectedCategory && selectedCategory.name}?
                         </>
                     }
                 />
