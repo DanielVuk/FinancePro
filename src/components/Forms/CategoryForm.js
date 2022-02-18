@@ -15,8 +15,6 @@ import AppInput from "../AppInput";
 import ColorInput from "../ColorInput";
 import GetIcon from "../GetIcon";
 
-const categoryIcons = ["delete", "palette"];
-
 const CategoryForm = ({
     action = "add",
     title,
@@ -50,6 +48,7 @@ const CategoryForm = ({
         if (newType.length === 0) {
             return;
         }
+        console.log(newType);
         setType(newType);
     };
 
@@ -112,17 +111,20 @@ const CategoryForm = ({
                             <Grid item xs="auto" m={0.7} key={index}>
                                 <Card
                                     onClick={() => {
-                                        console.log(item);
                                         setIcon(item);
                                     }}
                                     sx={{
                                         display: "flex",
                                         justifyContent: "center",
                                         alignItems: "center",
-                                        boxShadow: 0,
+                                        boxShadow: 1,
                                         width: "60px",
                                         height: "60px",
-
+                                        "&:hover": {
+                                            transition: "transform 0.5s",
+                                            cursor: "pointer",
+                                            transform: "scale(1.5)",
+                                        },
                                         backgroundColor:
                                             icon === item ? color : "white",
                                     }}
@@ -169,3 +171,34 @@ const CategoryForm = ({
 };
 
 export default CategoryForm;
+
+const categoryIcons = [
+    "delete",
+    "palette",
+    "car",
+    "school",
+    "casino",
+    "family",
+    "gym",
+    "food",
+    "restaurant",
+    "gift",
+    "travel",
+    "bank",
+    "fuel",
+    "drink",
+    "laptop",
+    "other",
+    "shop",
+    "internet",
+    "cloth",
+    "work",
+    "wallet",
+    "clean",
+    "beach",
+    "celebration",
+    "church",
+    "dolar",
+    "apartment",
+    "call",
+];

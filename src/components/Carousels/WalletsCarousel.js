@@ -25,6 +25,7 @@ const WalletsCarousel = ({ onAdd, onDelete, onEdit, onSelect }) => {
                     height="153px"
                     width="250px"
                     margin="10px"
+                    transition="transform 0.5s"
                     transform="scale(1.03)"
                 />
                 {state.wallets.map((wallet) => (

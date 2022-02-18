@@ -11,6 +11,7 @@ const Wallet = ({ balance, color, name, onDelete, onEdit }) => {
         minWidth: "250px",
         margin: "10px ",
         "&:hover": {
+            transition: "transform 0.5s",
             cursor: "pointer",
             transform: "scale(1.03)",
             backgroundColor: "#F1ECFD",

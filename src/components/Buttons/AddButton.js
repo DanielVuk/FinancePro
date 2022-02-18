@@ -5,7 +5,8 @@ const AddButton = ({
     onClick,
     height,
     width,
-    transform = "scale(1.1)",
+    transition,
+    transform,
     margin = "15px",
 }) => {
     return (
@@ -17,6 +18,7 @@ const AddButton = ({
                 "&:hover": {
                     backgroundColor: "#F7F6FA",
                     boxShadow: 4,
+                    transition: transition,
                     transform: transform,
                 },
                 margin: margin,

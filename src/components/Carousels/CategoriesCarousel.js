@@ -25,7 +25,13 @@ const CategoriesCarousel = ({ onAdd, onDelete, onEdit, onSelect }) => {
                 Categories: {state.categories.length}
             </Typography>
             <Carousel breakPoints={breakPointsForCategories}>
-                <AddButton onClick={onAdd} height="190px" width="120px" />
+                <AddButton
+                    onClick={onAdd}
+                    height="190px"
+                    width="120px"
+                    transition="transform 0.5s"
+                    transform="scale(1.1)"
+                />
                 {state.categories.map((category) => (
                     <Card
                         key={category.id}
