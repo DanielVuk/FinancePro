@@ -1,4 +1,4 @@
-import { Card, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { useContext } from "react";
 import Carousel from "react-elastic-carousel";
 import { Context } from "../../Store";
@@ -12,7 +12,13 @@ const breakPointsForCategories = [
     { width: 1200, itemsToShow: 8 },
 ];
 
-const CategoriesCarousel = ({ onAdd, onDelete, onEdit, onSelect }) => {
+const CategoriesCarousel = ({
+    onAdd,
+    onDelete,
+    onEdit,
+    onSelect,
+    selected,
+}) => {
     const [state] = useContext(Context);
     return (
         <>
@@ -29,26 +35,21 @@ const CategoriesCarousel = ({ onAdd, onDelete, onEdit, onSelect }) => {
                     onClick={onAdd}
                     height="190px"
                     width="120px"
+                    margin="23px"
                     transition="transform 0.5s"
                     transform="scale(1.1)"
                 />
                 {state.categories.map((category) => (
-                    <Card
+                    <Category
                         key={category.id}
-                        onClick={() => onSelect(category)}
-                        sx={{
-                            backgroundColor: "transparent",
-                            boxShadow: 0,
+                        category={category}
+                        onDelete={onDelete}
+                        onEdit={onEdit}
+                        onSelect={() => {
+                            onSelect(category);
                         }}
-                    >
-                        <Category
-                            color={category.color}
-                            iconName={category.icon}
-                            name={category.name}
-                            onDelete={onDelete}
-                            onEdit={onEdit}
-                        />
-                    </Card>
+                        selected={selected}
+                    />
                 ))}
             </Carousel>
         </>

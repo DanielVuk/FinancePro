@@ -1,31 +1,32 @@
-import DeleteIcon from "@mui/icons-material/Delete";
-import PaletteIcon from "@mui/icons-material/Palette";
-import CarRepairRoundedIcon from "@mui/icons-material/CarRepairRounded";
-import SchoolRoundedIcon from "@mui/icons-material/SchoolRounded";
-import CasinoRoundedIcon from "@mui/icons-material/CasinoRounded";
-import FamilyRestroomRoundedIcon from "@mui/icons-material/FamilyRestroomRounded";
-import FitnessCenterRoundedIcon from "@mui/icons-material/FitnessCenterRounded";
-import FastfoodRoundedIcon from "@mui/icons-material/FastfoodRounded";
-import RestaurantMenuRoundedIcon from "@mui/icons-material/RestaurantMenuRounded";
-import CardGiftcardRoundedIcon from "@mui/icons-material/CardGiftcardRounded";
-import FlightRoundedIcon from "@mui/icons-material/FlightRounded";
 import AccountBalanceRoundedIcon from "@mui/icons-material/AccountBalanceRounded";
-import LocalGasStationRoundedIcon from "@mui/icons-material/LocalGasStationRounded";
-import LiquorRoundedIcon from "@mui/icons-material/LiquorRounded";
-import LaptopMacIcon from "@mui/icons-material/LaptopMac";
-import InsertDriveFileRoundedIcon from "@mui/icons-material/InsertDriveFileRounded";
+import AccountBalanceWalletRoundedIcon from "@mui/icons-material/AccountBalanceWalletRounded";
 import AddShoppingCartRoundedIcon from "@mui/icons-material/AddShoppingCartRounded";
+import ApartmentRoundedIcon from "@mui/icons-material/ApartmentRounded";
+import AtmRoundedIcon from "@mui/icons-material/AtmRounded";
+import BeachAccessRoundedIcon from "@mui/icons-material/BeachAccessRounded";
+import CallRoundedIcon from "@mui/icons-material/CallRounded";
+import CardGiftcardRoundedIcon from "@mui/icons-material/CardGiftcardRounded";
+import CarRepairRoundedIcon from "@mui/icons-material/CarRepairRounded";
+import CasinoRoundedIcon from "@mui/icons-material/CasinoRounded";
+import CelebrationRoundedIcon from "@mui/icons-material/CelebrationRounded";
 import CellWifiRoundedIcon from "@mui/icons-material/CellWifiRounded";
 import CheckroomRoundedIcon from "@mui/icons-material/CheckroomRounded";
-import WorkOutlineRoundedIcon from "@mui/icons-material/WorkOutlineRounded";
-import AccountBalanceWalletRoundedIcon from "@mui/icons-material/AccountBalanceWalletRounded";
-import CleanHandsRoundedIcon from "@mui/icons-material/CleanHandsRounded";
-import BeachAccessRoundedIcon from "@mui/icons-material/BeachAccessRounded";
-import CelebrationRoundedIcon from "@mui/icons-material/CelebrationRounded";
 import ChurchRoundedIcon from "@mui/icons-material/ChurchRounded";
+import CleanHandsRoundedIcon from "@mui/icons-material/CleanHandsRounded";
 import CurrencyExchangeRoundedIcon from "@mui/icons-material/CurrencyExchangeRounded";
-import ApartmentRoundedIcon from "@mui/icons-material/ApartmentRounded";
-import CallRoundedIcon from "@mui/icons-material/CallRounded";
+import DeleteIcon from "@mui/icons-material/Delete";
+import FamilyRestroomRoundedIcon from "@mui/icons-material/FamilyRestroomRounded";
+import FastfoodRoundedIcon from "@mui/icons-material/FastfoodRounded";
+import FitnessCenterRoundedIcon from "@mui/icons-material/FitnessCenterRounded";
+import FlightRoundedIcon from "@mui/icons-material/FlightRounded";
+import InsertDriveFileRoundedIcon from "@mui/icons-material/InsertDriveFileRounded";
+import LaptopMacIcon from "@mui/icons-material/LaptopMac";
+import LiquorRoundedIcon from "@mui/icons-material/LiquorRounded";
+import LocalGasStationRoundedIcon from "@mui/icons-material/LocalGasStationRounded";
+import PaletteIcon from "@mui/icons-material/Palette";
+import RestaurantMenuRoundedIcon from "@mui/icons-material/RestaurantMenuRounded";
+import SchoolRoundedIcon from "@mui/icons-material/SchoolRounded";
+import WorkOutlineRoundedIcon from "@mui/icons-material/WorkOutlineRounded";
 
 const GetIcon = ({ iconName, color = null, size = "" }) => {
     switch (iconName) {
@@ -180,6 +181,8 @@ const GetIcon = ({ iconName, color = null, size = "" }) => {
 
         case "call":
             return <CallRoundedIcon fontSize={size} sx={{ color: color }} />;
+        case "atm":
+            return <AtmRoundedIcon fontSize={size} sx={{ color: color }} />;
 
         default:
             return null;

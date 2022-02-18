@@ -126,8 +126,8 @@ const Home = () => {
                     }}
                     onSelect={(wallet) => {
                         setSelectedWallet(wallet);
-                        console.log(wallet.name);
                     }}
+                    selected={selectedWallet}
                 />
                 <CategoriesCarousel
                     onAdd={() => {
@@ -141,8 +141,8 @@ const Home = () => {
                     }}
                     onSelect={(category) => {
                         setSelectedCategory(category);
-                        console.log(category.name);
                     }}
+                    selected={selectedCategory}
                 />
             </Container>
 

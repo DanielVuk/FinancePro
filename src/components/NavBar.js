@@ -69,6 +69,10 @@ const NavBar = () => {
                                 width: 50,
                                 height: 50,
                                 WebkitFilter: "brightness(0)",
+                                "&:hover": {
+                                    transition: "transform 0.3s",
+                                    transform: "scale(1.2)",
+                                },
                             }}
                         />
 
@@ -78,6 +82,10 @@ const NavBar = () => {
                             color="inherit"
                             sx={{
                                 display: { xs: "flex", md: "none" },
+                                "&:hover": {
+                                    transition: "transform 0.4s",
+                                    transform: "scale(1.2)",
+                                },
                             }}
                         >
                             <MenuIcon />
@@ -95,7 +103,16 @@ const NavBar = () => {
                         </Tabs>
                     </Box>
 
-                    <IconButton size="large" onClick={handleLogOut}>
+                    <IconButton
+                        size="large"
+                        onClick={handleLogOut}
+                        sx={{
+                            "&:hover": {
+                                transition: "transform 0.4s",
+                                transform: "scale(1.2)",
+                            },
+                        }}
+                    >
                         <LogoutRoundedIcon fontSize="inherit" />
                     </IconButton>
                 </Box>

@@ -1,34 +1,38 @@
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
-import { Box, IconButton, Typography } from "@mui/material";
+import { Box, Card, IconButton, Typography } from "@mui/material";
 import GetIcon from "./GetIcon";
 
-const Category = ({ color, iconName, name, onDelete, onEdit }) => {
+const Category = ({ category, onDelete, onEdit, onSelect, selected }) => {
+    const categoryStyle = {
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "190px",
+        width: "120px",
+        borderRadius: 5,
+        margin: "23px",
+        boxShadow: 3,
+        border:
+            selected && selected.id === category.id ? "4px solid" : "2px solid",
+        borderColor: category.color,
+        backgroundColor:
+            selected && selected.id === category.id ? "#F1ECFD" : "#F7F6FA",
+        "&:hover": {
+            cursor: "pointer",
+            backgroundColor: "#F1ECFD",
+            transition: "transform 0.5s",
+            border: "4px solid",
+            borderColor: category.color,
+            transform: "scale(1.1)",
+        },
+        transform:
+            selected && selected.id === category.id ? "scale(1.1)" : null,
+    };
+
     return (
-        <Box
-            sx={{
-                display: "flex",
-                flexDirection: "column",
-                height: "190px",
-                width: "120px",
-                borderRadius: 4,
-                justifyContent: "center",
-                alignItems: "center",
-                margin: "14px ",
-                boxShadow: 3,
-                border: "2px solid",
-                borderColor: color,
-                backgroundColor: "#F7F6FA",
-                "&:hover": {
-                    cursor: "pointer",
-                    transition: "transform 0.5s",
-                    transform: "scale(1.1)",
-                    backgroundColor: "#F1ECFD",
-                    border: "4px solid",
-                    borderColor: color,
-                },
-            }}
-        >
+        <Card onClick={onSelect} sx={categoryStyle}>
             <Box
                 sx={{
                     display: "flex",
@@ -41,14 +45,14 @@ const Category = ({ color, iconName, name, onDelete, onEdit }) => {
                 }}
             >
                 <GetIcon
-                    iconName={iconName}
+                    iconName={category.icon}
                     color="primary.main"
                     size="large"
                 />
             </Box>
 
             <Typography variant="button" mt={3}>
-                {name}
+                {category.name}
             </Typography>
             <Box>
                 <IconButton
@@ -67,7 +71,7 @@ const Category = ({ color, iconName, name, onDelete, onEdit }) => {
                     />
                 </IconButton>
             </Box>
-        </Box>
+        </Card>
     );
 };
 

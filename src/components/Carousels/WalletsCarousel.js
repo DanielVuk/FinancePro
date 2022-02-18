@@ -1,4 +1,4 @@
-import { Card, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import { useContext } from "react";
 import Carousel from "react-elastic-carousel";
 import { Context } from "../../Store";
@@ -12,8 +12,9 @@ const breakPointsForWallets = [
     { width: 1200, itemsToShow: 4 },
 ];
 
-const WalletsCarousel = ({ onAdd, onDelete, onEdit, onSelect }) => {
+const WalletsCarousel = ({ onAdd, onDelete, onEdit, onSelect, selected }) => {
     const [state] = useContext(Context);
+
     return (
         <>
             <Typography variant="h4" sx={{ color: "white" }} mt={-13} mb={2}>
@@ -24,27 +25,21 @@ const WalletsCarousel = ({ onAdd, onDelete, onEdit, onSelect }) => {
                     onClick={onAdd}
                     height="153px"
                     width="250px"
-                    margin="10px"
+                    margin="15px"
                     transition="transform 0.5s"
                     transform="scale(1.03)"
                 />
                 {state.wallets.map((wallet) => (
-                    <Card
+                    <Wallet
                         key={wallet.id}
-                        onClick={() => onSelect(wallet)}
-                        sx={{
-                            backgroundColor: "transparent",
-                            boxShadow: 0,
+                        onSelect={() => {
+                            onSelect(wallet);
                         }}
-                    >
-                        <Wallet
-                            balance={wallet.balance}
-                            color={wallet.color}
-                            name={wallet.name}
-                            onDelete={onDelete}
-                            onEdit={onEdit}
-                        />
-                    </Card>
+                        wallet={wallet}
+                        onDelete={onDelete}
+                        onEdit={onEdit}
+                        selected={selected}
+                    />
                 ))}
             </Carousel>
         </>

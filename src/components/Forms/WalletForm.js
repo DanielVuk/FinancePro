@@ -1,8 +1,7 @@
-import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
-import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import { Grid, IconButton, Stack, Typography } from "@mui/material";
+import { Grid, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import AppInput from "../AppInput";
+import ModalButtons from "../Buttons/ModalButtons";
 import ColorInput from "../ColorInput";
 
 const WalletForm = ({
@@ -78,20 +77,7 @@ const WalletForm = ({
                         }}
                     />
                 </Stack>
-                <Stack direction="row" spacing={8}>
-                    <IconButton
-                        onClick={onClose}
-                        sx={{ backgroundColor: "#F1ECFD" }}
-                    >
-                        <CloseRoundedIcon fontSize="inherit" color="primary" />
-                    </IconButton>
-                    <IconButton
-                        type="submit"
-                        sx={{ backgroundColor: "#F1ECFD" }}
-                    >
-                        <CheckRoundedIcon fontSize="inherit" color="primary" />
-                    </IconButton>
-                </Stack>
+                <ModalButtons onClose={onClose} />
             </Grid>
         </form>
     );

@@ -7,7 +7,7 @@ const AddButton = ({
     width,
     transition,
     transform,
-    margin = "15px",
+    margin,
 }) => {
     return (
         <Button
