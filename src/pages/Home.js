@@ -3,10 +3,10 @@ import React, { useContext, useState } from "react";
 import AppModal from "../components/AppModal";
 import CategoriesCarousel from "../components/Carousels/CategoriesCarousel";
 import WalletsCarousel from "../components/Carousels/WalletsCarousel";
+import CategoryForm from "../components/Forms/CategoryForm";
 import DeleteForm from "../components/Forms/DeleteForm";
 import WalletForm from "../components/Forms/WalletForm";
 import { Context } from "../Store";
-
 const Home = () => {
     const [state, setState] = useContext(Context);
 
@@ -28,7 +28,7 @@ const Home = () => {
         };
         let newWallets = [...state.wallets, newWallet];
         setState({ ...state, wallets: newWallets });
-        console.log(state);
+
         setAddWalletModal(false);
     };
 
@@ -50,6 +50,28 @@ const Home = () => {
         setState({ ...state, wallets: tempWallets });
 
         setEditWalletModal(false);
+    };
+
+    const addCategory = (category) => {
+        let newCategory = {
+            id: state.categories[state.categories.length - 1].id + 1,
+            ...category,
+        };
+        let newCategories = [...state.categories, newCategory];
+        setState({ ...state, categories: newCategories });
+
+        setAddCategoryModal(false);
+    };
+
+    const editCategory = (category) => {
+        var index = state.categories.findIndex(
+            (item) => item.id === selectedCategory.id
+        );
+        let tempCategories = [...state.categories];
+        tempCategories[index] = { id: selectedCategory.id, ...category };
+        setState({ ...state, categories: tempCategories });
+
+        setEditCategoryModal(false);
     };
 
     const deleteCategory = () => {
@@ -135,7 +157,6 @@ const Home = () => {
                     onClose={() => setAddWalletModal(false)}
                     onConfirm={addWallet}
                     open={addWalletModal}
-                    wallet={selectedWallet}
                 />
             </AppModal>
             <AppModal
@@ -171,14 +192,28 @@ const Home = () => {
 
             <AppModal
                 open={addCategoryModal}
-                onClose={() => setDeleteCategoryModal(false)}
+                onClose={() => setAddCategoryModal(false)}
             >
-                {" "}
+                <CategoryForm
+                    title="Create New Category"
+                    onClose={() => setAddCategoryModal(false)}
+                    onConfirm={addCategory}
+                    open={addCategoryModal}
+                />
             </AppModal>
             <AppModal
                 open={editCategoryModal}
-                onClose={() => setDeleteCategoryModal(false)}
-            ></AppModal>
+                onClose={() => setEditCategoryModal(false)}
+            >
+                <CategoryForm
+                    action="edit"
+                    title="Edit Category"
+                    onClose={() => setEditCategoryModal(false)}
+                    onConfirm={editCategory}
+                    open={editCategoryModal}
+                    category={selectedCategory}
+                />
+            </AppModal>
             <AppModal
                 open={deleteCategoryModal}
                 onClose={() => setDeleteCategoryModal(false)}

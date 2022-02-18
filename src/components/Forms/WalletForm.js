@@ -1,9 +1,9 @@
 import CheckRoundedIcon from "@mui/icons-material/CheckRounded";
 import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
-import { Box, Grid, IconButton, Stack, Typography } from "@mui/material";
-import { ColorPicker } from "material-ui-color";
+import { Grid, IconButton, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import AppInput from "../AppInput";
+import ColorInput from "../ColorInput";
 
 const WalletForm = ({
     action = "add",
@@ -13,20 +13,20 @@ const WalletForm = ({
     title,
     wallet = null,
 }) => {
-    const [walletName, setWalletName] = useState("");
-    const [walletBalance, setWalletBalance] = useState(0);
-    const [walletColor, setWalletColor] = useState("black");
+    const [name, setName] = useState("");
+    const [balance, setBalance] = useState(0);
+    const [color, setColor] = useState("black");
 
     useEffect(() => {
         if (action === "add") {
-            setWalletName("");
-            setWalletBalance(0);
-            setWalletColor("black");
+            setName("");
+            setBalance(0);
+            setColor("black");
         } else if (action === "edit") {
             if (wallet) {
-                setWalletName(wallet.name);
-                setWalletBalance(wallet.balance);
-                setWalletColor(wallet.color);
+                setName(wallet.name);
+                setBalance(wallet.balance);
+                setColor(wallet.color);
             }
         }
     }, [open]);
@@ -36,14 +36,14 @@ const WalletForm = ({
             onSubmit={(event) => {
                 event.preventDefault();
                 onConfirm({
-                    name: walletName,
-                    balance: walletBalance,
-                    color: walletColor,
+                    name: name,
+                    balance: balance,
+                    color: color,
                 });
             }}
         >
             <Grid container alignItems="center" direction="column">
-                <Typography sm={12} variant="h4" sx={{ fontWeight: "bold" }}>
+                <Typography variant="h4" sx={{ fontWeight: "bold" }}>
                     {title}
                 </Typography>
                 <Stack
@@ -55,49 +55,28 @@ const WalletForm = ({
                     <AppInput
                         label="Name"
                         placeholder="Wallet name"
-                        value={walletName}
+                        value={name}
                         required
-                        setValue={setWalletName}
+                        setValue={setName}
                         sx={{ marginBottom: 5 }}
                     />
                     <AppInput
                         label="Balance"
-                        value={walletBalance}
-                        setValue={setWalletBalance}
+                        value={balance}
+                        setValue={setBalance}
                         type="number"
                         required
                         sx={{ marginBottom: 5 }}
                         disabled={action === "edit"}
                         placeholder="Current balance"
                     />
-                    <Box
-                        sx={{
-                            border: "1px solid lightgrey",
-                            borderRadius: "4px",
-                            display: "flex",
-                            alignItems: "center",
-                            height: "56px",
-                            justifyContent: "space-between",
-                            paddingRight: "10px",
+                    <ColorInput
+                        title="Wallet color"
+                        value={color}
+                        onChange={(event) => {
+                            setColor(event.css.backgroundColor);
                         }}
-                        fullWidth
-                    >
-                        <Typography
-                            ml={1.5}
-                            sx={{ color: "#5D2DFD", fontWeight: 600 }}
-                        >
-                            Wallet color
-                        </Typography>
-
-                        <ColorPicker
-                            value={walletColor}
-                            hideTextfield
-                            defaultValue="black"
-                            onChange={(event) => {
-                                setWalletColor(event.css.backgroundColor);
-                            }}
-                        />
-                    </Box>
+                    />
                 </Stack>
                 <Stack direction="row" spacing={8}>
                     <IconButton

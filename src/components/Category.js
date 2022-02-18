@@ -16,10 +16,15 @@ const Category = ({ color, iconName, name, onDelete, onEdit }) => {
                 alignItems: "center",
                 margin: "14px ",
                 boxShadow: 3,
-                backgroundColor: color,
+                border: "2px solid",
+                borderColor: color,
+                backgroundColor: "#F7F6FA",
                 "&:hover": {
                     cursor: "pointer",
                     transform: "scale(1.1)",
+                    backgroundColor: "#F1ECFD",
+                    border: "4px solid",
+                    borderColor: color,
                 },
             }}
         >
@@ -34,13 +39,13 @@ const Category = ({ color, iconName, name, onDelete, onEdit }) => {
                     borderRadius: "30px",
                 }}
             >
-                <GetIcon iconName={iconName} />
+                <GetIcon iconName={iconName} color="primary.main" />
             </Box>
 
             <Typography
                 variant="button"
                 mt={3}
-                sx={{ WebkitFilter: "invert(100%)", color: color }}
+                // sx={{ WebkitFilter: "invert(100%)", color: color }}
             >
                 {name}
             </Typography>
@@ -55,7 +60,7 @@ const Category = ({ color, iconName, name, onDelete, onEdit }) => {
                     onClick={onEdit}
                     sx={{ backgroundColor: "#F1ECFD", marginLeft: "15px" }}
                 >
-                    <EditRoundedIcon fontSize="inherit" color="primary" />
+                    <EditRoundedIcon fontSize="inherit" color="primary.main" />
                 </IconButton>
             </Box>
         </Box>
