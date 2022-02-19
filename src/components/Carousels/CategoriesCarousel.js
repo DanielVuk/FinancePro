@@ -7,9 +7,9 @@ import Category from "../Category";
 
 const breakPointsForCategories = [
     { width: 1, itemsToShow: 2 },
-    { width: 550, itemsToShow: 4 },
-    { width: 768, itemsToShow: 6 },
-    { width: 1200, itemsToShow: 8 },
+    { width: 550, itemsToShow: 3 },
+    { width: 768, itemsToShow: 5 },
+    { width: 1200, itemsToShow: 7 },
 ];
 
 const CategoriesCarousel = ({

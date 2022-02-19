@@ -79,6 +79,39 @@ const initialState = {
             icon: "dolar",
         },
     ],
+
+    transactions: [
+        {
+            id: 1,
+            amount: 500,
+            categoryId: 1,
+            toWalletId: 1,
+            fromWalletId: null,
+            date: new Date(),
+            note: "Uplata",
+            type: ["Income"],
+        },
+        {
+            id: 2,
+            amount: 1000,
+            categoryId: 2,
+            toWalletId: null,
+            fromWalletId: 2,
+            date: new Date(),
+            note: "Placen racun",
+            type: ["Expense"],
+        },
+        {
+            id: 3,
+            amount: 100,
+            categoryId: null,
+            toWalletId: 1,
+            fromWalletId: 2,
+            date: new Date(),
+            note: "Prijenos plaracnjer racun za telekomunikacije i nserner",
+            type: ["Transfer"],
+        },
+    ],
 };
 
 const Context = React.createContext();

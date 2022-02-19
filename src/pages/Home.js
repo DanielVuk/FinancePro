@@ -2,6 +2,7 @@ import { Container, Grid, Stack, Typography } from "@mui/material";
 import React, { useContext, useState } from "react";
 import AppModal from "../components/AppModal";
 import CategoriesCarousel from "../components/Carousels/CategoriesCarousel";
+import TransactionsCarousel from "../components/Carousels/TransactionsCarousel";
 import WalletsCarousel from "../components/Carousels/WalletsCarousel";
 import CategoryForm from "../components/Forms/CategoryForm";
 import DeleteForm from "../components/Forms/DeleteForm";
@@ -42,7 +43,7 @@ const Home = () => {
     };
 
     const editWallet = (wallet) => {
-        var index = state.wallets.findIndex(
+        let index = state.wallets.findIndex(
             (item) => item.id === selectedWallet.id
         );
         let tempWallets = [...state.wallets];
@@ -64,7 +65,7 @@ const Home = () => {
     };
 
     const editCategory = (category) => {
-        var index = state.categories.findIndex(
+        let index = state.categories.findIndex(
             (item) => item.id === selectedCategory.id
         );
         let tempCategories = [...state.categories];
@@ -144,6 +145,8 @@ const Home = () => {
                     }}
                     selected={selectedCategory}
                 />
+
+                <TransactionsCarousel />
             </Container>
 
             <AppModal

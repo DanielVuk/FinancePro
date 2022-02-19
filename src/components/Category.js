@@ -1,5 +1,3 @@
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import { Box, Card, IconButton, Typography } from "@mui/material";
 import GetIcon from "./GetIcon";
 
@@ -18,10 +16,12 @@ const Category = ({ category, onDelete, onEdit, onSelect, selected }) => {
             selected && selected.id === category.id ? "4px solid" : "2px solid",
         borderColor: category.color,
         backgroundColor:
-            selected && selected.id === category.id ? "#F1ECFD" : "#F7F6FA",
+            selected && selected.id === category.id
+                ? "background.default"
+                : "#F7F6FA",
         "&:hover": {
             cursor: "pointer",
-            backgroundColor: "#F1ECFD",
+            backgroundColor: "background.default",
             transition: "transform 0.5s",
             border: "4px solid",
             borderColor: category.color,
@@ -57,18 +57,18 @@ const Category = ({ category, onDelete, onEdit, onSelect, selected }) => {
             <Box>
                 <IconButton
                     onClick={onDelete}
-                    sx={{ backgroundColor: "#F1ECFD" }}
+                    sx={{ backgroundColor: "background.default" }}
                 >
-                    <DeleteIcon fontSize="inherit" sx={{ color: "#FF6D6D" }} />
+                    <GetIcon iconName="delete" color="error.main" />
                 </IconButton>
                 <IconButton
                     onClick={onEdit}
-                    sx={{ backgroundColor: "#F1ECFD", marginLeft: "15px" }}
+                    sx={{
+                        backgroundColor: "background.default",
+                        marginLeft: "15px",
+                    }}
                 >
-                    <EditRoundedIcon
-                        fontSize="inherit"
-                        sx={{ color: "primary.main" }}
-                    />
+                    <GetIcon iconName="edit" color="primary.main" />
                 </IconButton>
             </Box>
         </Card>

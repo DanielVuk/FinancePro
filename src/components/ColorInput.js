@@ -26,6 +26,7 @@ const ColorInput = ({ title, value, onChange }) => {
             <ColorPicker
                 value={value}
                 hideTextfield
+                disableAlpha
                 defaultValue="black"
                 onChange={onChange}
             />

@@ -1,11 +1,12 @@
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import { Box, Card, IconButton, Typography } from "@mui/material";
+import GetIcon from "./GetIcon";
 
 const Wallet = ({ wallet, onDelete, onEdit, selected, onSelect }) => {
     const walletStyle = {
         backgroundColor:
-            selected && selected.id === wallet.id ? "#F1ECFD" : "#F7F6FA",
+            selected && selected.id === wallet.id
+                ? "background.default"
+                : "#F7F6FA",
         borderRadius: 5,
         padding: 1.5,
         boxShadow: 3,
@@ -13,11 +14,11 @@ const Wallet = ({ wallet, onDelete, onEdit, selected, onSelect }) => {
         margin: "15px ",
         "&:hover": {
             cursor: "pointer",
-            backgroundColor: "#F1ECFD",
+            backgroundColor: "background.default",
             transition: "transform 0.5s",
             transform: "scale(1.03)",
         },
-        transform: selected && selected.id === wallet.id ? "scale(1.1)" : null,
+        transform: selected && selected.id === wallet.id ? "scale(1.03)" : null,
     };
 
     return (
@@ -42,21 +43,18 @@ const Wallet = ({ wallet, onDelete, onEdit, selected, onSelect }) => {
                 <Box>
                     <IconButton
                         onClick={onDelete}
-                        sx={{ backgroundColor: "#F1ECFD" }}
+                        sx={{ backgroundColor: "background.default" }}
                     >
-                        <DeleteIcon
-                            fontSize="inherit"
-                            sx={{ color: "#FF6D6D" }}
-                        />
+                        <GetIcon iconName="delete" color="error.main" />
                     </IconButton>
                     <IconButton
                         onClick={onEdit}
                         sx={{
-                            backgroundColor: "#F1ECFD",
+                            backgroundColor: "background.default",
                             marginLeft: "15px",
                         }}
                     >
-                        <EditRoundedIcon fontSize="inherit" color="primary" />
+                        <GetIcon iconName="edit" color="primary.main" />
                     </IconButton>
                 </Box>
             </Box>

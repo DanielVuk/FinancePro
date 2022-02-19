@@ -5,6 +5,9 @@ export let AppTheme = createTheme({
         primary: {
             main: "#5D2DFD",
         },
+        error: {
+            main: "#FF6D6D",
+        },
         background: {
             default: "#F1ECFD",
         },

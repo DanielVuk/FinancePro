@@ -1,5 +1,5 @@
-import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
 import { Button } from "@mui/material";
+import GetIcon from "../GetIcon";
 
 const AddButton = ({
     onClick,
@@ -27,7 +27,7 @@ const AddButton = ({
                 width: width,
             }}
         >
-            <AddCircleOutlineRoundedIcon fontSize="large" />
+            <GetIcon iconName="add" size="large" />
         </Button>
     );
 };

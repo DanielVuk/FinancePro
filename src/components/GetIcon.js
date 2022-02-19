@@ -1,5 +1,6 @@
 import AccountBalanceRoundedIcon from "@mui/icons-material/AccountBalanceRounded";
 import AccountBalanceWalletRoundedIcon from "@mui/icons-material/AccountBalanceWalletRounded";
+import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
 import AddShoppingCartRoundedIcon from "@mui/icons-material/AddShoppingCartRounded";
 import ApartmentRoundedIcon from "@mui/icons-material/ApartmentRounded";
 import AtmRoundedIcon from "@mui/icons-material/AtmRounded";
@@ -15,6 +16,7 @@ import ChurchRoundedIcon from "@mui/icons-material/ChurchRounded";
 import CleanHandsRoundedIcon from "@mui/icons-material/CleanHandsRounded";
 import CurrencyExchangeRoundedIcon from "@mui/icons-material/CurrencyExchangeRounded";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditRoundedIcon from "@mui/icons-material/EditRounded";
 import FamilyRestroomRoundedIcon from "@mui/icons-material/FamilyRestroomRounded";
 import FastfoodRoundedIcon from "@mui/icons-material/FastfoodRounded";
 import FitnessCenterRoundedIcon from "@mui/icons-material/FitnessCenterRounded";
@@ -30,6 +32,13 @@ import WorkOutlineRoundedIcon from "@mui/icons-material/WorkOutlineRounded";
 
 const GetIcon = ({ iconName, color = null, size = "" }) => {
     switch (iconName) {
+        case "add":
+            return (
+                <AddCircleOutlineRoundedIcon
+                    fontSize={size}
+                    sx={{ color: color }}
+                />
+            );
         case "delete":
             return <DeleteIcon fontSize={size} sx={{ color: color }} />;
 
@@ -184,6 +193,8 @@ const GetIcon = ({ iconName, color = null, size = "" }) => {
         case "atm":
             return <AtmRoundedIcon fontSize={size} sx={{ color: color }} />;
 
+        case "edit":
+            return <EditRoundedIcon fontSize={size} sx={{ color: color }} />;
         default:
             return null;
     }
