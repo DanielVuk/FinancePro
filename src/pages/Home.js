@@ -19,8 +19,11 @@ const Home = () => {
     const [deleteCategoryModal, setDeleteCategoryModal] = useState(false);
     const [editCategoryModal, setEditCategoryModal] = useState(false);
 
+    const [deleteTransactionModal, setDeleteTransactionModal] = useState(false);
+
     const [selectedWallet, setSelectedWallet] = useState();
     const [selectedCategory, setSelectedCategory] = useState();
+    const [selectedTransaction, setSelectedTransaction] = useState();
 
     const addWallet = (wallet) => {
         let newWallet = {
@@ -82,6 +85,16 @@ const Home = () => {
         setState({ ...state, categories: newCategories });
 
         setDeleteCategoryModal(false);
+    };
+
+    const deleteTransaction = () => {
+        let newTransactions = [...state.transactions].filter(
+            (t) => t.id !== selectedTransaction.id
+        );
+
+        setState({ ...state, transactions: newTransactions });
+
+        setDeleteTransactionModal(false);
     };
 
     return (
@@ -146,7 +159,12 @@ const Home = () => {
                     selected={selectedCategory}
                 />
 
-                <TransactionsCarousel />
+                <TransactionsCarousel
+                    onDelete={() => setDeleteTransactionModal(true)}
+                    onSelect={(transaction) => {
+                        setSelectedTransaction(transaction);
+                    }}
+                />
             </Container>
 
             <AppModal
@@ -229,6 +247,19 @@ const Home = () => {
                             Delete category{" "}
                             {selectedCategory && selectedCategory.name}?
                         </>
+                    }
+                />
+            </AppModal>
+
+            <AppModal
+                open={deleteTransactionModal}
+                onClose={() => setDeleteTransactionModal(false)}
+            >
+                <DeleteForm
+                    onClose={() => setDeleteTransactionModal(false)}
+                    onDelete={deleteTransaction}
+                    Title={
+                        <>Are you sure you want to delete the transaction?</>
                     }
                 />
             </AppModal>

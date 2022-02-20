@@ -12,7 +12,7 @@ const breakPointsForTransactions = [
     { width: 1200, itemsToShow: 8 },
 ];
 
-const TransactionsCarousel = () => {
+const TransactionsCarousel = ({ onDelete, onSelect }) => {
     const [state] = useContext(Context);
 
     return (
@@ -38,14 +38,29 @@ const TransactionsCarousel = () => {
                     </IconButton>
                 </Box>
             </Box>
-            <Carousel breakPoints={breakPointsForTransactions} verticalMode>
-                {state.transactions.map((transaction) => (
-                    <Transaction
-                        key={transaction.id}
-                        transaction={transaction}
-                    />
-                ))}
-            </Carousel>
+            {state.transactions.length === 0 ? (
+                <Typography
+                    my={5}
+                    variant="h5"
+                    align="center"
+                    color="primary.main"
+                >
+                    There are no transactions to show.
+                </Typography>
+            ) : (
+                <Carousel breakPoints={breakPointsForTransactions} verticalMode>
+                    {state.transactions.map((transaction) => (
+                        <Transaction
+                            key={transaction.id}
+                            onSelect={() => {
+                                onSelect(transaction);
+                            }}
+                            transaction={transaction}
+                            onDelete={onDelete}
+                        />
+                    ))}
+                </Carousel>
+            )}
         </>
     );
 };

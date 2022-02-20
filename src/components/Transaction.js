@@ -14,7 +14,7 @@ const timeFromat = new Intl.DateTimeFormat("en-US", {
     hour12: false,
 });
 
-const Transaction = ({ transaction }) => {
+const Transaction = ({ transaction, onDelete, onSelect }) => {
     const [state] = useContext(Context);
 
     let categoryIndex = state.categories.findIndex(
@@ -30,6 +30,7 @@ const Transaction = ({ transaction }) => {
 
     return (
         <Card
+            onClick={onSelect}
             sx={{
                 display: { md: "flex", sm: "block" },
                 alignItems: "center",
@@ -128,7 +129,7 @@ const Transaction = ({ transaction }) => {
                         {transaction.amount}
                     </Typography>
                     <IconButton
-                        // onClick={onDelete}
+                        onClick={onDelete}
                         sx={{
                             backgroundColor: "background.default",
                         }}
