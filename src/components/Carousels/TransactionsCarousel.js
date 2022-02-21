@@ -12,7 +12,7 @@ const breakPointsForTransactions = [
     { width: 1200, itemsToShow: 8 },
 ];
 
-const TransactionsCarousel = ({ onAdd, onDelete, onSelect }) => {
+const TransactionsCarousel = ({ onAdd, onDelete, onEdit, onSelect }) => {
     const [state] = useContext(Context);
 
     return (
@@ -55,7 +55,7 @@ const TransactionsCarousel = ({ onAdd, onDelete, onSelect }) => {
                             }}
                             transaction={transaction}
                             onDelete={onDelete}
-                            // onEdit={onEdit}
+                            onEdit={onEdit}
                         />
                     ))}
                 </Carousel>

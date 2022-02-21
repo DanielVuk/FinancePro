@@ -1,6 +1,6 @@
 import DateAdapter from "@mui/lab/AdapterDateFns";
+import DateTimePicker from "@mui/lab/DateTimePicker";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import MobileDateTimePicker from "@mui/lab/MobileDateTimePicker";
 import {
     FormControl,
     Grid,
@@ -67,7 +67,6 @@ const TransactionForm = ({
     };
 
     const handleCategory = (event) => {
-        console.log("Category: ", event.target.value);
         setCategoryId(event.target.value);
     };
 
@@ -101,6 +100,7 @@ const TransactionForm = ({
                 <ToggleButtonGroup
                     exclusive
                     fullWidth
+                    disabled={action === "edit"}
                     onChange={handleType}
                     sx={{ marginY: "25px" }}
                     value={type}
@@ -225,15 +225,15 @@ const TransactionForm = ({
                         }}
                     />
                     <LocalizationProvider dateAdapter={DateAdapter}>
-                        <MobileDateTimePicker
+                        <DateTimePicker
                             label="Date and Time"
                             value={date}
                             onChange={(newValue) => {
                                 setDate(newValue);
                             }}
                             inputFormat="MMM dd, yyy HH':'mm'"
+                            readOnly={action === "edit"}
                             minDate={new Date()}
-                            minTime={new Date()}
                             renderInput={(params) => <TextField {...params} />}
                             InputProps={{
                                 startAdornment: (

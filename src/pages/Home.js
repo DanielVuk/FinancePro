@@ -91,6 +91,8 @@ const Home = () => {
     };
 
     const addTransaction = (transaction) => {
+        console.log(transaction);
+        console.log(typeof +transaction.amount);
         let newTransaction = {
             id: state.transactions[state.transactions.length - 1].id + 1,
             ...transaction,
@@ -98,13 +100,42 @@ const Home = () => {
 
         let newTransactions = [...state.transactions, newTransaction];
 
-        setState({ ...state, transactions: newTransactions });
+        let newWallets = updateWallets(transaction, "add");
+
+        setState({
+            ...state,
+            wallets: newWallets,
+            transactions: newTransactions,
+        });
 
         setAddTransactionModal(false);
     };
 
     const editTransaction = (transaction) => {
-        console.log("edit transaction");
+        let index = state.transactions.findIndex(
+            (item) => item.id === selectedTransaction.id
+        );
+
+        let tempTransactions = [...state.transactions];
+
+        let newWallets = updateWallets(
+            transaction,
+            "edit",
+            tempTransactions[index]
+        );
+
+        tempTransactions[index] = {
+            id: selectedTransaction.id,
+            ...transaction,
+        };
+
+        setState({
+            ...state,
+            wallets: newWallets,
+            transactions: tempTransactions,
+        });
+
+        setEditTransactionModal(false);
     };
 
     const deleteTransaction = () => {
@@ -112,9 +143,74 @@ const Home = () => {
             (t) => t.id !== selectedTransaction.id
         );
 
-        setState({ ...state, transactions: newTransactions });
+        let newWallets = updateWallets(selectedTransaction, "delete");
+
+        setState({
+            ...state,
+            wallets: newWallets,
+            transactions: newTransactions,
+        });
 
         setDeleteTransactionModal(false);
+    };
+
+    const updateWallets = (transaction, action, prevTrans = null) => {
+        let newWallets = [...state.wallets];
+
+        let toWalletIndex = state.wallets.findIndex(
+            (item) => item.id === transaction.toWalletId
+        );
+
+        let fromWalletIndex = state.wallets.findIndex(
+            (item) => item.id === transaction.fromWalletId
+        );
+
+        if (action == "add") {
+            if (transaction.type === "income") {
+                newWallets[toWalletIndex].balance += +transaction.amount;
+            }
+            if (transaction.type === "expense") {
+                newWallets[fromWalletIndex].balance -= +transaction.amount;
+            }
+            if (transaction.type === "transfer") {
+                newWallets[toWalletIndex].balance += +transaction.amount;
+                newWallets[fromWalletIndex].balance -= +transaction.amount;
+            }
+        } else if (action === "delete") {
+            if (transaction.type === "income") {
+                newWallets[toWalletIndex].balance -= +transaction.amount;
+            }
+            if (transaction.type === "expense") {
+                newWallets[fromWalletIndex].balance += +transaction.amount;
+            }
+            if (transaction.type === "transfer") {
+                newWallets[toWalletIndex].balance -= +transaction.amount;
+                newWallets[fromWalletIndex].balance += +transaction.amount;
+            }
+        } else if (action === "edit") {
+            if (prevTrans.type === "income") {
+                newWallets[toWalletIndex].balance -= +prevTrans.amount;
+            }
+            if (prevTrans.type === "expense") {
+                newWallets[fromWalletIndex].balance += +prevTrans.amount;
+            }
+            if (prevTrans.type === "transfer") {
+                newWallets[toWalletIndex].balance -= +prevTrans.amount;
+                newWallets[fromWalletIndex].balance += +prevTrans.amount;
+            }
+
+            if (transaction.type === "income") {
+                newWallets[toWalletIndex].balance += +transaction.amount;
+            }
+            if (transaction.type === "expense") {
+                newWallets[fromWalletIndex].balance -= +transaction.amount;
+            }
+            if (transaction.type === "transfer") {
+                newWallets[toWalletIndex].balance += +transaction.amount;
+                newWallets[fromWalletIndex].balance -= +transaction.amount;
+            }
+        }
+        return newWallets;
     };
 
     return (
@@ -184,7 +280,7 @@ const Home = () => {
                         setAddTransactionModal(true);
                     }}
                     onDelete={() => setDeleteTransactionModal(true)}
-                    // onEdit={() => setEditTransactionModal(true)}
+                    onEdit={() => setEditTransactionModal(true)}
                     onSelect={(transaction) => {
                         setSelectedTransaction(transaction);
                     }}

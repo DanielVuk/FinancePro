@@ -14,7 +14,7 @@ const timeFromat = new Intl.DateTimeFormat("en-US", {
     hour12: false,
 });
 
-const Transaction = ({ transaction, onDelete, onSelect }) => {
+const Transaction = ({ transaction, onDelete, onEdit, onSelect }) => {
     const [state] = useContext(Context);
 
     let categoryIndex = state.categories.findIndex(
@@ -137,7 +137,7 @@ const Transaction = ({ transaction, onDelete, onSelect }) => {
                         <GetIcon iconName="delete" color="error.main" />
                     </IconButton>
                     <IconButton
-                        // onClick={onEdit}
+                        onClick={onEdit}
                         sx={{
                             backgroundColor: "background.default",
                             margin: "3px 15px",
