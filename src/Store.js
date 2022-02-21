@@ -89,7 +89,7 @@ const initialState = {
             fromWalletId: null,
             date: new Date(),
             note: "Uplata",
-            type: ["Income"],
+            type: "Income",
         },
         {
             id: 2,
@@ -99,7 +99,7 @@ const initialState = {
             fromWalletId: 2,
             date: new Date(),
             note: "Placen racun",
-            type: ["Expense"],
+            type: "Expense",
         },
         {
             id: 3,
@@ -109,7 +109,7 @@ const initialState = {
             fromWalletId: 2,
             date: new Date(),
             note: "Prijenos plaracnjer racun za telekomunikacije i nserner",
-            type: ["Transfer"],
+            type: "Transfer",
         },
     ],
 };

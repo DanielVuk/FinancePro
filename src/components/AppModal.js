@@ -4,7 +4,7 @@ const style = {
     bgcolor: "background.paper",
     borderRadius: 5,
     boxShadow: 20,
-    minWidth: "320px",
+    minWidth: "550px",
     p: 4,
 };
 

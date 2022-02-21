@@ -12,7 +12,7 @@ const breakPointsForTransactions = [
     { width: 1200, itemsToShow: 8 },
 ];
 
-const TransactionsCarousel = ({ onDelete, onSelect }) => {
+const TransactionsCarousel = ({ onAdd, onDelete, onSelect }) => {
     const [state] = useContext(Context);
 
     return (
@@ -27,9 +27,7 @@ const TransactionsCarousel = ({ onDelete, onSelect }) => {
                     Transactions: {state.transactions.length}
                 </Typography>
                 <Box>
-                    <IconButton
-                    // onClick={onAdd}
-                    >
+                    <IconButton onClick={onAdd}>
                         <GetIcon
                             iconName="add"
                             color="primary.main"
@@ -57,6 +55,7 @@ const TransactionsCarousel = ({ onDelete, onSelect }) => {
                             }}
                             transaction={transaction}
                             onDelete={onDelete}
+                            // onEdit={onEdit}
                         />
                     ))}
                 </Carousel>

@@ -1,11 +1,8 @@
-import EmailIcon from "@mui/icons-material/Email";
-import LockIcon from "@mui/icons-material/Lock";
 import {
     Box,
     Container,
     Divider,
     Grid,
-    Icon,
     InputAdornment,
     Link,
 } from "@mui/material";
@@ -15,6 +12,7 @@ import logo from "../assets/logo.png";
 import AppInput from "../components/AppInput.js";
 import AppModal from "../components/AppModal";
 import AppButton from "../components/Buttons/AppButton";
+import GetIcon from "../components/GetIcon";
 
 const alignCenter = {
     justifyContent: "center",
@@ -95,9 +93,11 @@ const UserAuth = () => {
                                 InputProps={{
                                     startAdornment: (
                                         <InputAdornment position="start">
-                                            <Icon color="primary">
-                                                <EmailIcon />
-                                            </Icon>
+                                            <GetIcon
+                                                iconName="email"
+                                                color="primary.main"
+                                                size="medium"
+                                            />
                                         </InputAdornment>
                                     ),
                                 }}
@@ -113,9 +113,11 @@ const UserAuth = () => {
                                 InputProps={{
                                     startAdornment: (
                                         <InputAdornment position="start">
-                                            <Icon color="primary">
-                                                <LockIcon />
-                                            </Icon>
+                                            <GetIcon
+                                                iconName="lock"
+                                                color="primary.main"
+                                                size="medium"
+                                            />
                                         </InputAdornment>
                                     ),
                                 }}

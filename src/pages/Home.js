@@ -6,6 +6,7 @@ import TransactionsCarousel from "../components/Carousels/TransactionsCarousel";
 import WalletsCarousel from "../components/Carousels/WalletsCarousel";
 import CategoryForm from "../components/Forms/CategoryForm";
 import DeleteForm from "../components/Forms/DeleteForm";
+import TransactionForm from "../components/Forms/TransactionForm";
 import WalletForm from "../components/Forms/WalletForm";
 import { Context } from "../Store";
 const Home = () => {
@@ -19,7 +20,9 @@ const Home = () => {
     const [deleteCategoryModal, setDeleteCategoryModal] = useState(false);
     const [editCategoryModal, setEditCategoryModal] = useState(false);
 
+    const [addTransactionModal, setAddTransactionModal] = useState(false);
     const [deleteTransactionModal, setDeleteTransactionModal] = useState(false);
+    const [editTransactionModal, setEditTransactionModal] = useState(false);
 
     const [selectedWallet, setSelectedWallet] = useState();
     const [selectedCategory, setSelectedCategory] = useState();
@@ -87,6 +90,23 @@ const Home = () => {
         setDeleteCategoryModal(false);
     };
 
+    const addTransaction = (transaction) => {
+        let newTransaction = {
+            id: state.transactions[state.transactions.length - 1].id + 1,
+            ...transaction,
+        };
+
+        let newTransactions = [...state.transactions, newTransaction];
+
+        setState({ ...state, transactions: newTransactions });
+
+        setAddTransactionModal(false);
+    };
+
+    const editTransaction = (transaction) => {
+        console.log("edit transaction");
+    };
+
     const deleteTransaction = () => {
         let newTransactions = [...state.transactions].filter(
             (t) => t.id !== selectedTransaction.id
@@ -102,7 +122,7 @@ const Home = () => {
             container
             maxWidth="fluid"
             justifyContent="center"
-            sx={{ minWidth: "428px" }}
+            sx={{ minWidth: "550px" }}
         >
             <Grid
                 container
@@ -160,7 +180,11 @@ const Home = () => {
                 />
 
                 <TransactionsCarousel
+                    onAdd={() => {
+                        setAddTransactionModal(true);
+                    }}
                     onDelete={() => setDeleteTransactionModal(true)}
+                    // onEdit={() => setEditTransactionModal(true)}
                     onSelect={(transaction) => {
                         setSelectedTransaction(transaction);
                     }}
@@ -222,17 +246,18 @@ const Home = () => {
                     open={addCategoryModal}
                 />
             </AppModal>
+
             <AppModal
                 open={editCategoryModal}
                 onClose={() => setEditCategoryModal(false)}
             >
                 <CategoryForm
                     action="edit"
-                    title="Edit Category"
+                    category={selectedCategory}
                     onClose={() => setEditCategoryModal(false)}
                     onConfirm={editCategory}
                     open={editCategoryModal}
-                    category={selectedCategory}
+                    title="Edit Category"
                 />
             </AppModal>
             <AppModal
@@ -248,6 +273,32 @@ const Home = () => {
                             {selectedCategory && selectedCategory.name}?
                         </>
                     }
+                />
+            </AppModal>
+
+            <AppModal
+                open={addTransactionModal}
+                onClose={() => setAddTransactionModal(false)}
+            >
+                <TransactionForm
+                    onClose={() => setAddTransactionModal(false)}
+                    onConfirm={addTransaction}
+                    open={addTransactionModal}
+                    title="Create New Transaction"
+                />
+            </AppModal>
+
+            <AppModal
+                open={editTransactionModal}
+                onClose={() => setEditTransactionModal(false)}
+            >
+                <TransactionForm
+                    action="edit"
+                    onClose={() => setEditTransactionModal(false)}
+                    onConfirm={editTransaction}
+                    open={editTransactionModal}
+                    title="Edit Transaction"
+                    transaction={selectedTransaction}
                 />
             </AppModal>
 

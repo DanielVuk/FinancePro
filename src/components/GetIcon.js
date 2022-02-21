@@ -15,8 +15,10 @@ import CheckroomRoundedIcon from "@mui/icons-material/CheckroomRounded";
 import ChurchRoundedIcon from "@mui/icons-material/ChurchRounded";
 import CleanHandsRoundedIcon from "@mui/icons-material/CleanHandsRounded";
 import CurrencyExchangeRoundedIcon from "@mui/icons-material/CurrencyExchangeRounded";
+import DateRangeRoundedIcon from "@mui/icons-material/DateRangeRounded";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";
+import EmailIcon from "@mui/icons-material/Email";
 import FamilyRestroomRoundedIcon from "@mui/icons-material/FamilyRestroomRounded";
 import FastfoodRoundedIcon from "@mui/icons-material/FastfoodRounded";
 import FitnessCenterRoundedIcon from "@mui/icons-material/FitnessCenterRounded";
@@ -25,13 +27,19 @@ import InsertDriveFileRoundedIcon from "@mui/icons-material/InsertDriveFileRound
 import LaptopMacIcon from "@mui/icons-material/LaptopMac";
 import LiquorRoundedIcon from "@mui/icons-material/LiquorRounded";
 import LocalGasStationRoundedIcon from "@mui/icons-material/LocalGasStationRounded";
+import LockIcon from "@mui/icons-material/Lock";
 import PaletteIcon from "@mui/icons-material/Palette";
 import RestaurantMenuRoundedIcon from "@mui/icons-material/RestaurantMenuRounded";
 import SchoolRoundedIcon from "@mui/icons-material/SchoolRounded";
 import WorkOutlineRoundedIcon from "@mui/icons-material/WorkOutlineRounded";
+import { Avatar } from "@mui/material";
+import send from "../assets/send.png";
 
 const GetIcon = ({ iconName, color = null, size = "" }) => {
     switch (iconName) {
+        case "sendTo":
+            return <Avatar src={send} sx={{ width: 27, height: 27 }} />;
+
         case "add":
             return (
                 <AddCircleOutlineRoundedIcon
@@ -39,6 +47,7 @@ const GetIcon = ({ iconName, color = null, size = "" }) => {
                     sx={{ color: color }}
                 />
             );
+
         case "delete":
             return <DeleteIcon fontSize={size} sx={{ color: color }} />;
 
@@ -195,6 +204,17 @@ const GetIcon = ({ iconName, color = null, size = "" }) => {
 
         case "edit":
             return <EditRoundedIcon fontSize={size} sx={{ color: color }} />;
+
+        case "email":
+            return <EmailIcon fontSize={size} sx={{ color: color }} />;
+
+        case "lock":
+            return <LockIcon fontSize={size} sx={{ color: color }} />;
+
+        case "date":
+            return (
+                <DateRangeRoundedIcon fontSize={size} sx={{ color: color }} />
+            );
         default:
             return null;
     }

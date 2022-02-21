@@ -15,11 +15,11 @@ import GetIcon from "../GetIcon";
 
 const CategoryForm = ({
     action = "add",
-    title,
+    category = null,
     onClose,
     onConfirm,
     open,
-    category = null,
+    title,
 }) => {
     const [name, setName] = useState("");
     const [type, setType] = useState(["income", "expense"]);
@@ -43,9 +43,8 @@ const CategoryForm = ({
     }, [open]);
 
     const handleTypeChange = (event, newType) => {
-        if (newType.length === 0) {
-            return;
-        }
+        if (newType.length === 0) return;
+
         console.log(newType);
         setType(newType);
     };
