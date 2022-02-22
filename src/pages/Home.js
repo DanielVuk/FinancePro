@@ -8,7 +8,9 @@ import CategoryForm from "../components/Forms/CategoryForm";
 import DeleteForm from "../components/Forms/DeleteForm";
 import TransactionForm from "../components/Forms/TransactionForm";
 import WalletForm from "../components/Forms/WalletForm";
+import updateWallets from "../Functions/updateWallets";
 import { Context } from "../Store";
+
 const Home = () => {
     const [state, setState] = useContext(Context);
 
@@ -91,8 +93,6 @@ const Home = () => {
     };
 
     const addTransaction = (transaction) => {
-        console.log(transaction);
-        console.log(typeof +transaction.amount);
         let newTransaction = {
             id: state.transactions[state.transactions.length - 1].id + 1,
             ...transaction,
@@ -100,7 +100,7 @@ const Home = () => {
 
         let newTransactions = [...state.transactions, newTransaction];
 
-        let newWallets = updateWallets(transaction, "add");
+        let newWallets = updateWallets(transaction, "add", state);
 
         setState({
             ...state,
@@ -121,7 +121,8 @@ const Home = () => {
         let newWallets = updateWallets(
             transaction,
             "edit",
-            tempTransactions[index]
+            tempTransactions[index],
+            state
         );
 
         tempTransactions[index] = {
@@ -143,7 +144,7 @@ const Home = () => {
             (t) => t.id !== selectedTransaction.id
         );
 
-        let newWallets = updateWallets(selectedTransaction, "delete");
+        let newWallets = updateWallets(selectedTransaction, "delete", state);
 
         setState({
             ...state,
@@ -152,65 +153,6 @@ const Home = () => {
         });
 
         setDeleteTransactionModal(false);
-    };
-
-    const updateWallets = (transaction, action, prevTrans = null) => {
-        let newWallets = [...state.wallets];
-
-        let toWalletIndex = state.wallets.findIndex(
-            (item) => item.id === transaction.toWalletId
-        );
-
-        let fromWalletIndex = state.wallets.findIndex(
-            (item) => item.id === transaction.fromWalletId
-        );
-
-        if (action == "add") {
-            if (transaction.type === "income") {
-                newWallets[toWalletIndex].balance += +transaction.amount;
-            }
-            if (transaction.type === "expense") {
-                newWallets[fromWalletIndex].balance -= +transaction.amount;
-            }
-            if (transaction.type === "transfer") {
-                newWallets[toWalletIndex].balance += +transaction.amount;
-                newWallets[fromWalletIndex].balance -= +transaction.amount;
-            }
-        } else if (action === "delete") {
-            if (transaction.type === "income") {
-                newWallets[toWalletIndex].balance -= +transaction.amount;
-            }
-            if (transaction.type === "expense") {
-                newWallets[fromWalletIndex].balance += +transaction.amount;
-            }
-            if (transaction.type === "transfer") {
-                newWallets[toWalletIndex].balance -= +transaction.amount;
-                newWallets[fromWalletIndex].balance += +transaction.amount;
-            }
-        } else if (action === "edit") {
-            if (prevTrans.type === "income") {
-                newWallets[toWalletIndex].balance -= +prevTrans.amount;
-            }
-            if (prevTrans.type === "expense") {
-                newWallets[fromWalletIndex].balance += +prevTrans.amount;
-            }
-            if (prevTrans.type === "transfer") {
-                newWallets[toWalletIndex].balance -= +prevTrans.amount;
-                newWallets[fromWalletIndex].balance += +prevTrans.amount;
-            }
-
-            if (transaction.type === "income") {
-                newWallets[toWalletIndex].balance += +transaction.amount;
-            }
-            if (transaction.type === "expense") {
-                newWallets[fromWalletIndex].balance -= +transaction.amount;
-            }
-            if (transaction.type === "transfer") {
-                newWallets[toWalletIndex].balance += +transaction.amount;
-                newWallets[fromWalletIndex].balance -= +transaction.amount;
-            }
-        }
-        return newWallets;
     };
 
     return (

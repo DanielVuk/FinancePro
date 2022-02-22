@@ -2,10 +2,13 @@ import DateAdapter from "@mui/lab/AdapterDateFns";
 import DateTimePicker from "@mui/lab/DateTimePicker";
 import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import {
+    Box,
     FormControl,
     Grid,
     InputAdornment,
     InputLabel,
+    ListItemIcon,
+    ListItemText,
     MenuItem,
     Select,
     Stack,
@@ -111,7 +114,7 @@ const TransactionForm = ({
                     <ToggleButton value="expense" color="error">
                         <Typography>Expense</Typography>
                     </ToggleButton>
-                    <ToggleButton value="transfer" color="primary">
+                    <ToggleButton value="transfer" color="info">
                         <Typography>Transfer</Typography>
                     </ToggleButton>
                 </ToggleButtonGroup>
@@ -136,7 +139,9 @@ const TransactionForm = ({
                                                   key={category.id}
                                                   value={category.id}
                                               >
-                                                  {category.name}
+                                                  <SelectItem
+                                                      category={category}
+                                                  />
                                               </MenuItem>
                                           ))
                                     : state.categories
@@ -148,7 +153,9 @@ const TransactionForm = ({
                                                   key={category.id}
                                                   value={category.id}
                                               >
-                                                  {category.name}
+                                                  <SelectItem
+                                                      category={category}
+                                                  />
                                               </MenuItem>
                                           ))}
                             </Select>
@@ -276,3 +283,28 @@ const TransactionForm = ({
 };
 
 export default TransactionForm;
+
+const SelectItem = ({ category }) => {
+    return (
+        <Box
+            sx={{
+                display: "flex",
+                justifyContent: "center",
+            }}
+        >
+            <ListItemIcon>
+                <GetIcon
+                    iconName={category.icon}
+                    color="primary.main"
+                    size="medium"
+                />
+            </ListItemIcon>
+            <ListItemText
+                sx={{
+                    marginLeft: "-10px",
+                }}
+                primary={category.name}
+            />
+        </Box>
+    );
+};

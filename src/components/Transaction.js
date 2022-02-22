@@ -1,18 +1,8 @@
 import { Box, Card, IconButton, Stack, Typography } from "@mui/material";
 import { useContext } from "react";
+import { dateFormat, timeFormat } from "../components/DateTimeFormat";
 import { Context } from "../Store";
 import GetIcon from "./GetIcon";
-
-const dateFormat = new Intl.DateTimeFormat("en-US", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-});
-const timeFromat = new Intl.DateTimeFormat("en-US", {
-    hour: "numeric",
-    minute: "numeric",
-    hour12: false,
-});
 
 const Transaction = ({ transaction, onDelete, onEdit, onSelect }) => {
     const [state] = useContext(Context);
@@ -80,7 +70,7 @@ const Transaction = ({ transaction, onDelete, onEdit, onSelect }) => {
                     </Typography>
                     <Typography noWrap>
                         {dateFormat.format(transaction.date)}{" "}
-                        {timeFromat.format(transaction.date)}
+                        {timeFormat.format(transaction.date)}
                     </Typography>
                 </Stack>
             </Box>
