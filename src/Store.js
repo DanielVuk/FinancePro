@@ -112,7 +112,7 @@ const initialState = {
             type: "transfer",
         },
         {
-            id: 4,
+            id: 1000,
             amount: 500,
             categoryId: 1,
             toWalletId: 1,
@@ -121,16 +121,16 @@ const initialState = {
             note: "Uplata",
             type: "income",
         },
-        {
-            id: 5,
-            amount: 1000,
-            categoryId: 2,
-            toWalletId: "",
-            fromWalletId: 2,
-            date: new Date(),
-            note: "Placen racun",
-            type: "expense",
-        },
+        // {
+        //     id: 5,
+        //     amount: 1000,
+        //     categoryId: 8,
+        //     toWalletId: "",
+        //     fromWalletId: 2,
+        //     date: new Date(),
+        //     note: "Placen racun",
+        //     type: "expense",
+        // },
         // {
         //     id: 13,
         //     amount: 100,
@@ -174,7 +174,7 @@ const initialState = {
         // {
         //     id: 111,
         //     amount: 500,
-        //     categoryId: 1,
+        //     categoryId: 4,
         //     toWalletId: 1,
         //     fromWalletId: "",
         //     date: new Date(),
@@ -204,7 +204,7 @@ const initialState = {
         // {
         //     id: 411,
         //     amount: 500,
-        //     categoryId: 1,
+        //     categoryId: 4,
         //     toWalletId: 1,
         //     fromWalletId: "",
         //     date: new Date(),

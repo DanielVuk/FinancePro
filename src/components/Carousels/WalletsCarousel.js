@@ -1,8 +1,10 @@
-import { Typography } from "@mui/material";
-import { useContext } from "react";
+import { SettingsInputAntennaTwoTone } from "@mui/icons-material";
+import { Chip, Stack, Typography } from "@mui/material";
+import { useContext, useState } from "react";
 import Carousel from "react-elastic-carousel";
 import { Context } from "../../Store";
 import AddButton from "../Buttons/AddButton";
+import GetIcon from "../GetIcon";
 import Wallet from "../Wallet";
 
 const breakPointsForWallets = [
@@ -17,9 +19,25 @@ const WalletsCarousel = ({ onAdd, onDelete, onEdit, onSelect, selected }) => {
 
     return (
         <>
-            <Typography variant="h4" sx={{ color: "white" }} mt={-13} mb={2}>
-                Wallets: {state.wallets.length}
-            </Typography>
+            <Stack
+                mt={-13}
+                mb={2}
+                direction="row"
+                spacing={1}
+                alignItems="center"
+            >
+                <Typography variant="h4" sx={{ color: "white" }}>
+                    Wallets: {state.wallets.length}
+                </Typography>
+                {selected && (
+                    <Chip
+                        sx={{ paddingLeft: "5px", color: selected.color }}
+                        icon={<GetIcon iconName="circle" size="medium" />}
+                        label={selected.name}
+                        onDelete={() => onSelect("")}
+                    />
+                )}
+            </Stack>
             <Carousel breakPoints={breakPointsForWallets}>
                 <AddButton
                     onClick={onAdd}

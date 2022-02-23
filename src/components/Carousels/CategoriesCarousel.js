@@ -1,9 +1,10 @@
-import { Typography } from "@mui/material";
+import { Chip, Stack, Typography } from "@mui/material";
 import { useContext } from "react";
 import Carousel from "react-elastic-carousel";
 import { Context } from "../../Store";
 import AddButton from "../Buttons/AddButton";
 import Category from "../Category";
+import GetIcon from "../GetIcon";
 
 const breakPointsForCategories = [
     { width: 1, itemsToShow: 2 },
@@ -22,14 +23,25 @@ const CategoriesCarousel = ({
     const [state] = useContext(Context);
     return (
         <>
-            <Typography
-                my={4}
-                variant="h4"
-                color="text.secondary"
-                sx={{ fontWeight: "bold" }}
-            >
-                Categories: {state.categories.length}
-            </Typography>
+            <Stack my={4} direction="row" spacing={1} alignItems="center">
+                <Typography
+                    variant="h4"
+                    color="text.secondary"
+                    sx={{ fontWeight: "bold" }}
+                >
+                    Categories: {state.categories.length}
+                </Typography>
+                {selected && (
+                    <Chip
+                        sx={{ paddingLeft: "5px", color: selected.color }}
+                        icon={
+                            <GetIcon iconName={selected.icon} size="medium" />
+                        }
+                        label={selected.name}
+                        onDelete={() => onSelect("")}
+                    />
+                )}
+            </Stack>
             <Carousel breakPoints={breakPointsForCategories}>
                 <AddButton
                     onClick={onAdd}

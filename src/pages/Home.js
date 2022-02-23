@@ -37,7 +37,6 @@ const Home = () => {
         };
         let newWallets = [...state.wallets, newWallet];
         setState({ ...state, wallets: newWallets });
-
         setAddWalletModal(false);
     };
 
@@ -45,7 +44,20 @@ const Home = () => {
         let newWallets = [...state.wallets].filter(
             (w) => w.id !== selectedWallet.id
         );
-        setState({ ...state, wallets: newWallets });
+
+        let newTransactions = [...state.transactions].filter(
+            (t) =>
+                t.toWalletId !== selectedWallet.id &&
+                t.fromWalletId !== selectedWallet.id
+        );
+
+        setSelectedWallet("");
+
+        setState({
+            ...state,
+            wallets: newWallets,
+            transactions: newTransactions,
+        });
 
         setDeleteWalletModal(false);
     };
@@ -56,7 +68,9 @@ const Home = () => {
         );
         let tempWallets = [...state.wallets];
         tempWallets[index] = { id: selectedWallet.id, ...wallet };
+
         setState({ ...state, wallets: tempWallets });
+        setSelectedWallet({ id: selectedWallet.id, ...wallet });
 
         setEditWalletModal(false);
     };
@@ -78,7 +92,10 @@ const Home = () => {
         );
         let tempCategories = [...state.categories];
         tempCategories[index] = { id: selectedCategory.id, ...category };
+
         setState({ ...state, categories: tempCategories });
+
+        setSelectedCategory({ id: selectedCategory.id, ...category });
 
         setEditCategoryModal(false);
     };
@@ -87,7 +104,18 @@ const Home = () => {
         let newCategories = [...state.categories].filter(
             (w) => w.id !== selectedCategory.id
         );
-        setState({ ...state, categories: newCategories });
+
+        let newTransactions = [...state.transactions].filter(
+            (t) => t.categoryId !== selectedCategory.id
+        );
+
+        setState({
+            ...state,
+            categories: newCategories,
+            transactions: newTransactions,
+        });
+
+        setSelectedCategory("");
 
         setDeleteCategoryModal(false);
     };
@@ -169,9 +197,7 @@ const Home = () => {
                         setEditWalletModal(true);
                     }}
                     onSelect={(wallet) => {
-                        wallet !== selectedWallet
-                            ? setSelectedWallet(wallet)
-                            : setSelectedWallet("");
+                        setSelectedWallet(wallet);
                     }}
                     selected={selectedWallet}
                 />
@@ -186,9 +212,7 @@ const Home = () => {
                         setEditCategoryModal(true);
                     }}
                     onSelect={(category) => {
-                        category !== selectedCategory
-                            ? setSelectedCategory(category)
-                            : setSelectedCategory("");
+                        setSelectedCategory(category);
                     }}
                     selected={selectedCategory}
                 />

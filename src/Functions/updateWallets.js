@@ -1,16 +1,13 @@
 const getTotalBalance = (state) => {
     let initialBalance = 0;
-
     state.wallets.forEach((wallet) => {
         initialBalance += getWalletBalance(wallet, state.transactions);
     });
-
     return initialBalance;
 };
 
 const getWalletBalance = (wallet, transactions) => {
     let initialBalance = wallet.balance;
-
     transactions.forEach((t) => {
         if (t.type === "income") {
             if (t.toWalletId === wallet.id) {
@@ -30,7 +27,6 @@ const getWalletBalance = (wallet, transactions) => {
             }
         }
     });
-
     return initialBalance;
 };
 

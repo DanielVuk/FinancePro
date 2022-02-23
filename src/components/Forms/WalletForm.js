@@ -1,8 +1,10 @@
 import { Grid, Stack, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { getWalletBalance } from "../../Functions/updateWallets";
 import AppInput from "../AppInput";
 import ModalButtons from "../Buttons/ModalButtons";
 import ColorInput from "../ColorInput";
+import { Context } from "../../Store";
 
 const WalletForm = ({
     action = "add",
@@ -12,6 +14,8 @@ const WalletForm = ({
     title,
     wallet = null,
 }) => {
+    const [state] = useContext(Context);
+
     const [name, setName] = useState("");
     const [balance, setBalance] = useState(0);
     const [color, setColor] = useState("black");
@@ -24,7 +28,7 @@ const WalletForm = ({
         } else if (action === "edit") {
             if (wallet) {
                 setName(wallet.name);
-                setBalance(wallet.balance);
+                setBalance(getWalletBalance(wallet, state.transactions));
                 setColor(wallet.color);
             }
         }

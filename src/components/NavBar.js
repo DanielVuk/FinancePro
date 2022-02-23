@@ -100,6 +100,7 @@ const NavBar = () => {
                         <Tabs value={selectedTab} onChange={handleTabChange}>
                             <Tab value="/" label="Home" />
                             <Tab value="/transactions" label="Transactions" />
+                            <Tab value="/analytics" label="Analytics" />
                         </Tabs>
                     </Box>
 
@@ -137,6 +138,7 @@ const NavBar = () => {
                         >
                             <Tab value="/" label="Home" />
                             <Tab value="/transactions" label="Transactions" />
+                            <Tab value="/analytics" label="Analytics" />
                         </Tabs>
                     </Slide>
                 </Box>

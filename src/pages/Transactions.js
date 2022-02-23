@@ -21,6 +21,7 @@ const Transactions = () => {
     const [selectionModel, setSelectionModel] = useState([]);
 
     const [addTransactionModal, setAddTransactionModal] = useState(false);
+    const [editTransactionModal, setEditTransactionModal] = useState(false);
     const [deleteTransactionModal, setDeleteTransactionModal] = useState(false);
 
     const [rows, setRows] = useState([]);
@@ -76,6 +77,22 @@ const Transactions = () => {
         setAddTransactionModal(false);
     };
 
+    const editTransaction = (transaction) => {
+        let index = state.transactions.findIndex(
+            (item) => item.id === selectionModel[0]
+        );
+        let tempTransactions = [...state.transactions];
+
+        tempTransactions[index] = {
+            id: selectionModel[0],
+            ...transaction,
+        };
+
+        setState({ ...state, transactions: tempTransactions });
+
+        setEditTransactionModal(false);
+    };
+
     const deleteTransaction = () => {
         let newTransactions = [...state.transactions];
 
@@ -103,6 +120,16 @@ const Transactions = () => {
                 >
                     ADD
                 </AppButton>
+                {selectionModel.length === 1 ? (
+                    <AppButton
+                        onClick={() => {
+                            setEditTransactionModal(true);
+                        }}
+                        startIcon={<GetIcon iconName="edit" />}
+                    >
+                        EDIT
+                    </AppButton>
+                ) : null}
                 {selectionModel.length > 0 ? (
                     <AppButton
                         onClick={() => {
@@ -181,6 +208,21 @@ const Transactions = () => {
                     onConfirm={addTransaction}
                     open={addTransactionModal}
                     title="Create New Transaction"
+                />
+            </AppModal>
+            <AppModal
+                open={editTransactionModal}
+                onClose={() => setEditTransactionModal(false)}
+            >
+                <TransactionForm
+                    action="edit"
+                    onClose={() => setEditTransactionModal(false)}
+                    onConfirm={editTransaction}
+                    open={editTransactionModal}
+                    title="Edit Transaction"
+                    transaction={state.transactions.find(
+                        (t) => t.id === selectionModel[0]
+                    )}
                 />
             </AppModal>
             <AppModal

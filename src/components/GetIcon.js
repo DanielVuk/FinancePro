@@ -32,6 +32,7 @@ import PaletteIcon from "@mui/icons-material/Palette";
 import RestaurantMenuRoundedIcon from "@mui/icons-material/RestaurantMenuRounded";
 import SchoolRoundedIcon from "@mui/icons-material/SchoolRounded";
 import WorkOutlineRoundedIcon from "@mui/icons-material/WorkOutlineRounded";
+import CircleIcon from "@mui/icons-material/Circle";
 import { Avatar } from "@mui/material";
 import send from "../assets/send.png";
 
@@ -215,6 +216,8 @@ const GetIcon = ({ iconName, color = null, size = "" }) => {
             return (
                 <DateRangeRoundedIcon fontSize={size} sx={{ color: color }} />
             );
+        case "circle":
+            return <CircleIcon fontSize={size} sx={{ color: color }} />;
         default:
             return null;
     }
