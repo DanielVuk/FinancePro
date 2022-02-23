@@ -18,17 +18,23 @@ const Transaction = ({ transaction, onDelete, onEdit, onSelect }) => {
         (item) => item.id === transaction.fromWalletId
     );
 
+    const getColor = () => {
+        if (transaction.type === "income") return "#F0F5EF";
+        if (transaction.type === "expense") return "#FDF4F4";
+        if (transaction.type === "transfer") return "#EDF5FB";
+    };
+
     return (
         <Card
             onClick={onSelect}
             sx={{
                 display: { md: "flex", sm: "block" },
                 alignItems: "center",
-                width: { md: "100%", sm: "62%", xs: "100%" },
+                width: { md: "100%", sm: "75%", xs: "100%" },
                 borderRadius: 5,
                 margin: "0 23px 23px 23px",
                 boxShadow: 3,
-                backgroundColor: "#F7F6FA",
+                backgroundColor: getColor(),
                 justifyContent: "space-between",
                 padding: "15px",
             }}
@@ -63,9 +69,11 @@ const Transaction = ({ transaction, onDelete, onEdit, onSelect }) => {
                     />
                 </Box>
                 <Stack>
-                    <Typography sx={{ fontWeight: "bold" }}>
+                    <Typography
+                        sx={{ fontWeight: "bold", textTransform: "capitalize" }}
+                    >
                         {categoryIndex !== -1
-                            ? state.categories[categoryIndex].name
+                            ? `${transaction.type} - ${state.categories[categoryIndex].name}`
                             : "Transfer"}
                     </Typography>
                     <Typography noWrap>
@@ -111,12 +119,13 @@ const Transaction = ({ transaction, onDelete, onEdit, onSelect }) => {
                 >
                     <Typography
                         color={"primary.main"}
+                        noWrap
                         sx={{
                             fontWeight: "bold",
                             marginRight: "15px",
                         }}
                     >
-                        {transaction.amount}
+                        {transaction.amount} HRK
                     </Typography>
                     <IconButton
                         onClick={onDelete}

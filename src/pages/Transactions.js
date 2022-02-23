@@ -7,7 +7,7 @@ import {
     GridToolbarExport,
     GridToolbarFilterButton,
 } from "@mui/x-data-grid";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import AppModal from "../components/AppModal";
 import AppButton from "../components/Buttons/AppButton";
 import { dateFormat, timeFormat } from "../components/DateTimeFormat";
@@ -23,17 +23,35 @@ const Transactions = () => {
     const [addTransactionModal, setAddTransactionModal] = useState(false);
     const [deleteTransactionModal, setDeleteTransactionModal] = useState(false);
 
-    let rows = state.transactions.map((t) => ({
-        id: t.id,
-        col1: t.type,
-        col2: `${dateFormat.format(t.date)} ${timeFormat.format(t.date)}`,
-        col3: t.categoryId !== null ? state.categories[t.categoryId].name : "-",
-        col4: t.toWalletId !== null ? state.wallets[t.toWalletId].name : "-",
-        col5:
-            t.fromWalletId !== null ? state.wallets[t.fromWalletId].name : "-",
-        col6: t.amount,
-        col7: t.note,
-    }));
+    const [rows, setRows] = useState([]);
+
+    useEffect(() => {
+        setRows(
+            state.transactions.map((t) => ({
+                id: t.id,
+                col1: t.type,
+                col2: `${dateFormat.format(t.date)} ${timeFormat.format(
+                    t.date
+                )}`,
+                col3:
+                    t.categoryId !== ""
+                        ? state.categories.find((c) => c.id === t.categoryId)
+                              .name
+                        : "-",
+                col4:
+                    t.toWalletId !== ""
+                        ? state.wallets.find((w) => w.id === t.toWalletId).name
+                        : "-",
+                col5:
+                    t.fromWalletId !== ""
+                        ? state.wallets.find((w) => w.id === t.fromWalletId)
+                              .name
+                        : "-",
+                col6: t.amount + " HRK",
+                col7: t.note,
+            }))
+        );
+    }, [state.transactions]);
 
     const columns = [
         { field: "col1", headerName: "Type", minWidth: 150, flex: 1 },
@@ -46,22 +64,26 @@ const Transactions = () => {
     ];
 
     const addTransaction = (transaction) => {
-        // let newTransaction = {
-        //     id: state.transactions[state.transactions.length - 1].id + 1,
-        //     ...transaction,
-        // };
-        // let newTransactions = [...state.transactions, newTransaction];
-        // let newWallets = UpdateWallets(transaction, "add");
-        // setState({
-        //     ...state,
-        //     wallets: newWallets,
-        //     transactions: newTransactions,
-        // });
-        // setAddTransactionModal(false);
+        let newTransaction = {
+            id: state.transactions[state.transactions.length - 1].id + 1,
+            ...transaction,
+        };
+
+        let newTransactions = [...state.transactions, newTransaction];
+
+        setState({ ...state, transactions: newTransactions });
+
+        setAddTransactionModal(false);
     };
 
     const deleteTransaction = () => {
-        console.log("deleted transaction");
+        let newTransactions = [...state.transactions];
+
+        selectionModel.forEach((item) => {
+            newTransactions = newTransactions.filter((t) => t.id !== item);
+        });
+
+        setState({ ...state, transactions: newTransactions });
 
         setDeleteTransactionModal(false);
     };
@@ -81,15 +103,16 @@ const Transactions = () => {
                 >
                     ADD
                 </AppButton>
-                <AppButton
-                    onClick={() => {
-                        console.log("delete", selectionModel);
-                        setDeleteTransactionModal(true);
-                    }}
-                    startIcon={<GetIcon iconName="delete" />}
-                >
-                    DELETE
-                </AppButton>
+                {selectionModel.length > 0 ? (
+                    <AppButton
+                        onClick={() => {
+                            setDeleteTransactionModal(true);
+                        }}
+                        startIcon={<GetIcon iconName="delete" />}
+                    >
+                        DELETE
+                    </AppButton>
+                ) : null}
             </GridToolbarContainer>
         );
     };

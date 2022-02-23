@@ -8,7 +8,7 @@ import CategoryForm from "../components/Forms/CategoryForm";
 import DeleteForm from "../components/Forms/DeleteForm";
 import TransactionForm from "../components/Forms/TransactionForm";
 import WalletForm from "../components/Forms/WalletForm";
-import updateWallets from "../Functions/updateWallets";
+import { getTotalBalance } from "../Functions/updateWallets";
 import { Context } from "../Store";
 
 const Home = () => {
@@ -26,8 +26,8 @@ const Home = () => {
     const [deleteTransactionModal, setDeleteTransactionModal] = useState(false);
     const [editTransactionModal, setEditTransactionModal] = useState(false);
 
-    const [selectedWallet, setSelectedWallet] = useState();
-    const [selectedCategory, setSelectedCategory] = useState();
+    const [selectedWallet, setSelectedWallet] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState("");
     const [selectedTransaction, setSelectedTransaction] = useState();
 
     const addWallet = (wallet) => {
@@ -97,16 +97,9 @@ const Home = () => {
             id: state.transactions[state.transactions.length - 1].id + 1,
             ...transaction,
         };
-
         let newTransactions = [...state.transactions, newTransaction];
 
-        let newWallets = updateWallets(transaction, "add", state);
-
-        setState({
-            ...state,
-            wallets: newWallets,
-            transactions: newTransactions,
-        });
+        setState({ ...state, transactions: newTransactions });
 
         setAddTransactionModal(false);
     };
@@ -115,26 +108,14 @@ const Home = () => {
         let index = state.transactions.findIndex(
             (item) => item.id === selectedTransaction.id
         );
-
         let tempTransactions = [...state.transactions];
-
-        let newWallets = updateWallets(
-            transaction,
-            "edit",
-            tempTransactions[index],
-            state
-        );
 
         tempTransactions[index] = {
             id: selectedTransaction.id,
             ...transaction,
         };
 
-        setState({
-            ...state,
-            wallets: newWallets,
-            transactions: tempTransactions,
-        });
+        setState({ ...state, transactions: tempTransactions });
 
         setEditTransactionModal(false);
     };
@@ -144,13 +125,7 @@ const Home = () => {
             (t) => t.id !== selectedTransaction.id
         );
 
-        let newWallets = updateWallets(selectedTransaction, "delete", state);
-
-        setState({
-            ...state,
-            wallets: newWallets,
-            transactions: newTransactions,
-        });
+        setState({ ...state, transactions: newTransactions });
 
         setDeleteTransactionModal(false);
     };
@@ -178,10 +153,7 @@ const Home = () => {
                         Your total balance:
                     </Typography>
                     <Typography variant="h4" sx={{ color: "white" }}>
-                        {state.wallets.reduce(
-                            (prev, curr) => prev + +curr.balance,
-                            0
-                        )}
+                        {getTotalBalance(state)}
                     </Typography>
                 </Stack>
             </Grid>
@@ -197,7 +169,9 @@ const Home = () => {
                         setEditWalletModal(true);
                     }}
                     onSelect={(wallet) => {
-                        setSelectedWallet(wallet);
+                        wallet !== selectedWallet
+                            ? setSelectedWallet(wallet)
+                            : setSelectedWallet("");
                     }}
                     selected={selectedWallet}
                 />
@@ -212,7 +186,9 @@ const Home = () => {
                         setEditCategoryModal(true);
                     }}
                     onSelect={(category) => {
-                        setSelectedCategory(category);
+                        category !== selectedCategory
+                            ? setSelectedCategory(category)
+                            : setSelectedCategory("");
                     }}
                     selected={selectedCategory}
                 />
@@ -226,6 +202,8 @@ const Home = () => {
                     onSelect={(transaction) => {
                         setSelectedTransaction(transaction);
                     }}
+                    selectedCategory={selectedCategory}
+                    selectedWallet={selectedWallet}
                 />
             </Container>
 

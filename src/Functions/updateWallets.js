@@ -1,77 +1,37 @@
-const updateWallets = (transaction, action, state, prevTrans = null) => {
-    console.log(state);
-    let newWallets = [...state.wallets];
+const getTotalBalance = (state) => {
+    let initialBalance = 0;
 
-    let toWalletIndex = state.wallets.findIndex(
-        (item) => item.id === transaction.toWalletId
-    );
+    state.wallets.forEach((wallet) => {
+        initialBalance += getWalletBalance(wallet, state.transactions);
+    });
 
-    let fromWalletIndex = state.wallets.findIndex(
-        (item) => item.id === transaction.fromWalletId
-    );
-
-    if (action === "add") {
-        if (transaction.type === "income") {
-            newWallets[toWalletIndex].balance += +transaction.amount;
-        }
-        if (transaction.type === "expense") {
-            newWallets[fromWalletIndex].balance -= +transaction.amount;
-        }
-        if (transaction.type === "transfer") {
-            newWallets[toWalletIndex].balance += +transaction.amount;
-            newWallets[fromWalletIndex].balance -= +transaction.amount;
-        }
-    } else if (action === "delete") {
-        if (transaction.type === "income") {
-            newWallets[toWalletIndex].balance -= +transaction.amount;
-        }
-        if (transaction.type === "expense") {
-            newWallets[fromWalletIndex].balance += +transaction.amount;
-        }
-        if (transaction.type === "transfer") {
-            newWallets[toWalletIndex].balance -= +transaction.amount;
-            newWallets[fromWalletIndex].balance += +transaction.amount;
-        }
-    } else if (action === "edit") {
-        if (prevTrans.type === "income") {
-            newWallets[toWalletIndex].balance -= +prevTrans.amount;
-        }
-        if (prevTrans.type === "expense") {
-            newWallets[fromWalletIndex].balance += +prevTrans.amount;
-        }
-        if (prevTrans.type === "transfer") {
-            newWallets[toWalletIndex].balance -= +prevTrans.amount;
-            newWallets[fromWalletIndex].balance += +prevTrans.amount;
-        }
-
-        if (transaction.type === "income") {
-            newWallets[toWalletIndex].balance += +transaction.amount;
-        }
-        if (transaction.type === "expense") {
-            newWallets[fromWalletIndex].balance -= +transaction.amount;
-        }
-        if (transaction.type === "transfer") {
-            newWallets[toWalletIndex].balance += +transaction.amount;
-            newWallets[fromWalletIndex].balance -= +transaction.amount;
-        }
-    }
-    return newWallets;
+    return initialBalance;
 };
 
-// const getWalletBalance = ({wallet, transactions}) =>{
-//     let initialBalance = wallet.balance;
+const getWalletBalance = (wallet, transactions) => {
+    let initialBalance = wallet.balance;
 
-//     return 0;
-// }
+    transactions.forEach((t) => {
+        if (t.type === "income") {
+            if (t.toWalletId === wallet.id) {
+                initialBalance += +t.amount;
+            }
+        }
+        if (t.type === "expense") {
+            if (t.fromWalletId === wallet.id) {
+                initialBalance -= +t.amount;
+            }
+        }
+        if (t.type === "transfer") {
+            if (t.toWalletId === wallet.id) {
+                initialBalance += +t.amount;
+            } else if (t.fromWalletId === wallet.id) {
+                initialBalance -= +t.amount;
+            }
+        }
+    });
 
-// const getAllWalletsBalance = ({state}) =>{
-//     let initialBalance = 0
+    return initialBalance;
+};
 
-//     state.wallets.forEach(wallet => {
-//         initialBalance += getWalletBalance(wallet, state.transactions);
-//     });
-
-//     return initialBalance;
-// }
-
-export default updateWallets;
+export { getTotalBalance, getWalletBalance };

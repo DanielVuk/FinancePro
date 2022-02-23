@@ -1,7 +1,12 @@
 import { Box, Card, IconButton, Typography } from "@mui/material";
+import { useContext } from "react";
+import { getWalletBalance } from "../Functions/updateWallets";
+import { Context } from "../Store";
 import GetIcon from "./GetIcon";
 
 const Wallet = ({ wallet, onDelete, onEdit, selected, onSelect }) => {
+    const [state] = useContext(Context);
+
     const walletStyle = {
         backgroundColor:
             selected && selected.id === wallet.id
@@ -36,7 +41,7 @@ const Wallet = ({ wallet, onDelete, onEdit, selected, onSelect }) => {
                 {wallet.name}
             </Typography>
             <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-                {wallet.balance}
+                {getWalletBalance(wallet, state.transactions)}
             </Typography>
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                 <Typography variant="h6">HRK</Typography>

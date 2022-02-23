@@ -1,6 +1,5 @@
+import { LocalizationProvider, MobileDateTimePicker } from "@mui/lab";
 import DateAdapter from "@mui/lab/AdapterDateFns";
-import DateTimePicker from "@mui/lab/DateTimePicker";
-import LocalizationProvider from "@mui/lab/LocalizationProvider";
 import {
     Box,
     FormControl,
@@ -64,8 +63,14 @@ const TransactionForm = ({
 
     const handleType = (event, newType) => {
         if (newType === null) return;
+        setType("income");
+        setCategoryId("");
         setToWalletId("");
         setFromWalletId("");
+        setAmount(0);
+        setDate(new Date());
+        setNote("");
+
         setType(newType);
     };
 
@@ -103,7 +108,6 @@ const TransactionForm = ({
                 <ToggleButtonGroup
                     exclusive
                     fullWidth
-                    disabled={action === "edit"}
                     onChange={handleType}
                     sx={{ marginY: "25px" }}
                     value={type}
@@ -232,7 +236,7 @@ const TransactionForm = ({
                         }}
                     />
                     <LocalizationProvider dateAdapter={DateAdapter}>
-                        <DateTimePicker
+                        <MobileDateTimePicker
                             label="Date and Time"
                             value={date}
                             onChange={(newValue) => {

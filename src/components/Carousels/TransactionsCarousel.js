@@ -12,8 +12,28 @@ const breakPointsForTransactions = [
     { width: 1200, itemsToShow: 8 },
 ];
 
-const TransactionsCarousel = ({ onAdd, onDelete, onEdit, onSelect }) => {
+const TransactionsCarousel = ({
+    onAdd,
+    onDelete,
+    onEdit,
+    onSelect,
+    selectedCategory,
+    selectedWallet,
+}) => {
     const [state] = useContext(Context);
+
+    let transactionsToShow = state.transactions
+        .filter((t) =>
+            selectedWallet !== ""
+                ? t.toWalletId === selectedWallet.id ||
+                  t.fromWalletId === selectedWallet.id
+                : true
+        )
+        .filter((t) =>
+            selectedCategory !== ""
+                ? t.categoryId === selectedCategory.id
+                : true
+        );
 
     return (
         <>
@@ -36,7 +56,7 @@ const TransactionsCarousel = ({ onAdd, onDelete, onEdit, onSelect }) => {
                     </IconButton>
                 </Box>
             </Box>
-            {state.transactions.length === 0 ? (
+            {transactionsToShow.length === 0 ? (
                 <Typography
                     my={5}
                     variant="h5"
@@ -47,7 +67,7 @@ const TransactionsCarousel = ({ onAdd, onDelete, onEdit, onSelect }) => {
                 </Typography>
             ) : (
                 <Carousel breakPoints={breakPointsForTransactions} verticalMode>
-                    {state.transactions.map((transaction) => (
+                    {transactionsToShow.map((transaction) => (
                         <Transaction
                             key={transaction.id}
                             onSelect={() => {
