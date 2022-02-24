@@ -13,12 +13,15 @@ import AppButton from "../components/Buttons/AppButton";
 import { dateFormat, timeFormat } from "../components/DateTimeFormat";
 import DeleteForm from "../components/Forms/DeleteForm";
 import TransactionForm from "../components/Forms/TransactionForm";
+import useSnackBar from "../components/CustomSnackBar";
 import GetIcon from "../components/GetIcon";
 import { Context } from "../Store";
 
 const Transactions = () => {
     const [state, setState] = useContext(Context);
     const [selectionModel, setSelectionModel] = useState([]);
+
+    const { SnackBar, openSnackBarHelper } = useSnackBar();
 
     const [addTransactionModal, setAddTransactionModal] = useState(false);
     const [editTransactionModal, setEditTransactionModal] = useState(false);
@@ -75,6 +78,8 @@ const Transactions = () => {
         setState({ ...state, transactions: newTransactions });
 
         setAddTransactionModal(false);
+
+        openSnackBarHelper(`Transaction is successfully added!`);
     };
 
     const editTransaction = (transaction) => {
@@ -91,6 +96,8 @@ const Transactions = () => {
         setState({ ...state, transactions: tempTransactions });
 
         setEditTransactionModal(false);
+
+        openSnackBarHelper(`Transaction is successfully edited!`);
     };
 
     const deleteTransaction = () => {
@@ -103,6 +110,8 @@ const Transactions = () => {
         setState({ ...state, transactions: newTransactions });
 
         setDeleteTransactionModal(false);
+
+        openSnackBarHelper(`Transaction(s) is successfully deleted!`);
     };
 
     const CustomToolbar = () => {
@@ -237,6 +246,7 @@ const Transactions = () => {
                     }
                 />
             </AppModal>
+            <SnackBar />
         </Container>
     );
 };

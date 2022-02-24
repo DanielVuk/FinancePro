@@ -4,6 +4,7 @@ import AppModal from "../components/AppModal";
 import CategoriesCarousel from "../components/Carousels/CategoriesCarousel";
 import TransactionsCarousel from "../components/Carousels/TransactionsCarousel";
 import WalletsCarousel from "../components/Carousels/WalletsCarousel";
+import useSnackBar from "../components/CustomSnackBar";
 import CategoryForm from "../components/Forms/CategoryForm";
 import DeleteForm from "../components/Forms/DeleteForm";
 import TransactionForm from "../components/Forms/TransactionForm";
@@ -13,6 +14,8 @@ import { Context } from "../Store";
 
 const Home = () => {
     const [state, setState] = useContext(Context);
+
+    const { SnackBar, openSnackBarHelper } = useSnackBar();
 
     const [addWalletModal, setAddWalletModal] = useState(false);
     const [deleteWalletModal, setDeleteWalletModal] = useState(false);
@@ -38,6 +41,8 @@ const Home = () => {
         let newWallets = [...state.wallets, newWallet];
         setState({ ...state, wallets: newWallets });
         setAddWalletModal(false);
+
+        openSnackBarHelper(`${wallet.name} is successfully created!`);
     };
 
     const deleteWallet = () => {
@@ -51,6 +56,7 @@ const Home = () => {
                 t.fromWalletId !== selectedWallet.id
         );
 
+        openSnackBarHelper(`${selectedWallet.name} is successfully deleted!`);
         setSelectedWallet("");
 
         setState({
@@ -73,6 +79,8 @@ const Home = () => {
         setSelectedWallet({ id: selectedWallet.id, ...wallet });
 
         setEditWalletModal(false);
+
+        openSnackBarHelper(`${wallet.name} is successfully edited!`);
     };
 
     const addCategory = (category) => {
@@ -84,6 +92,8 @@ const Home = () => {
         setState({ ...state, categories: newCategories });
 
         setAddCategoryModal(false);
+
+        openSnackBarHelper(`${category.name} is successfully added!`);
     };
 
     const editCategory = (category) => {
@@ -97,7 +107,7 @@ const Home = () => {
 
         setSelectedCategory({ id: selectedCategory.id, ...category });
 
-        setEditCategoryModal(false);
+        openSnackBarHelper(`${category.name} is successfully edited!`);
     };
 
     const deleteCategory = () => {
@@ -115,6 +125,7 @@ const Home = () => {
             transactions: newTransactions,
         });
 
+        openSnackBarHelper(`${selectedCategory.name} is successfully deleted!`);
         setSelectedCategory("");
 
         setDeleteCategoryModal(false);
@@ -130,6 +141,8 @@ const Home = () => {
         setState({ ...state, transactions: newTransactions });
 
         setAddTransactionModal(false);
+
+        openSnackBarHelper(`Transaction is successfully added!`);
     };
 
     const editTransaction = (transaction) => {
@@ -146,6 +159,8 @@ const Home = () => {
         setState({ ...state, transactions: tempTransactions });
 
         setEditTransactionModal(false);
+
+        openSnackBarHelper(`Transaction is successfully edited!`);
     };
 
     const deleteTransaction = () => {
@@ -156,6 +171,8 @@ const Home = () => {
         setState({ ...state, transactions: newTransactions });
 
         setDeleteTransactionModal(false);
+
+        openSnackBarHelper(`Transaction is successfully deleted!`);
     };
 
     return (
@@ -354,6 +371,8 @@ const Home = () => {
                     }
                 />
             </AppModal>
+
+            <SnackBar />
         </Grid>
     );
 };
