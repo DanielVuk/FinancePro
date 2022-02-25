@@ -46,15 +46,17 @@ const TransactionsCarousel = ({
                 >
                     Transactions: {state.transactions.length}
                 </Typography>
-                <Box>
-                    <IconButton onClick={onAdd}>
-                        <GetIcon
-                            iconName="add"
-                            color="primary.main"
-                            size="large"
-                        />
-                    </IconButton>
-                </Box>
+                {state.wallets.length > 0 && state.categories.length > 0 ? (
+                    <Box>
+                        <IconButton onClick={onAdd}>
+                            <GetIcon
+                                iconName="add"
+                                color="primary.main"
+                                size="large"
+                            />
+                        </IconButton>
+                    </Box>
+                ) : null}
             </Box>
             {transactionsToShow.length === 0 ? (
                 <Typography

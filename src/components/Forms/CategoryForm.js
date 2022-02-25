@@ -23,14 +23,14 @@ const CategoryForm = ({
 }) => {
     const [name, setName] = useState("");
     const [type, setType] = useState(["income", "expense"]);
-    const [color, setColor] = useState("primary.main");
+    const [color, setColor] = useState("#5D2DFD");
     const [icon, setIcon] = useState(categoryIcons[0]);
 
     useEffect(() => {
         if (action === "add") {
             setName("");
             setType(["income", "expense"]);
-            setColor("primary.main");
+            setColor("#5D2DFD");
             setIcon(categoryIcons[0]);
         } else if (action === "edit") {
             if (category) {

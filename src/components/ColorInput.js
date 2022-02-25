@@ -27,7 +27,7 @@ const ColorInput = ({ title, value, onChange }) => {
                 value={value}
                 hideTextfield
                 disableAlpha
-                defaultValue="black"
+                defaultValue="primary.main"
                 onChange={onChange}
             />
         </Box>

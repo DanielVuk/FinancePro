@@ -228,6 +228,7 @@ const TransactionForm = ({
                         setValue={setAmount}
                         type="number"
                         InputProps={{
+                            inputProps: { min: 0 },
                             startAdornment: (
                                 <InputAdornment position="start">
                                     <GetIcon iconName="sendTo" />

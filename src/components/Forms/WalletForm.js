@@ -18,13 +18,13 @@ const WalletForm = ({
 
     const [name, setName] = useState("");
     const [balance, setBalance] = useState(0);
-    const [color, setColor] = useState("black");
+    const [color, setColor] = useState("#5D2DFD");
 
     useEffect(() => {
         if (action === "add") {
             setName("");
             setBalance(0);
-            setColor("black");
+            setColor("#5D2DFD");
         } else if (action === "edit") {
             if (wallet) {
                 setName(wallet.name);

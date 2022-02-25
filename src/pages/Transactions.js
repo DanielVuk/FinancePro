@@ -22,12 +22,11 @@ const Transactions = () => {
     const [selectionModel, setSelectionModel] = useState([]);
 
     const { SnackBar, openSnackBarHelper } = useSnackBar();
+    const [rows, setRows] = useState([]);
 
     const [addTransactionModal, setAddTransactionModal] = useState(false);
     const [editTransactionModal, setEditTransactionModal] = useState(false);
     const [deleteTransactionModal, setDeleteTransactionModal] = useState(false);
-
-    const [rows, setRows] = useState([]);
 
     useEffect(() => {
         setRows(
