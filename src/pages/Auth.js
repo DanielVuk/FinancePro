@@ -12,6 +12,7 @@ import logo from "../assets/logo.png";
 import AppInput from "../components/AppInput.js";
 import AppModal from "../components/AppModal";
 import AppButton from "../components/Buttons/AppButton";
+import WelcomeCarousel from "../components/Carousels/WelcomeCarousel";
 import GetIcon from "../components/GetIcon";
 
 const alignCenter = {
@@ -19,7 +20,7 @@ const alignCenter = {
     alignItems: "center",
 };
 
-const logInBtnStyles = {
+const loginBtnStyles = {
     backgroundColor: "#5D2DFD",
     fontWeight: "700",
     textTransform: "none",
@@ -58,14 +59,22 @@ const UserAuth = () => {
         <Container maxWidth="fluid" sx={{ height: "100vh " }}>
             <AppModal open={open} onClose={() => setOpen(false)} />
             <Container maxWidth="xl">
-                <Grid container spacing={0}>
+                <Grid container spacing={{ xs: 0, md: 10 }}>
                     <Grid container item xs={12} md={6} style={alignCenter}>
                         <Box
                             component="img"
                             src={logo}
                             sx={{
-                                maxWidth: { xs: "350px", md: "500px" },
-                                minWidth: { xs: "300px", md: "500px" },
+                                maxWidth: {
+                                    xs: "350px",
+                                    sm: "350px",
+                                    md: "540px",
+                                },
+                                minWidth: {
+                                    xs: "300px",
+                                    sm: "350px",
+                                    md: "540px",
+                                },
                             }}
                         ></Box>
                     </Grid>
@@ -79,8 +88,8 @@ const UserAuth = () => {
                                 borderRadius: "3px",
                                 padding: "1.5rem",
                                 margin: "1rem",
-                                maxWidth: { xs: "350px", md: "400px" },
-                                minWidth: { xs: "300px", md: "400px" },
+                                maxWidth: { xs: "350px", md: "450px" },
+                                minWidth: { xs: "300px", md: "450px" },
                             }}
                         >
                             <AppInput
@@ -102,7 +111,6 @@ const UserAuth = () => {
                                     ),
                                 }}
                             />
-
                             <AppInput
                                 value={password}
                                 setValue={setPassword}
@@ -129,7 +137,7 @@ const UserAuth = () => {
                                     navigate("/");
                                 }}
                                 variant="contained"
-                                sx={logInBtnStyles}
+                                sx={loginBtnStyles}
                                 fullWidth
                             >
                                 Log in
@@ -156,6 +164,7 @@ const UserAuth = () => {
                         </Box>
                     </Grid>
                 </Grid>
+                <WelcomeCarousel />
             </Container>
         </Container>
     );
