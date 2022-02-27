@@ -1,25 +1,28 @@
-import { Grid, Typography } from "@mui/material";
-import { Box } from "@mui/system";
+import { Grid, Typography, Box } from "@mui/material";
 import Carousel from "react-elastic-carousel";
 import wallet from "../../assets/wallet.png";
 import category from "../../assets/categories.png";
 import finance from "../../assets/finance.png";
+import { useRef } from "react";
 
 const changeColor =
     "invert(15%) sepia(99%) saturate(3867%) hue-rotate(253deg) brightness(101%) contrast(106%)";
 
 const content = [
     {
+        id: 0,
         image: wallet,
         title: "Wallets",
         desc: "Create wallets so you can keep track of your total balance",
     },
     {
+        id: 1,
         image: category,
         title: "Categories",
         desc: "Create categories to know where you spend your money and how you make it",
     },
     {
+        id: 2,
         image: finance,
         title: "Analytics",
         desc: "Analytics provides an analysis of the movement of account balances, categories and transactions",
@@ -27,13 +30,30 @@ const content = [
 ];
 
 const WelcomeCarousel = () => {
+    const carouselRef = useRef(null);
+    let resetTimeout;
+
+    const reset = (index) => {
+        clearTimeout(resetTimeout);
+        if (index + 1 === content.length) {
+            resetTimeout = setTimeout(() => {
+                carouselRef.current.goTo(0);
+            }, 3000);
+        }
+    };
     return (
         <Box sx={{ display: { xs: "none", lg: "block" } }}>
-            <Carousel>
+            <Carousel
+                ref={carouselRef}
+                enableAutoPlay
+                autoPlaySpeed={3000}
+                onNextEnd={({ index }) => reset(index)}
+            >
                 {content.map((item) => (
                     <Grid
                         container
                         sx={{ backgroundColor: "white", borderRadius: 5 }}
+                        key={item.id}
                     >
                         <Grid
                             container

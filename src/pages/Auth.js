@@ -13,6 +13,7 @@ import AppInput from "../components/AppInput.js";
 import AppModal from "../components/AppModal";
 import AppButton from "../components/Buttons/AppButton";
 import WelcomeCarousel from "../components/Carousels/WelcomeCarousel";
+import SignupForm from "../components/Forms/SignupForm";
 import GetIcon from "../components/GetIcon";
 
 const alignCenter = {
@@ -57,7 +58,6 @@ const UserAuth = () => {
 
     return (
         <Container maxWidth="fluid" sx={{ height: "100vh " }}>
-            <AppModal open={open} onClose={() => setOpen(false)} />
             <Container maxWidth="xl">
                 <Grid container spacing={{ xs: 0, md: 10 }}>
                     <Grid container item xs={12} md={6} style={alignCenter}>
@@ -166,6 +166,9 @@ const UserAuth = () => {
                 </Grid>
                 <WelcomeCarousel />
             </Container>
+            <AppModal open={open} onClose={() => setOpen(false)}>
+                <SignupForm open={openSignupModal} />
+            </AppModal>
         </Container>
     );
 };
