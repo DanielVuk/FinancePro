@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 const initialState = {
+    user: null,
     wallets: [
         {
             id: 1,

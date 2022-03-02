@@ -6,7 +6,7 @@ import {
     InputAdornment,
     Link,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import AppInput from "../components/AppInput.js";
@@ -15,6 +15,9 @@ import AppButton from "../components/Buttons/AppButton";
 import WelcomeCarousel from "../components/Carousels/WelcomeCarousel";
 import SignupForm from "../components/Forms/SignupForm";
 import GetIcon from "../components/GetIcon";
+import { auth } from "../firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { Context } from "../Store";
 
 const alignCenter = {
     justifyContent: "center",
@@ -47,6 +50,7 @@ const createBtnStyles = {
 };
 
 const UserAuth = () => {
+    const [state, setState] = useContext(Context);
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [email, setEmail] = useState("");
@@ -54,6 +58,20 @@ const UserAuth = () => {
 
     const openSignupModal = () => {
         setOpen(true);
+    };
+
+    const handleLogin = async () => {
+        try {
+            const user = await signInWithEmailAndPassword(
+                auth,
+                email,
+                password
+            );
+
+            navigate("/", { replace: true });
+        } catch (error) {
+            console.log(error.message);
+        }
     };
 
     return (
@@ -131,11 +149,7 @@ const UserAuth = () => {
                                 }}
                             />
                             <AppButton
-                                onClick={() => {
-                                    console.log("email " + email);
-                                    console.log("password " + password);
-                                    navigate("/");
-                                }}
+                                onClick={handleLogin}
                                 variant="contained"
                                 sx={loginBtnStyles}
                                 fullWidth

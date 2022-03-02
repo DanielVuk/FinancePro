@@ -1,9 +1,12 @@
-import { Box, Grid, Stack, Typography } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import logo from "../../assets/logo.png";
 import AppInput from "../AppInput";
 import AppButton from "../Buttons/AppButton";
-
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../firebase";
+import useSnackBar from "../CustomSnackBar";
+import { useNavigate } from "react-router-dom";
 const createBtnStyles = {
     backgroundColor: "#A2D202",
     fontWeight: "700",
@@ -15,22 +18,50 @@ const createBtnStyles = {
 };
 
 const SignupForm = ({ open }) => {
-    const [name, setName] = useState("");
-    const [lastName, setLastName] = useState("");
+    const { SnackBar, openSnackBarHelper } = useSnackBar();
+    const navigate = useNavigate();
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPass, setConfirmPass] = useState("");
 
     useEffect(() => {
-        setName("");
-        setLastName("");
         setEmail("");
         setPassword("");
         setConfirmPass("");
     }, [open]);
 
+    const register = async () => {
+        if (password !== confirmPass) {
+            openSnackBarHelper(`The confirmed password is incorrect`, "error");
+            return;
+        }
+        try {
+            const user = await createUserWithEmailAndPassword(
+                auth,
+                email,
+                password
+            );
+            navigate("/", { replace: true });
+        } catch (error) {
+            if (
+                error.message ===
+                "Firebase: Error (auth/network-request-failed)."
+            )
+                openSnackBarHelper("Account already exists.", "error");
+            else {
+                openSnackBarHelper(error.message, "error");
+            }
+        }
+    };
+
     return (
-        <form>
+        <form
+            onSubmit={(event) => {
+                event.preventDefault();
+                register();
+            }}
+        >
             <Grid
                 container
                 direction="column"
@@ -46,26 +77,12 @@ const SignupForm = ({ open }) => {
                 >
                     Sign Up
                 </Typography>
-                <Box component="img" src={logo} sx={{ maxWidth: "200px" }} />
-                <Stack
-                    direction="row"
-                    justifyContent="space-between"
-                    my={4}
-                    sx={{ width: "500px" }}
-                >
-                    <AppInput
-                        placeholder="First name"
-                        required
-                        setValue={setName}
-                        value={name}
-                    />
-                    <AppInput
-                        placeholder="Last name"
-                        required
-                        setValue={setLastName}
-                        value={lastName}
-                    />
-                </Stack>
+                <Box
+                    mb={2}
+                    component="img"
+                    src={logo}
+                    sx={{ maxWidth: "200px" }}
+                />
                 <AppInput
                     fullWidth
                     placeholder="Email address"
@@ -82,6 +99,9 @@ const SignupForm = ({ open }) => {
                     sx={{ margin: "32px 0" }}
                     type="password"
                     value={password}
+                    InputProps={{
+                        inputProps: { minLength: 6, maxLength: 12 },
+                    }}
                 />
                 <AppInput
                     fullWidth
@@ -93,12 +113,14 @@ const SignupForm = ({ open }) => {
                 />
                 <AppButton
                     variant="contained"
+                    type="submit"
                     size="large"
                     sx={createBtnStyles}
                 >
                     Register
                 </AppButton>
             </Grid>
+            <SnackBar />
         </form>
     );
 };

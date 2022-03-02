@@ -4,9 +4,11 @@ import { useState } from "react";
 const useSnackBar = () => {
     const [openSnackBar, setOpenSnackBar] = useState(false);
     const [message, setMessage] = useState();
+    const [severity, setSeverity] = useState("success");
 
-    const openSnackBarHelper = (message) => {
+    const openSnackBarHelper = (message, severity) => {
         setMessage(message);
+        setSeverity(severity);
         setOpenSnackBar(true);
     };
 
@@ -22,7 +24,7 @@ const useSnackBar = () => {
                 onClose={handleCloseSnackbar}
                 anchorOrigin={{ vertical: "top", horizontal: "right" }}
             >
-                <Alert severity="success">{message}</Alert>
+                <Alert severity={severity}>{message}</Alert>
             </Snackbar>
         );
     };

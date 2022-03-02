@@ -13,6 +13,8 @@ import {
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import icon from "../assets/icon.png";
+import { signOut } from "firebase/auth";
+import { auth } from "../firebase";
 
 const NavBar = () => {
     const navigate = useNavigate();
@@ -43,7 +45,9 @@ const NavBar = () => {
         handleMenuOpen();
     };
 
-    const handleLogOut = () => {
+    const handleLogOut = async () => {
+        await signOut(auth);
+
         navigate("/auth");
     };
 
