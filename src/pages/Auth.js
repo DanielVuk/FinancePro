@@ -6,8 +6,7 @@ import {
     InputAdornment,
     Link,
 } from "@mui/material";
-import React, { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useContext } from "react";
 import logo from "../assets/logo.png";
 import AppInput from "../components/AppInput.js";
 import AppModal from "../components/AppModal";
@@ -15,9 +14,11 @@ import AppButton from "../components/Buttons/AppButton";
 import WelcomeCarousel from "../components/Carousels/WelcomeCarousel";
 import SignupForm from "../components/Forms/SignupForm";
 import GetIcon from "../components/GetIcon";
-import { auth } from "../firebase";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { loginUser } from "../rest/auth";
+import { getUserWallets } from "../rest/wallets";
 import { Context } from "../Store";
+import useSnackBar from "../components/CustomSnackBar";
+import { useNavigate } from "react-router-dom";
 
 const alignCenter = {
     justifyContent: "center",
@@ -52,6 +53,9 @@ const createBtnStyles = {
 const UserAuth = () => {
     const [state, setState] = useContext(Context);
     const navigate = useNavigate();
+
+    const { SnackBar, openSnackBarHelper } = useSnackBar();
+
     const [open, setOpen] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -62,15 +66,26 @@ const UserAuth = () => {
 
     const handleLogin = async () => {
         try {
-            const user = await signInWithEmailAndPassword(
-                auth,
-                email,
-                password
+            let result = await loginUser(email, password);
+            let wallets = await getUserWallets(
+                result.data.idToken,
+                result.data.localId
             );
 
-            navigate("/", { replace: true });
+            setState({
+                ...state,
+                user: {
+                    email,
+                    token: result.data.idToken,
+                    id: result.data.localId,
+                },
+                wallets: wallets,
+            });
+
+            navigate("/");
         } catch (error) {
             console.log(error.message);
+            openSnackBarHelper(error.message, "error");
         }
     };
 
@@ -183,6 +198,7 @@ const UserAuth = () => {
             <AppModal open={open} onClose={() => setOpen(false)}>
                 <SignupForm open={openSignupModal} />
             </AppModal>
+            <SnackBar />
         </Container>
     );
 };

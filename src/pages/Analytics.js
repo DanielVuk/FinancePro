@@ -22,7 +22,7 @@ import {
     LineElement,
     Title,
 } from "chart.js";
-import { getWalletBalance } from "../Functions/updateWallets";
+import { getWalletBalance } from "../functions/updateWallets";
 
 ChartJS.register(
     ArcElement,

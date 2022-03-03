@@ -1,6 +1,5 @@
-import { SettingsInputAntennaTwoTone } from "@mui/icons-material";
 import { Chip, Stack, Typography } from "@mui/material";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import Carousel from "react-elastic-carousel";
 import { Context } from "../../Store";
 import AddButton from "../Buttons/AddButton";

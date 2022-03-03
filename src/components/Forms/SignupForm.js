@@ -1,12 +1,13 @@
 import { Box, Grid, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import logo from "../../assets/logo.png";
 import AppInput from "../AppInput";
 import AppButton from "../Buttons/AppButton";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../firebase";
 import useSnackBar from "../CustomSnackBar";
+import { registerUser } from "../../rest/auth";
+import { Context } from "../../Store";
 import { useNavigate } from "react-router-dom";
+
 const createBtnStyles = {
     backgroundColor: "#A2D202",
     fontWeight: "700",
@@ -18,8 +19,10 @@ const createBtnStyles = {
 };
 
 const SignupForm = ({ open }) => {
-    const { SnackBar, openSnackBarHelper } = useSnackBar();
+    const [state, setState] = useContext(Context);
     const navigate = useNavigate();
+
+    const { SnackBar, openSnackBarHelper } = useSnackBar();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -31,27 +34,29 @@ const SignupForm = ({ open }) => {
         setConfirmPass("");
     }, [open]);
 
-    const register = async () => {
+    const handleRegister = async () => {
         if (password !== confirmPass) {
-            openSnackBarHelper(`The confirmed password is incorrect`, "error");
+            openSnackBarHelper(
+                `The confirmed password is incorrect `,
+                "warning"
+            );
             return;
         }
         try {
-            const user = await createUserWithEmailAndPassword(
-                auth,
-                email,
-                password
-            );
-            navigate("/", { replace: true });
+            let result = await registerUser(email, password);
+            setState({
+                ...state,
+                user: {
+                    email,
+                    token: result.data.idToken,
+                    id: result.data.localId,
+                },
+            });
+            console.log("Result: ", result);
+            navigate("/");
         } catch (error) {
-            if (
-                error.message ===
-                "Firebase: Error (auth/network-request-failed)."
-            )
-                openSnackBarHelper("Account already exists.", "error");
-            else {
-                openSnackBarHelper(error.message, "error");
-            }
+            console.log(error.message);
+            openSnackBarHelper(error.message, "error");
         }
     };
 
@@ -59,7 +64,7 @@ const SignupForm = ({ open }) => {
         <form
             onSubmit={(event) => {
                 event.preventDefault();
-                register();
+                handleRegister();
             }}
         >
             <Grid

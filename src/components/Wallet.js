@@ -1,6 +1,6 @@
 import { Box, Card, IconButton, Typography } from "@mui/material";
 import { useContext } from "react";
-import { getWalletBalance } from "../Functions/updateWallets";
+import { getWalletBalance } from "../functions/updateWallets";
 import { Context } from "../Store";
 import GetIcon from "./GetIcon";
 

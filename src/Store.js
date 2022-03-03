@@ -2,26 +2,7 @@ import React, { useState } from "react";
 
 const initialState = {
     user: null,
-    wallets: [
-        {
-            id: 1,
-            name: "Gotovina",
-            color: "green",
-            balance: 8000,
-        },
-        {
-            id: 2,
-            name: "Ziro",
-            color: "red",
-            balance: 40000,
-        },
-        {
-            id: 3,
-            name: "Tekuci",
-            color: "yellow",
-            balance: 2000,
-        },
-    ],
+    wallets: [],
     categories: [
         {
             id: 1,
@@ -36,27 +17,6 @@ const initialState = {
             type: ["expense"],
             color: "black",
             icon: "restaurant",
-        },
-        {
-            id: 3,
-            name: "Travel",
-            type: ["expense"],
-            color: "blue",
-            icon: "travel",
-        },
-        {
-            id: 4,
-            name: "Job",
-            type: ["income"],
-            color: "yellow",
-            icon: "work",
-        },
-        {
-            id: 5,
-            name: "Trade",
-            type: ["income"],
-            color: "purple",
-            icon: "dolar",
         },
     ],
 

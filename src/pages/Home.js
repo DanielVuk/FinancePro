@@ -9,7 +9,8 @@ import CategoryForm from "../components/Forms/CategoryForm";
 import DeleteForm from "../components/Forms/DeleteForm";
 import TransactionForm from "../components/Forms/TransactionForm";
 import WalletForm from "../components/Forms/WalletForm";
-import { getTotalBalance } from "../Functions/updateWallets";
+import { getTotalBalance } from "../functions/updateWallets";
+import { addWallet, deleteWallet, editWallet } from "../rest/wallets";
 import { Context } from "../Store";
 
 const Home = () => {
@@ -33,54 +34,86 @@ const Home = () => {
     const [selectedCategory, setSelectedCategory] = useState("");
     const [selectedTransaction, setSelectedTransaction] = useState();
 
-    const addWallet = (wallet) => {
-        let newWallet = {
-            id: state.wallets[state.wallets.length - 1].id + 1,
-            ...wallet,
-        };
-        let newWallets = [...state.wallets, newWallet];
-        setState({ ...state, wallets: newWallets });
-        setAddWalletModal(false);
+    console.log(state);
 
-        openSnackBarHelper(`${wallet.name} is successfully created!`);
+    const handleAddWallet = async (wallet) => {
+        try {
+            let result = await addWallet(
+                wallet,
+                state.user.token,
+                state.user.id
+            );
+
+            let newWallet = {
+                id: result.data.name,
+                userId: state.user.id,
+                ...wallet,
+            };
+
+            let newWallets = [...state.wallets, newWallet];
+            setState({ ...state, wallets: newWallets });
+            setAddWalletModal(false);
+
+            openSnackBarHelper(`${wallet.name} is successfully created!`);
+        } catch (error) {
+            openSnackBarHelper(error.message, "error");
+        }
     };
 
-    const deleteWallet = () => {
-        let newWallets = [...state.wallets].filter(
-            (w) => w.id !== selectedWallet.id
-        );
+    const handleDeleteWallet = async () => {
+        try {
+            await deleteWallet(selectedWallet.id, state.user.token);
 
-        let newTransactions = [...state.transactions].filter(
-            (t) =>
-                t.toWalletId !== selectedWallet.id &&
-                t.fromWalletId !== selectedWallet.id
-        );
+            let newWallets = [...state.wallets].filter(
+                (w) => w.id !== selectedWallet.id
+            );
 
-        openSnackBarHelper(`${selectedWallet.name} is successfully deleted!`);
-        setSelectedWallet("");
+            openSnackBarHelper(
+                `${selectedWallet.name} is successfully deleted!`
+            );
+            setSelectedWallet("");
 
-        setState({
-            ...state,
-            wallets: newWallets,
-            transactions: newTransactions,
-        });
+            setDeleteWalletModal(false);
+        } catch (error) {
+            openSnackBarHelper(error.message, "error");
+        }
 
-        setDeleteWalletModal(false);
+        // let newTransactions = [...state.transactions].filter(
+        //     (t) =>
+        //         t.toWalletId !== selectedWallet.id &&
+        //         t.fromWalletId !== selectedWallet.id
+        // );
+
+        // setState({
+        //     ...state,
+        //     wallets: newWallets,
+        //     transactions: newTransactions,
+        // });
     };
 
-    const editWallet = (wallet) => {
-        let index = state.wallets.findIndex(
-            (item) => item.id === selectedWallet.id
-        );
-        let tempWallets = [...state.wallets];
-        tempWallets[index] = { id: selectedWallet.id, ...wallet };
+    const handleEditWallet = async (wallet) => {
+        try {
+            let result = await editWallet(
+                { ...wallet, userId: state.user.id },
+                selectedWallet.id,
+                state.user.token
+            );
 
-        setState({ ...state, wallets: tempWallets });
-        setSelectedWallet({ id: selectedWallet.id, ...wallet });
+            let index = state.wallets.findIndex(
+                (item) => item.id === selectedWallet.id
+            );
+            let tempWallets = [...state.wallets];
 
-        setEditWalletModal(false);
+            tempWallets[index] = { id: selectedWallet.id, ...result.data };
 
-        openSnackBarHelper(`${wallet.name} is successfully edited!`);
+            setState({ ...state, wallets: tempWallets });
+            setSelectedWallet(tempWallets[index]);
+            setEditWalletModal(false);
+
+            openSnackBarHelper(`${wallet.name} is successfully edited!`);
+        } catch (error) {
+            openSnackBarHelper(error.message, "error");
+        }
     };
 
     const addCategory = (category) => {
@@ -257,7 +290,7 @@ const Home = () => {
                 <WalletForm
                     title="Create New Wallet"
                     onClose={() => setAddWalletModal(false)}
-                    onConfirm={addWallet}
+                    onConfirm={handleAddWallet}
                     open={addWalletModal}
                 />
             </AppModal>
@@ -271,7 +304,7 @@ const Home = () => {
                     action="edit"
                     title="Edit Wallet"
                     onClose={() => setEditWalletModal(false)}
-                    onConfirm={editWallet}
+                    onConfirm={handleEditWallet}
                     open={editWalletModal}
                     wallet={selectedWallet}
                 />
@@ -282,7 +315,7 @@ const Home = () => {
             >
                 <DeleteForm
                     onClose={() => setDeleteWalletModal(false)}
-                    onDelete={deleteWallet}
+                    onDelete={handleDeleteWallet}
                     Title={
                         <>
                             Delete wallet{" "}
