@@ -1,5 +1,3 @@
-import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
-import MenuIcon from "@mui/icons-material/Menu";
 import {
     AppBar,
     Avatar,
@@ -13,17 +11,20 @@ import {
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import icon from "../assets/icon.png";
+import GetIcon from "./GetIcon";
 
 const NavBar = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const [selectedTab, setSelectedTab] = useState(location.pathname);
+    const [selectedTab, setSelectedTab] = useState(
+        location.pathname !== "/auth" ? location.pathname : "/"
+    );
     const [toggle, setToggle] = useState(false);
     const [collapse, setCollapse] = useState(false);
 
     useEffect(() => {
-        setSelectedTab(location.pathname);
+        if (location.pathname !== "/auth") setSelectedTab(location.pathname);
     }, [location.pathname]);
 
     const handleMenuOpen = () => {
@@ -73,7 +74,6 @@ const NavBar = () => {
                                 },
                             }}
                         />
-
                         <IconButton
                             size="large"
                             onClick={handleMenuOpen}
@@ -86,14 +86,12 @@ const NavBar = () => {
                                 },
                             }}
                         >
-                            <MenuIcon />
+                            <GetIcon iconName="menu" color="primary.main" />
                         </IconButton>
                     </Box>
                     <Box
                         mt={2}
-                        sx={{
-                            display: { md: "flex", xs: "none" },
-                        }}
+                        sx={{ visibility: { md: "visible", xs: "hidden" } }}
                     >
                         <Tabs value={selectedTab} onChange={handleTabChange}>
                             <Tab value="/" label="Home" />
@@ -112,7 +110,7 @@ const NavBar = () => {
                             },
                         }}
                     >
-                        <LogoutRoundedIcon fontSize="inherit" />
+                        <GetIcon iconName="exit" color="primary.main" />
                     </IconButton>
                 </Box>
             </Toolbar>
@@ -120,19 +118,20 @@ const NavBar = () => {
                 <Box
                     mt={-6}
                     sx={{
-                        display: { xs: "flex", md: "none" },
+                        visibility: { md: "hidden", xs: "visible" },
+                        display: "flex",
                         justifyContent: "center",
                     }}
                 >
-                    <Slide
-                        in={toggle}
-                        style={{ transformOrigin: "0 0 0" }}
-                        {...(toggle ? { timeout: 500 } : {})}
-                    >
+                    <Slide in={toggle} timeout={toggle ? 500 : 0}>
                         <Tabs
                             value={selectedTab}
                             onChange={handleTabChange}
-                            orientation="vertical"
+                            orientation={
+                                window.innerWidth < 900
+                                    ? "vertical"
+                                    : "horizontal"
+                            }
                         >
                             <Tab value="/" label="Home" />
                             <Tab value="/transactions" label="Transactions" />

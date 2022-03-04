@@ -14,6 +14,7 @@ import AppModal from "../components/AppModal";
 import AppButton from "../components/Buttons/AppButton";
 import WelcomeCarousel from "../components/Carousels/WelcomeCarousel";
 import useSnackBar from "../components/CustomSnackBar";
+import ResetPasswordForm from "../components/Forms/ResetPasswordForm";
 import SignupForm from "../components/Forms/SignupForm";
 import GetIcon from "../components/GetIcon";
 import { loginUser } from "../rest/auth";
@@ -57,14 +58,11 @@ const UserAuth = () => {
     const navigate = useNavigate();
 
     const { SnackBar, openSnackBarHelper } = useSnackBar();
+    const [signUpModal, setSignUpModal] = useState(false);
+    const [resetPasswordModal, setResetPasswordModal] = useState(false);
 
-    const [open, setOpen] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-
-    const openSignupModal = () => {
-        setOpen(true);
-    };
 
     const handleLogin = async () => {
         try {
@@ -141,6 +139,7 @@ const UserAuth = () => {
                                 placeholder="Email address"
                                 required
                                 fullWidth
+                                type="email"
                                 sx={{ marginBottom: "15px" }}
                                 InputProps={{
                                     startAdornment: (
@@ -185,9 +184,7 @@ const UserAuth = () => {
                                 component="button"
                                 color="#7F5DF0"
                                 sx={linkButton}
-                                onClick={() => {
-                                    console.info("I'm a button.");
-                                }}
+                                onClick={() => setResetPasswordModal(true)}
                             >
                                 Forgot password?
                             </Link>
@@ -196,7 +193,7 @@ const UserAuth = () => {
                                 variant="contained"
                                 size="large"
                                 sx={createBtnStyles}
-                                onClick={openSignupModal}
+                                onClick={() => setSignUpModal(true)}
                             >
                                 Create Account
                             </AppButton>
@@ -205,8 +202,17 @@ const UserAuth = () => {
                 </Grid>
                 <WelcomeCarousel />
             </Container>
-            <AppModal open={open} onClose={() => setOpen(false)}>
-                <SignupForm open={openSignupModal} />
+            <AppModal
+                open={resetPasswordModal}
+                onClose={() => setResetPasswordModal(false)}
+            >
+                <ResetPasswordForm
+                    open={() => setResetPasswordModal(true)}
+                    onClose={() => setResetPasswordModal(false)}
+                />
+            </AppModal>
+            <AppModal open={signUpModal} onClose={() => setSignUpModal(false)}>
+                <SignupForm open={() => setSignUpModal(true)} />
             </AppModal>
             <SnackBar />
         </Container>

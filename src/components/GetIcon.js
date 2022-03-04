@@ -13,7 +13,9 @@ import CelebrationRoundedIcon from "@mui/icons-material/CelebrationRounded";
 import CellWifiRoundedIcon from "@mui/icons-material/CellWifiRounded";
 import CheckroomRoundedIcon from "@mui/icons-material/CheckroomRounded";
 import ChurchRoundedIcon from "@mui/icons-material/ChurchRounded";
+import CircleIcon from "@mui/icons-material/Circle";
 import CleanHandsRoundedIcon from "@mui/icons-material/CleanHandsRounded";
+import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import CurrencyExchangeRoundedIcon from "@mui/icons-material/CurrencyExchangeRounded";
 import DateRangeRoundedIcon from "@mui/icons-material/DateRangeRounded";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -28,12 +30,12 @@ import LaptopMacIcon from "@mui/icons-material/LaptopMac";
 import LiquorRoundedIcon from "@mui/icons-material/LiquorRounded";
 import LocalGasStationRoundedIcon from "@mui/icons-material/LocalGasStationRounded";
 import LockIcon from "@mui/icons-material/Lock";
+import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
+import MenuIcon from "@mui/icons-material/Menu";
 import PaletteIcon from "@mui/icons-material/Palette";
 import RestaurantMenuRoundedIcon from "@mui/icons-material/RestaurantMenuRounded";
 import SchoolRoundedIcon from "@mui/icons-material/SchoolRounded";
 import WorkOutlineRoundedIcon from "@mui/icons-material/WorkOutlineRounded";
-import CircleIcon from "@mui/icons-material/Circle";
-import CloseRoundedIcon from "@mui/icons-material/CloseRounded";
 import { Avatar } from "@mui/material";
 import send from "../assets/send.png";
 
@@ -221,6 +223,10 @@ const GetIcon = ({ iconName, color = null, size = "" }) => {
             return <CircleIcon fontSize={size} sx={{ color: color }} />;
         case "close":
             return <CloseRoundedIcon fontSize={size} sx={{ color: color }} />;
+        case "menu":
+            return <MenuIcon fontSize={size} sx={{ color: color }} />;
+        case "exit":
+            return <LogoutRoundedIcon fontSize={size} sx={{ color: color }} />;
         default:
             return null;
     }
