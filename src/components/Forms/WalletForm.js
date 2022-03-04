@@ -1,10 +1,10 @@
 import { Grid, Stack, Typography } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import { getWalletBalance } from "../../functions/updateWallets";
+import { Context } from "../../Store";
 import AppInput from "../AppInput";
 import ModalButtons from "../Buttons/ModalButtons";
 import ColorInput from "../ColorInput";
-import { Context } from "../../Store";
 
 const WalletForm = ({
     action = "add",
@@ -40,7 +40,7 @@ const WalletForm = ({
                 event.preventDefault();
                 onConfirm({
                     name: name,
-                    balance: balance,
+                    balance: +balance,
                     color: color,
                 });
             }}

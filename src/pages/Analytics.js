@@ -10,19 +10,21 @@ import {
     ToggleButtonGroup,
     Typography,
 } from "@mui/material";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { useContext, useEffect, useState } from "react";
-import { Pie, Line } from "react-chartjs-2";
-import { Context } from "../Store";
-
 import {
+    ArcElement,
     CategoryScale,
+    Chart as ChartJS,
+    Legend,
     LinearScale,
-    PointElement,
     LineElement,
+    PointElement,
     Title,
+    Tooltip,
 } from "chart.js";
+import { useContext, useEffect, useState } from "react";
+import { Line, Pie } from "react-chartjs-2";
 import { getWalletBalance } from "../functions/updateWallets";
+import { Context } from "../Store";
 
 ChartJS.register(
     ArcElement,

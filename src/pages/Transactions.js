@@ -10,11 +10,16 @@ import {
 import React, { useContext, useEffect, useState } from "react";
 import AppModal from "../components/AppModal";
 import AppButton from "../components/Buttons/AppButton";
+import useSnackBar from "../components/CustomSnackBar";
 import { dateFormat, timeFormat } from "../components/DateTimeFormat";
 import DeleteForm from "../components/Forms/DeleteForm";
 import TransactionForm from "../components/Forms/TransactionForm";
-import useSnackBar from "../components/CustomSnackBar";
 import GetIcon from "../components/GetIcon";
+import {
+    addTransaction,
+    deleteTransaction,
+    editTransaction,
+} from "../rest/transactions";
 import { Context } from "../Store";
 
 const Transactions = () => {
@@ -33,9 +38,9 @@ const Transactions = () => {
             state.transactions.map((t) => ({
                 id: t.id,
                 col1: t.type,
-                col2: `${dateFormat.format(t.date)} ${timeFormat.format(
-                    t.date
-                )}`,
+                col2: `${dateFormat.format(
+                    new Date(t.date)
+                )} ${timeFormat.format(new Date(t.date))}`,
                 col3:
                     t.categoryId !== ""
                         ? state.categories.find((c) => c.id === t.categoryId)
@@ -66,51 +71,84 @@ const Transactions = () => {
         { field: "col7", headerName: "Note", minWidth: 330, flex: 1 },
     ];
 
-    const addTransaction = (transaction) => {
-        let newTransaction = {
-            id: state.transactions[state.transactions.length - 1].id + 1,
-            ...transaction,
-        };
+    const handleAddTransaction = async (transaction) => {
+        try {
+            let result = await addTransaction(
+                transaction,
+                state.user.token,
+                state.user.id
+            );
 
-        let newTransactions = [...state.transactions, newTransaction];
+            let newTransaction = {
+                id: result.data.name,
+                userId: state.user.id,
+                ...transaction,
+            };
 
-        setState({ ...state, transactions: newTransactions });
+            let newTransactions = [...state.transactions, newTransaction];
 
-        setAddTransactionModal(false);
+            setState({ ...state, transactions: newTransactions });
 
-        openSnackBarHelper(`Transaction is successfully added!`);
+            setAddTransactionModal(false);
+
+            openSnackBarHelper(`Transaction is successfully added!`);
+        } catch (error) {
+            openSnackBarHelper(error.message, "error");
+        }
     };
 
-    const editTransaction = (transaction) => {
-        let index = state.transactions.findIndex(
-            (item) => item.id === selectionModel[0]
-        );
-        let tempTransactions = [...state.transactions];
+    const handleEditTransaction = async (transaction) => {
+        try {
+            let result = await editTransaction(
+                { ...transaction, userId: state.user.id },
+                selectionModel[0],
+                state.user.token
+            );
 
-        tempTransactions[index] = {
-            id: selectionModel[0],
-            ...transaction,
-        };
+            let index = state.transactions.findIndex(
+                (item) => item.id === selectionModel[0]
+            );
+            let tempTransactions = [...state.transactions];
 
-        setState({ ...state, transactions: tempTransactions });
+            tempTransactions[index] = {
+                id: selectionModel[0],
+                ...result.data,
+            };
 
-        setEditTransactionModal(false);
+            setState({ ...state, transactions: tempTransactions });
 
-        openSnackBarHelper(`Transaction is successfully edited!`);
+            setEditTransactionModal(false);
+
+            openSnackBarHelper(`Transaction is successfully edited!`);
+        } catch (error) {
+            openSnackBarHelper(error.message, "error");
+        }
     };
 
-    const deleteTransaction = () => {
-        let newTransactions = [...state.transactions];
+    const handleDeleteTransaction = async () => {
+        try {
+            selectionModel.forEach(async (item) => {
+                await deleteTransaction(
+                    state.transactions.filter((t) => t.id === item)[0].id,
+                    state.user.token
+                );
 
-        selectionModel.forEach((item) => {
-            newTransactions = newTransactions.filter((t) => t.id !== item);
-        });
+                let newTransactions = [...state.transactions];
+                selectionModel.forEach((item) => {
+                    newTransactions = newTransactions.filter(
+                        (t) => t.id !== item
+                    );
+                });
 
-        setState({ ...state, transactions: newTransactions });
+                setState({ ...state, transactions: newTransactions });
 
-        setDeleteTransactionModal(false);
+                setDeleteTransactionModal(false);
 
-        openSnackBarHelper(`Transaction(s) is successfully deleted!`);
+                openSnackBarHelper(`Transaction(s) is successfully deleted!`);
+            });
+        } catch (error) {
+            openSnackBarHelper(error.message, "error");
+        }
     };
 
     const CustomToolbar = () => {
@@ -213,7 +251,7 @@ const Transactions = () => {
             >
                 <TransactionForm
                     onClose={() => setAddTransactionModal(false)}
-                    onConfirm={addTransaction}
+                    onConfirm={handleAddTransaction}
                     open={addTransactionModal}
                     title="Create New Transaction"
                 />
@@ -225,7 +263,7 @@ const Transactions = () => {
                 <TransactionForm
                     action="edit"
                     onClose={() => setEditTransactionModal(false)}
-                    onConfirm={editTransaction}
+                    onConfirm={handleEditTransaction}
                     open={editTransactionModal}
                     title="Edit Transaction"
                     transaction={state.transactions.find(
@@ -239,7 +277,7 @@ const Transactions = () => {
             >
                 <DeleteForm
                     onClose={() => setDeleteTransactionModal(false)}
-                    onDelete={deleteTransaction}
+                    onDelete={handleDeleteTransaction}
                     Title={
                         <>Are you sure you want to delete the transaction?</>
                     }

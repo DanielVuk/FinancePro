@@ -1,12 +1,12 @@
 import { Box, Grid, Typography } from "@mui/material";
-import { useEffect, useState, useContext } from "react";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import logo from "../../assets/logo.png";
+import { registerUser } from "../../rest/auth";
+import { Context } from "../../Store";
 import AppInput from "../AppInput";
 import AppButton from "../Buttons/AppButton";
 import useSnackBar from "../CustomSnackBar";
-import { registerUser } from "../../rest/auth";
-import { Context } from "../../Store";
-import { useNavigate } from "react-router-dom";
 
 const createBtnStyles = {
     backgroundColor: "#A2D202",

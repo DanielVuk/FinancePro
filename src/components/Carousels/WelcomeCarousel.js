@@ -1,9 +1,9 @@
-import { Grid, Typography, Box } from "@mui/material";
+import { Box, Grid, Typography } from "@mui/material";
+import { useRef } from "react";
 import Carousel from "react-elastic-carousel";
-import wallet from "../../assets/wallet.png";
 import category from "../../assets/categories.png";
 import finance from "../../assets/finance.png";
-import { useRef } from "react";
+import wallet from "../../assets/wallet.png";
 
 const changeColor =
     "invert(15%) sepia(99%) saturate(3867%) hue-rotate(253deg) brightness(101%) contrast(106%)";

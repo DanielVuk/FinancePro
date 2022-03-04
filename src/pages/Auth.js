@@ -6,19 +6,21 @@ import {
     InputAdornment,
     Link,
 } from "@mui/material";
-import React, { useState, useContext } from "react";
+import React, { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import AppInput from "../components/AppInput.js";
 import AppModal from "../components/AppModal";
 import AppButton from "../components/Buttons/AppButton";
 import WelcomeCarousel from "../components/Carousels/WelcomeCarousel";
+import useSnackBar from "../components/CustomSnackBar";
 import SignupForm from "../components/Forms/SignupForm";
 import GetIcon from "../components/GetIcon";
 import { loginUser } from "../rest/auth";
+import { getUserCategories } from "../rest/categories";
+import { getUserTransactions } from "../rest/transactions";
 import { getUserWallets } from "../rest/wallets";
 import { Context } from "../Store";
-import useSnackBar from "../components/CustomSnackBar";
-import { useNavigate } from "react-router-dom";
 
 const alignCenter = {
     justifyContent: "center",
@@ -71,20 +73,28 @@ const UserAuth = () => {
                 result.data.idToken,
                 result.data.localId
             );
+            let categories = await getUserCategories(
+                result.data.idToken,
+                result.data.localId
+            );
+            let transactions = await getUserTransactions(
+                result.data.idToken,
+                result.data.localId
+            );
 
             setState({
-                ...state,
                 user: {
                     email,
                     token: result.data.idToken,
                     id: result.data.localId,
                 },
                 wallets: wallets,
+                categories: categories,
+                transactions: transactions,
             });
 
-            navigate("/");
+            navigate("/", { replace: true });
         } catch (error) {
-            console.log(error.message);
             openSnackBarHelper(error.message, "error");
         }
     };

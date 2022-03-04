@@ -55,7 +55,7 @@ const TransactionForm = ({
                 setToWalletId(transaction.toWalletId);
                 setFromWalletId(transaction.fromWalletId);
                 setAmount(transaction.amount);
-                setDate(transaction.date);
+                setDate(new Date(transaction.date));
                 setNote(transaction.note);
             }
         }
@@ -95,8 +95,8 @@ const TransactionForm = ({
                     type,
                     toWalletId,
                     fromWalletId,
-                    amount,
-                    date,
+                    amount: +amount,
+                    date: date.toString(),
                     note,
                 });
             }}

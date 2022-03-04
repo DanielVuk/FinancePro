@@ -1,10 +1,13 @@
-import Router from "./router";
+import { useContext } from "react";
 import NavBar from "./components/NavBar";
+import Router from "./router";
+import { Context } from "./Store";
 
 const App = () => {
+    const [state] = useContext(Context);
     return (
         <>
-            <NavBar />
+            {state.user && <NavBar />}
             <Router />
         </>
     );

@@ -13,8 +13,10 @@ const DeleteForm = ({ onClose, onDelete, Title }) => {
                     {Title}
                 </Typography>
                 <Typography variant="h6">
-                    Once deleted cannot be recovered.
+                    Once deleted cannot be recovered. <br />
+                    All related transactions will be deleted.
                 </Typography>
+
                 <ModalButtons onClose={onClose} />
             </Stack>
         </form>

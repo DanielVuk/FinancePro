@@ -77,8 +77,8 @@ const Transaction = ({ transaction, onDelete, onEdit, onSelect }) => {
                             : "Transfer"}
                     </Typography>
                     <Typography noWrap>
-                        {dateFormat.format(transaction.date)}{" "}
-                        {timeFormat.format(transaction.date)}
+                        {dateFormat.format(new Date(transaction.date))}{" "}
+                        {timeFormat.format(new Date(transaction.date))}
                     </Typography>
                 </Stack>
             </Box>

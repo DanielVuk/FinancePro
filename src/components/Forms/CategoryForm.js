@@ -45,7 +45,6 @@ const CategoryForm = ({
     const handleTypeChange = (event, newType) => {
         if (newType.length === 0) return;
 
-        console.log(newType);
         setType(newType);
     };
 

@@ -10,6 +10,12 @@ import DeleteForm from "../components/Forms/DeleteForm";
 import TransactionForm from "../components/Forms/TransactionForm";
 import WalletForm from "../components/Forms/WalletForm";
 import { getTotalBalance } from "../functions/updateWallets";
+import { addCategory, deleteCategory, editCategory } from "../rest/categories";
+import {
+    addTransaction,
+    deleteTransaction,
+    editTransaction,
+} from "../rest/transactions";
 import { addWallet, deleteWallet, editWallet } from "../rest/wallets";
 import { Context } from "../Store";
 
@@ -34,7 +40,7 @@ const Home = () => {
     const [selectedCategory, setSelectedCategory] = useState("");
     const [selectedTransaction, setSelectedTransaction] = useState();
 
-    console.log(state);
+    console.log("State: ", state);
 
     const handleAddWallet = async (wallet) => {
         try {
@@ -64,31 +70,42 @@ const Home = () => {
         try {
             await deleteWallet(selectedWallet.id, state.user.token);
 
+            let transactionsForDelete = [...state.transactions].filter(
+                (t) =>
+                    t.toWalletId === selectedWallet.id ||
+                    t.fromWalletId === selectedWallet.id
+            );
+
+            transactionsForDelete.forEach(async (t) => {
+                await deleteTransaction(t.id, state.user.token);
+            });
+
             let newWallets = [...state.wallets].filter(
                 (w) => w.id !== selectedWallet.id
             );
 
-            openSnackBarHelper(
-                `${selectedWallet.name} is successfully deleted!`
+            let newTransactions = [...state.transactions].filter(
+                (t) =>
+                    t.toWalletId !== selectedWallet.id &&
+                    t.fromWalletId !== selectedWallet.id
             );
+
+            setState({
+                ...state,
+                wallets: newWallets,
+                transactions: newTransactions,
+            });
+
             setSelectedWallet("");
 
             setDeleteWalletModal(false);
+
+            openSnackBarHelper(
+                `${selectedWallet.name} is successfully deleted!`
+            );
         } catch (error) {
             openSnackBarHelper(error.message, "error");
         }
-
-        // let newTransactions = [...state.transactions].filter(
-        //     (t) =>
-        //         t.toWalletId !== selectedWallet.id &&
-        //         t.fromWalletId !== selectedWallet.id
-        // );
-
-        // setState({
-        //     ...state,
-        //     wallets: newWallets,
-        //     transactions: newTransactions,
-        // });
     };
 
     const handleEditWallet = async (wallet) => {
@@ -116,96 +133,164 @@ const Home = () => {
         }
     };
 
-    const addCategory = (category) => {
-        let newCategory = {
-            id: state.categories[state.categories.length - 1].id + 1,
-            ...category,
-        };
-        let newCategories = [...state.categories, newCategory];
-        setState({ ...state, categories: newCategories });
+    const handleAddCategory = async (category) => {
+        try {
+            let result = await addCategory(
+                category,
+                state.user.token,
+                state.user.id
+            );
 
-        setAddCategoryModal(false);
+            let newCategory = {
+                id: result.data.name,
+                userId: state.user.id,
+                ...category,
+            };
 
-        openSnackBarHelper(`${category.name} is successfully added!`);
+            let newCategories = [...state.categories, newCategory];
+            setState({ ...state, categories: newCategories });
+
+            setAddCategoryModal(false);
+
+            openSnackBarHelper(`${category.name} is successfully added!`);
+        } catch (error) {
+            openSnackBarHelper(error.message, "error");
+        }
     };
 
-    const editCategory = (category) => {
-        let index = state.categories.findIndex(
-            (item) => item.id === selectedCategory.id
-        );
-        let tempCategories = [...state.categories];
-        tempCategories[index] = { id: selectedCategory.id, ...category };
+    const handleDeleteCategory = async () => {
+        try {
+            await deleteCategory(selectedCategory.id, state.user.token);
 
-        setState({ ...state, categories: tempCategories });
+            let transactionsForDelete = [...state.transactions].filter(
+                (t) => t.categoryId === selectedCategory.id
+            );
+            transactionsForDelete.forEach(async (t) => {
+                await deleteTransaction(t.id, state.user.token);
+            });
 
-        setSelectedCategory({ id: selectedCategory.id, ...category });
+            let newCategories = [...state.categories].filter(
+                (w) => w.id !== selectedCategory.id
+            );
 
-        openSnackBarHelper(`${category.name} is successfully edited!`);
+            let newTransactions = [...state.transactions].filter(
+                (t) => t.categoryId !== selectedCategory.id
+            );
+
+            setState({
+                ...state,
+                categories: newCategories,
+                transactions: newTransactions,
+            });
+
+            setSelectedCategory("");
+
+            openSnackBarHelper(
+                `${selectedCategory.name} is successfully deleted!`
+            );
+
+            setDeleteCategoryModal(false);
+        } catch (error) {
+            openSnackBarHelper(error.message, "error");
+        }
     };
 
-    const deleteCategory = () => {
-        let newCategories = [...state.categories].filter(
-            (w) => w.id !== selectedCategory.id
-        );
+    const handleEditCategory = async (category) => {
+        try {
+            let result = await editCategory(
+                { ...category, userId: state.user.id },
+                selectedCategory.id,
+                state.user.token
+            );
 
-        let newTransactions = [...state.transactions].filter(
-            (t) => t.categoryId !== selectedCategory.id
-        );
+            let index = state.categories.findIndex(
+                (item) => item.id === selectedCategory.id
+            );
 
-        setState({
-            ...state,
-            categories: newCategories,
-            transactions: newTransactions,
-        });
+            let tempCategories = [...state.categories];
 
-        openSnackBarHelper(`${selectedCategory.name} is successfully deleted!`);
-        setSelectedCategory("");
+            tempCategories[index] = { id: selectedCategory.id, ...result.data };
 
-        setDeleteCategoryModal(false);
+            setState({ ...state, categories: tempCategories });
+            setSelectedCategory(tempCategories[index]);
+            setEditCategoryModal(false);
+
+            openSnackBarHelper(`${category.name} is successfully edited!`);
+        } catch (error) {
+            openSnackBarHelper(error.message, "error");
+        }
     };
 
-    const addTransaction = (transaction) => {
-        let newTransaction = {
-            id: state.transactions[state.transactions.length - 1].id + 1,
-            ...transaction,
-        };
-        let newTransactions = [...state.transactions, newTransaction];
+    const handleAddTransaction = async (transaction) => {
+        try {
+            let result = await addTransaction(
+                transaction,
+                state.user.token,
+                state.user.id
+            );
 
-        setState({ ...state, transactions: newTransactions });
+            let newTransaction = {
+                id: result.data.name,
+                userId: state.user.id,
+                ...transaction,
+            };
 
-        setAddTransactionModal(false);
+            let newTransactions = [...state.transactions, newTransaction];
 
-        openSnackBarHelper(`Transaction is successfully added!`);
+            setState({ ...state, transactions: newTransactions });
+
+            setAddTransactionModal(false);
+
+            openSnackBarHelper(`Transaction is successfully added!`);
+        } catch (error) {
+            openSnackBarHelper(error.message, "error");
+        }
     };
 
-    const editTransaction = (transaction) => {
-        let index = state.transactions.findIndex(
-            (item) => item.id === selectedTransaction.id
-        );
-        let tempTransactions = [...state.transactions];
+    const handleEditTransaction = async (transaction) => {
+        try {
+            let result = await editTransaction(
+                { ...transaction, userId: state.user.id },
+                selectedTransaction.id,
+                state.user.token
+            );
 
-        tempTransactions[index] = {
-            id: selectedTransaction.id,
-            ...transaction,
-        };
+            let index = state.transactions.findIndex(
+                (item) => item.id === selectedTransaction.id
+            );
+            let tempTransactions = [...state.transactions];
 
-        setState({ ...state, transactions: tempTransactions });
+            tempTransactions[index] = {
+                id: selectedTransaction.id,
+                ...result.data,
+            };
 
-        setEditTransactionModal(false);
+            setState({ ...state, transactions: tempTransactions });
 
-        openSnackBarHelper(`Transaction is successfully edited!`);
+            setEditTransactionModal(false);
+
+            openSnackBarHelper(`Transaction is successfully edited!`);
+        } catch (error) {
+            openSnackBarHelper(error.message, "error");
+        }
     };
 
-    const deleteTransaction = () => {
-        let newTransactions = [...state.transactions].filter(
-            (t) => t.id !== selectedTransaction.id
-        );
+    const handleDeleteTransaction = async () => {
+        try {
+            await deleteTransaction(selectedTransaction.id, state.user.token);
 
-        setState({ ...state, transactions: newTransactions });
+            let newTransactions = [...state.transactions].filter(
+                (t) => t.id !== selectedTransaction.id
+            );
 
-        setDeleteTransactionModal(false);
+            setState({ ...state, transactions: newTransactions });
 
-        openSnackBarHelper(`Transaction is successfully deleted!`);
+            setDeleteTransactionModal(false);
+
+            openSnackBarHelper(`Transaction is successfully deleted!`);
+        } catch (error) {
+            openSnackBarHelper(error.message, "error");
+        }
     };
 
     return (
@@ -332,7 +417,7 @@ const Home = () => {
                 <CategoryForm
                     title="Create New Category"
                     onClose={() => setAddCategoryModal(false)}
-                    onConfirm={addCategory}
+                    onConfirm={handleAddCategory}
                     open={addCategoryModal}
                 />
             </AppModal>
@@ -345,7 +430,7 @@ const Home = () => {
                     action="edit"
                     category={selectedCategory}
                     onClose={() => setEditCategoryModal(false)}
-                    onConfirm={editCategory}
+                    onConfirm={handleEditCategory}
                     open={editCategoryModal}
                     title="Edit Category"
                 />
@@ -356,7 +441,7 @@ const Home = () => {
             >
                 <DeleteForm
                     onClose={() => setDeleteCategoryModal(false)}
-                    onDelete={deleteCategory}
+                    onDelete={handleDeleteCategory}
                     Title={
                         <>
                             Delete category{" "}
@@ -372,7 +457,7 @@ const Home = () => {
             >
                 <TransactionForm
                     onClose={() => setAddTransactionModal(false)}
-                    onConfirm={addTransaction}
+                    onConfirm={handleAddTransaction}
                     open={addTransactionModal}
                     title="Create New Transaction"
                 />
@@ -385,7 +470,7 @@ const Home = () => {
                 <TransactionForm
                     action="edit"
                     onClose={() => setEditTransactionModal(false)}
-                    onConfirm={editTransaction}
+                    onConfirm={handleEditTransaction}
                     open={editTransactionModal}
                     title="Edit Transaction"
                     transaction={selectedTransaction}
@@ -398,7 +483,7 @@ const Home = () => {
             >
                 <DeleteForm
                     onClose={() => setDeleteTransactionModal(false)}
-                    onDelete={deleteTransaction}
+                    onDelete={handleDeleteTransaction}
                     Title={
                         <>Are you sure you want to delete the transaction?</>
                     }
