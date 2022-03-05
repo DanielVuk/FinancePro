@@ -73,6 +73,7 @@ const Transactions = () => {
 
     const handleAddTransaction = async (transaction) => {
         try {
+            setState({ ...state, loading: true });
             let result = await addTransaction(
                 transaction,
                 state.user.token,
@@ -87,18 +88,24 @@ const Transactions = () => {
 
             let newTransactions = [...state.transactions, newTransaction];
 
-            setState({ ...state, transactions: newTransactions });
+            setState({
+                ...state,
+                transactions: newTransactions,
+                loading: false,
+            });
 
             setAddTransactionModal(false);
 
             openSnackBarHelper(`Transaction is successfully added!`);
         } catch (error) {
             openSnackBarHelper(error.message, "error");
+            setState({ ...state, loading: false });
         }
     };
 
     const handleEditTransaction = async (transaction) => {
         try {
+            setState({ ...state, loading: true });
             let result = await editTransaction(
                 { ...transaction, userId: state.user.id },
                 selectionModel[0],
@@ -115,39 +122,47 @@ const Transactions = () => {
                 ...result.data,
             };
 
-            setState({ ...state, transactions: tempTransactions });
+            setState({
+                ...state,
+                transactions: tempTransactions,
+                loading: false,
+            });
 
             setEditTransactionModal(false);
 
             openSnackBarHelper(`Transaction is successfully edited!`);
         } catch (error) {
             openSnackBarHelper(error.message, "error");
+            setState({ ...state, loading: false });
         }
     };
 
     const handleDeleteTransaction = async () => {
         try {
+            setState({ ...state, loading: true });
             selectionModel.forEach(async (item) => {
                 await deleteTransaction(
                     state.transactions.filter((t) => t.id === item)[0].id,
                     state.user.token
                 );
-
                 let newTransactions = [...state.transactions];
                 selectionModel.forEach((item) => {
                     newTransactions = newTransactions.filter(
                         (t) => t.id !== item
                     );
                 });
-
-                setState({ ...state, transactions: newTransactions });
-
+                setState({
+                    ...state,
+                    transactions: newTransactions,
+                    loading: false,
+                });
                 setDeleteTransactionModal(false);
 
                 openSnackBarHelper(`Transaction(s) is successfully deleted!`);
             });
         } catch (error) {
             openSnackBarHelper(error.message, "error");
+            setState({ ...state, loading: false });
         }
     };
 

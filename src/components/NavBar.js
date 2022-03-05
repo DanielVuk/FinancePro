@@ -8,12 +8,14 @@ import {
     Tabs,
     Toolbar,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import icon from "../assets/icon.png";
+import { Context, initialState } from "../Store";
 import GetIcon from "./GetIcon";
 
 const NavBar = () => {
+    const [state, setState] = useContext(Context);
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -44,7 +46,9 @@ const NavBar = () => {
         handleMenuOpen();
     };
 
-    const handleLogOut = async () => {};
+    const handleLogOut = async () => {
+        setState(initialState);
+    };
 
     return (
         <AppBar
@@ -99,7 +103,6 @@ const NavBar = () => {
                             <Tab value="/analytics" label="Analytics" />
                         </Tabs>
                     </Box>
-
                     <IconButton
                         size="large"
                         onClick={handleLogOut}

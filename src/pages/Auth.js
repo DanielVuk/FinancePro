@@ -66,21 +66,26 @@ const UserAuth = () => {
 
     const handleLogin = async () => {
         try {
+            setState({ ...state, loading: true });
             let result = await loginUser(email, password);
+
             let wallets = await getUserWallets(
                 result.data.idToken,
                 result.data.localId
             );
+
             let categories = await getUserCategories(
                 result.data.idToken,
                 result.data.localId
             );
+
             let transactions = await getUserTransactions(
                 result.data.idToken,
                 result.data.localId
             );
 
             setState({
+                loading: false,
                 user: {
                     email,
                     token: result.data.idToken,
@@ -93,7 +98,12 @@ const UserAuth = () => {
 
             navigate("/", { replace: true });
         } catch (error) {
-            openSnackBarHelper(error.message, "error");
+            if (error.message === "Request failed with status code 400") {
+                openSnackBarHelper("Check your email or password.", "error");
+            } else {
+                openSnackBarHelper(error.message, "error");
+            }
+            setState({ ...state, loading: false });
         }
     };
 

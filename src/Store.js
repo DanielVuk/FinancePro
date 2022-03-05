@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 const initialState = {
     user: null,
+    loading: false,
     wallets: [],
     categories: [],
     transactions: [],
@@ -19,4 +20,4 @@ const Store = ({ children }) => {
     );
 };
 
-export { Store, Context };
+export { Store, Context, initialState };

@@ -1,11 +1,13 @@
 import { Grid, InputAdornment, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { resetPassword } from "../../rest/auth";
+import { Context } from "../../Store";
 import AppInput from "../AppInput";
 import ModalButtons from "../Buttons/ModalButtons";
 import GetIcon from "../GetIcon";
 
 const ResetPasswordForm = ({ open, onClose }) => {
+    const [state, setState] = useContext(Context);
     const [email, setEmail] = useState("");
 
     useEffect(() => {
@@ -15,13 +17,16 @@ const ResetPasswordForm = ({ open, onClose }) => {
     return (
         <form
             onSubmit={async (event) => {
+                setState({ ...state, loading: true });
                 event.preventDefault();
                 try {
                     await resetPassword(email);
                     alert("Check email for next steps");
                     onClose();
+                    setState({ ...state, loading: false });
                 } catch (error) {
                     alert("Email not found.");
+                    setState({ ...state, loading: false });
                 }
             }}
         >

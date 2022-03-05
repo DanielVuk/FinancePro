@@ -40,10 +40,11 @@ const Home = () => {
     const [selectedCategory, setSelectedCategory] = useState("");
     const [selectedTransaction, setSelectedTransaction] = useState();
 
-    console.log("State: ", state);
+    // console.log("State: ", state);
 
     const handleAddWallet = async (wallet) => {
         try {
+            setState({ ...state, loading: true });
             let result = await addWallet(
                 wallet,
                 state.user.token,
@@ -57,17 +58,19 @@ const Home = () => {
             };
 
             let newWallets = [...state.wallets, newWallet];
-            setState({ ...state, wallets: newWallets });
+            setState({ ...state, wallets: newWallets, loading: false });
             setAddWalletModal(false);
 
             openSnackBarHelper(`${wallet.name} is successfully created!`);
         } catch (error) {
             openSnackBarHelper(error.message, "error");
+            setState({ ...state, loading: false });
         }
     };
 
     const handleDeleteWallet = async () => {
         try {
+            setState({ ...state, loading: true });
             await deleteWallet(selectedWallet.id, state.user.token);
 
             let transactionsForDelete = [...state.transactions].filter(
@@ -94,6 +97,7 @@ const Home = () => {
                 ...state,
                 wallets: newWallets,
                 transactions: newTransactions,
+                loading: false,
             });
 
             setSelectedWallet("");
@@ -105,11 +109,13 @@ const Home = () => {
             );
         } catch (error) {
             openSnackBarHelper(error.message, "error");
+            setState({ ...state, loading: false });
         }
     };
 
     const handleEditWallet = async (wallet) => {
         try {
+            setState({ ...state, loading: true });
             let result = await editWallet(
                 { ...wallet, userId: state.user.id },
                 selectedWallet.id,
@@ -123,18 +129,20 @@ const Home = () => {
 
             tempWallets[index] = { id: selectedWallet.id, ...result.data };
 
-            setState({ ...state, wallets: tempWallets });
+            setState({ ...state, wallets: tempWallets, loading: false });
             setSelectedWallet(tempWallets[index]);
             setEditWalletModal(false);
 
             openSnackBarHelper(`${wallet.name} is successfully edited!`);
         } catch (error) {
             openSnackBarHelper(error.message, "error");
+            setState({ ...state, loading: false });
         }
     };
 
     const handleAddCategory = async (category) => {
         try {
+            setState({ ...state, loading: true });
             let result = await addCategory(
                 category,
                 state.user.token,
@@ -148,18 +156,20 @@ const Home = () => {
             };
 
             let newCategories = [...state.categories, newCategory];
-            setState({ ...state, categories: newCategories });
+            setState({ ...state, categories: newCategories, loading: false });
 
             setAddCategoryModal(false);
 
             openSnackBarHelper(`${category.name} is successfully added!`);
         } catch (error) {
             openSnackBarHelper(error.message, "error");
+            setState({ ...state, loading: false });
         }
     };
 
     const handleDeleteCategory = async () => {
         try {
+            setState({ ...state, loading: true });
             await deleteCategory(selectedCategory.id, state.user.token);
 
             let transactionsForDelete = [...state.transactions].filter(
@@ -179,6 +189,7 @@ const Home = () => {
 
             setState({
                 ...state,
+                loading: false,
                 categories: newCategories,
                 transactions: newTransactions,
             });
@@ -192,11 +203,13 @@ const Home = () => {
             setDeleteCategoryModal(false);
         } catch (error) {
             openSnackBarHelper(error.message, "error");
+            setState({ ...state, loading: false });
         }
     };
 
     const handleEditCategory = async (category) => {
         try {
+            setState({ ...state, loading: true });
             let result = await editCategory(
                 { ...category, userId: state.user.id },
                 selectedCategory.id,
@@ -211,18 +224,20 @@ const Home = () => {
 
             tempCategories[index] = { id: selectedCategory.id, ...result.data };
 
-            setState({ ...state, categories: tempCategories });
+            setState({ ...state, categories: tempCategories, loading: false });
             setSelectedCategory(tempCategories[index]);
             setEditCategoryModal(false);
 
             openSnackBarHelper(`${category.name} is successfully edited!`);
         } catch (error) {
             openSnackBarHelper(error.message, "error");
+            setState({ ...state, loading: false });
         }
     };
 
     const handleAddTransaction = async (transaction) => {
         try {
+            setState({ ...state, loading: true });
             let result = await addTransaction(
                 transaction,
                 state.user.token,
@@ -237,18 +252,24 @@ const Home = () => {
 
             let newTransactions = [...state.transactions, newTransaction];
 
-            setState({ ...state, transactions: newTransactions });
+            setState({
+                ...state,
+                transactions: newTransactions,
+                loading: false,
+            });
 
             setAddTransactionModal(false);
 
             openSnackBarHelper(`Transaction is successfully added!`);
         } catch (error) {
             openSnackBarHelper(error.message, "error");
+            setState({ ...state, loading: false });
         }
     };
 
     const handleEditTransaction = async (transaction) => {
         try {
+            setState({ ...state, loading: true });
             let result = await editTransaction(
                 { ...transaction, userId: state.user.id },
                 selectedTransaction.id,
@@ -265,31 +286,42 @@ const Home = () => {
                 ...result.data,
             };
 
-            setState({ ...state, transactions: tempTransactions });
+            setState({
+                ...state,
+                transactions: tempTransactions,
+                loading: false,
+            });
 
             setEditTransactionModal(false);
 
             openSnackBarHelper(`Transaction is successfully edited!`);
         } catch (error) {
             openSnackBarHelper(error.message, "error");
+            setState({ ...state, loading: false });
         }
     };
 
     const handleDeleteTransaction = async () => {
         try {
+            setState({ ...state, loading: true });
             await deleteTransaction(selectedTransaction.id, state.user.token);
 
             let newTransactions = [...state.transactions].filter(
                 (t) => t.id !== selectedTransaction.id
             );
 
-            setState({ ...state, transactions: newTransactions });
+            setState({
+                ...state,
+                transactions: newTransactions,
+                loading: false,
+            });
 
             setDeleteTransactionModal(false);
 
             openSnackBarHelper(`Transaction is successfully deleted!`);
         } catch (error) {
             openSnackBarHelper(error.message, "error");
+            setState({ ...state, loading: false });
         }
     };
 

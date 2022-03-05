@@ -43,6 +43,7 @@ const SignupForm = ({ open }) => {
             return;
         }
         try {
+            setState({ ...state, loading: true });
             let result = await registerUser(email, password);
             setState({
                 ...state,
@@ -51,12 +52,13 @@ const SignupForm = ({ open }) => {
                     token: result.data.idToken,
                     id: result.data.localId,
                 },
+                loading: false,
             });
-            console.log("Result: ", result);
+
             navigate("/");
         } catch (error) {
-            console.log(error.message);
             openSnackBarHelper(error.message, "error");
+            setState({ ...state, loading: false });
         }
     };
 
