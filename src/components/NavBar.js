@@ -48,6 +48,8 @@ const NavBar = () => {
 
     const handleLogOut = async () => {
         setState(initialState);
+
+        localStorage.clear();
     };
 
     return (

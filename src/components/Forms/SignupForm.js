@@ -55,7 +55,10 @@ const SignupForm = ({ open }) => {
                 loading: false,
             });
 
-            navigate("/");
+            localStorage.setItem("token", result.data.idToken);
+            localStorage.setItem("userId", result.data.localId);
+
+            navigate("/", { replace: true });
         } catch (error) {
             openSnackBarHelper(error.message, "error");
             setState({ ...state, loading: false });

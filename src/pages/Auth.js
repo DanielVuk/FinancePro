@@ -96,6 +96,9 @@ const UserAuth = () => {
                 transactions: transactions,
             });
 
+            localStorage.setItem("token", result.data.idToken);
+            localStorage.setItem("userId", result.data.localId);
+
             navigate("/", { replace: true });
         } catch (error) {
             if (error.message === "Request failed with status code 400") {

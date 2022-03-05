@@ -40,7 +40,7 @@ const Home = () => {
     const [selectedCategory, setSelectedCategory] = useState("");
     const [selectedTransaction, setSelectedTransaction] = useState();
 
-    // console.log("State: ", state);
+    console.log("State: ", state);
 
     const handleAddWallet = async (wallet) => {
         try {
