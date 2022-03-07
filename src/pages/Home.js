@@ -433,7 +433,7 @@ const Home = () => {
                 <DeleteForm
                     onClose={() => setDeleteWalletModal(false)}
                     onDelete={handleDeleteWallet}
-                    Title={
+                    title={
                         <>
                             Delete wallet{" "}
                             {selectedWallet && selectedWallet.name}?
@@ -474,7 +474,7 @@ const Home = () => {
                 <DeleteForm
                     onClose={() => setDeleteCategoryModal(false)}
                     onDelete={handleDeleteCategory}
-                    Title={
+                    title={
                         <>
                             Delete category{" "}
                             {selectedCategory && selectedCategory.name}?
@@ -516,7 +516,7 @@ const Home = () => {
                 <DeleteForm
                     onClose={() => setDeleteTransactionModal(false)}
                     onDelete={handleDeleteTransaction}
-                    Title={
+                    title={
                         <>Are you sure you want to delete the transaction?</>
                     }
                 />

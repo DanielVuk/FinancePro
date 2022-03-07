@@ -7,15 +7,15 @@ import { AppTheme } from "./AppTheme";
 import { Store } from "./Store";
 
 ReactDOM.render(
-    //<React.StrictMode>
-    <ThemeProvider theme={AppTheme}>
-        <CssBaseline />
-        <BrowserRouter>
-            <Store>
-                <App />
-            </Store>
-        </BrowserRouter>
-    </ThemeProvider>,
-    //</React.StrictMode>,
+    <React.StrictMode>
+        <ThemeProvider theme={AppTheme}>
+            <CssBaseline />
+            <BrowserRouter>
+                <Store>
+                    <App />
+                </Store>
+            </BrowserRouter>
+        </ThemeProvider>
+    </React.StrictMode>,
     document.getElementById("root")
 );

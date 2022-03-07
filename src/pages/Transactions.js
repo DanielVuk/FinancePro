@@ -55,7 +55,7 @@ const Transactions = () => {
                         ? state.wallets.find((w) => w.id === t.fromWalletId)
                               .name
                         : "-",
-                col6: t.amount + " HRK",
+                col6: t.amount + " EUR",
                 col7: t.note,
             }))
         );
@@ -293,7 +293,7 @@ const Transactions = () => {
                 <DeleteForm
                     onClose={() => setDeleteTransactionModal(false)}
                     onDelete={handleDeleteTransaction}
-                    Title={
+                    title={
                         <>Are you sure you want to delete the transaction?</>
                     }
                 />

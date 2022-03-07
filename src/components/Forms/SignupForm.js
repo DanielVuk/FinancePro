@@ -48,13 +48,16 @@ const SignupForm = ({ open }) => {
             setState({
                 ...state,
                 user: {
-                    email,
                     token: result.data.idToken,
                     id: result.data.localId,
                 },
                 loading: false,
             });
 
+            const expiresIn = +result.data.expiresIn * 1000;
+            const expirationDate = new Date().getTime() + expiresIn;
+
+            localStorage.setItem("tokenExpiration", expirationDate);
             localStorage.setItem("token", result.data.idToken);
             localStorage.setItem("userId", result.data.localId);
 

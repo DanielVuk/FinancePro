@@ -125,7 +125,7 @@ const Transaction = ({ transaction, onDelete, onEdit, onSelect }) => {
                             marginRight: "15px",
                         }}
                     >
-                        {transaction.amount} HRK
+                        {transaction.amount} EUR
                     </Typography>
                     <IconButton
                         onClick={onDelete}

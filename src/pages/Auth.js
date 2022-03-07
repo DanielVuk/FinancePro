@@ -6,7 +6,7 @@ import {
     InputAdornment,
     Link,
 } from "@mui/material";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
 import AppInput from "../components/AppInput.js";
@@ -57,6 +57,12 @@ const UserAuth = () => {
     const [state, setState] = useContext(Context);
     const navigate = useNavigate();
 
+    useEffect(() => {
+        if (localStorage.getItem("token")) {
+            navigate("/", { replace: true });
+        }
+    }, []);
+
     const { SnackBar, openSnackBarHelper } = useSnackBar();
     const [signUpModal, setSignUpModal] = useState(false);
     const [resetPasswordModal, setResetPasswordModal] = useState(false);
@@ -87,7 +93,6 @@ const UserAuth = () => {
             setState({
                 loading: false,
                 user: {
-                    email,
                     token: result.data.idToken,
                     id: result.data.localId,
                 },
@@ -96,6 +101,10 @@ const UserAuth = () => {
                 transactions: transactions,
             });
 
+            const expiresIn = +result.data.expiresIn * 1000;
+            const expirationDate = new Date().getTime() + expiresIn;
+
+            localStorage.setItem("tokenExpiration", expirationDate);
             localStorage.setItem("token", result.data.idToken);
             localStorage.setItem("userId", result.data.localId);
 

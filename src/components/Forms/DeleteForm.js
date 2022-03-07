@@ -1,6 +1,6 @@
 import { Stack, Typography } from "@mui/material";
 import ModalButtons from "../Buttons/ModalButtons";
-const DeleteForm = ({ onClose, onDelete, Title }) => {
+const DeleteForm = ({ onClose, onDelete, title }) => {
     return (
         <form
             onSubmit={(event) => {
@@ -10,7 +10,7 @@ const DeleteForm = ({ onClose, onDelete, Title }) => {
         >
             <Stack spacing={5} sx={{ alignItems: "center" }}>
                 <Typography sm={12} variant="h4" sx={{ fontWeight: "bold" }}>
-                    {Title}
+                    {title}
                 </Typography>
                 <Typography variant="h6">
                     Once deleted cannot be recovered. <br />

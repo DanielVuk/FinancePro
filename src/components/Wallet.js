@@ -44,7 +44,7 @@ const Wallet = ({ wallet, onDelete, onEdit, selected, onSelect }) => {
                 {getWalletBalance(wallet, state.transactions)}
             </Typography>
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                <Typography variant="h6">HRK</Typography>
+                <Typography variant="h6">EUR</Typography>
                 <Box>
                     <IconButton
                         onClick={onDelete}
