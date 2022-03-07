@@ -56,7 +56,7 @@ const NavBar = () => {
         <AppBar
             position="static"
             color="transparent"
-            sx={{ boxShadow: 1, minWidth: "320px" }}
+            sx={{ boxShadow: 1, minWidth: "520px" }}
         >
             <Toolbar>
                 <Box
@@ -97,7 +97,9 @@ const NavBar = () => {
                     </Box>
                     <Box
                         mt={2}
-                        sx={{ visibility: { md: "visible", xs: "hidden" } }}
+                        sx={{
+                            visibility: { md: "visible", xs: "hidden" },
+                        }}
                     >
                         <Tabs value={selectedTab} onChange={handleTabChange}>
                             <Tab value="/" label="Home" />

@@ -199,7 +199,7 @@ const Analytics = () => {
     };
 
     return (
-        <Container maxWidth="xl">
+        <Container maxWidth="xl" sx={{ minWidth: "520px" }}>
             <Grid container sx={{ paddingBottom: "200px" }}>
                 <Grid mt={5} item xs={12} sx={{ backgroundColor: "white" }}>
                     <Line

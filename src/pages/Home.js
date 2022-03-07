@@ -330,7 +330,7 @@ const Home = () => {
             container
             maxWidth="fluid"
             justifyContent="center"
-            sx={{ minWidth: "550px" }}
+            sx={{ minWidth: "520px" }}
         >
             <Grid
                 container

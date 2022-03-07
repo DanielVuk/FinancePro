@@ -206,12 +206,11 @@ const Transactions = () => {
     };
 
     return (
-        <Container maxWidth="xl">
+        <Container maxWidth="xl" sx={{ minWidth: "520px" }}>
             <Box
                 mt={5}
                 sx={{
                     backgroundColor: "white",
-                    width: "100%",
                     borderRadiu: 1,
                 }}
             >
@@ -219,7 +218,6 @@ const Transactions = () => {
                     p={1}
                     sx={{
                         display: "flex",
-                        height: "100%",
                     }}
                 >
                     <Box sx={{ flexGrow: 1 }}>
