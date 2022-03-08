@@ -9,7 +9,7 @@ import CategoryForm from "../components/Forms/CategoryForm";
 import DeleteForm from "../components/Forms/DeleteForm";
 import TransactionForm from "../components/Forms/TransactionForm";
 import WalletForm from "../components/Forms/WalletForm";
-import { getTotalBalance } from "../functions/updateWallets";
+import { getTotalBalance } from "../functions/UpdateWallets";
 import { addCategory, deleteCategory, editCategory } from "../rest/categories";
 import {
     addTransaction,

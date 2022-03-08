@@ -23,7 +23,7 @@ import {
 } from "chart.js";
 import { useContext, useEffect, useState } from "react";
 import { Line, Pie } from "react-chartjs-2";
-import { getWalletBalance } from "../functions/updateWallets";
+import { getWalletBalance } from "../functions/UpdateWallets";
 import { Context } from "../Store";
 
 ChartJS.register(

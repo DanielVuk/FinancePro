@@ -1,6 +1,6 @@
 import { Grid, Stack, Typography } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
-import { getWalletBalance } from "../../functions/updateWallets";
+import { getWalletBalance } from "../../functions/UpdateWallets";
 import { Context } from "../../Store";
 import AppInput from "../AppInput";
 import ModalButtons from "../Buttons/ModalButtons";
