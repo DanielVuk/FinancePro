@@ -1,8 +1,8 @@
 import { Box, Card, IconButton, Typography } from "@mui/material";
 import { useContext } from "react";
-import { getWalletBalance } from "../functions/UpdateWallets";
 import { Context } from "../Store";
 import GetIcon from "./GetIcon";
+import { getWalletBalance } from "./UpdateWallets";
 
 const Wallet = ({ wallet, onDelete, onEdit, selected, onSelect }) => {
     const [state] = useContext(Context);
