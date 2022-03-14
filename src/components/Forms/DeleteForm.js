@@ -1,6 +1,6 @@
 import { Stack, Typography } from "@mui/material";
 import ModalButtons from "../Buttons/ModalButtons";
-const DeleteForm = ({ onClose, onDelete, title }) => {
+const DeleteForm = ({ onClose, onDelete, title, warning = true }) => {
     return (
         <form
             onSubmit={(event) => {
@@ -14,7 +14,7 @@ const DeleteForm = ({ onClose, onDelete, title }) => {
                 </Typography>
                 <Typography variant="h6">
                     Once deleted cannot be recovered. <br />
-                    All related transactions will be deleted.
+                    {warning && "All related transactions will be deleted."}
                 </Typography>
 
                 <ModalButtons onClose={onClose} />

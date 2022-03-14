@@ -150,7 +150,9 @@ const Analytics = () => {
 
         const toDate = new Date(prevDate);
 
-        let transactions = state.transactions.filter((t) => t.date < toDate);
+        let transactions = state.transactions.filter(
+            (t) => new Date(t.date) < toDate
+        );
 
         let balance = 0;
         state.wallets.forEach((wallet) => {
@@ -165,7 +167,9 @@ const Analytics = () => {
 
         const toDate = new Date(prevDate);
 
-        let transactions = state.transactions.filter((t) => t.date < toDate);
+        let transactions = state.transactions.filter(
+            (t) => new Date(t.date) < toDate
+        );
 
         return getWalletBalance(wallet, transactions);
     };

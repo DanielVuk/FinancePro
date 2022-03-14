@@ -519,6 +519,7 @@ const Home = () => {
                     title={
                         <>Are you sure you want to delete the transaction?</>
                     }
+                    warning={false}
                 />
             </AppModal>
 

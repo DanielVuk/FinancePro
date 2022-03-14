@@ -1,7 +1,5 @@
 # FinancePro
 
----
-
 Web aplikacija za praćenje osobnih financija.
 
 ### Autor:
@@ -14,16 +12,19 @@ Figma: [FinancePro](https://www.figma.com/proto/8JmSTowzVsKG9ZMX9u1VBC/FinancePr
 
 ### Javni link na aplikaciju
 
-Web: (dodat će se kasnije)
+Web: [FinancePro](https://financepro.netlify.app/)
 
 ### Kratki opis funkcionalnosti
 
 -   dodavanje, uređivanje i brisanje računa
 -   dodavanje, uređivanje i brisanje kategorija
 -   dodavanje, uređivanje i brisanje transakcija
--   kreiranje predložaka budućih transakcija
 -   filtriranje transakcija
--   kreiranje obračuna
+-   grafikoni
+
+Test
+email: user@user.com
+password: user123
 
 ### Organizacija
 
